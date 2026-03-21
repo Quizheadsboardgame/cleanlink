@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -85,9 +86,9 @@ export function Navbar() {
 
         {/* Branding in the middle */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="flex items-center gap-3 sm:gap-4 pointer-events-auto">
+          <Link href="/" className="flex items-center gap-2 pointer-events-auto">
             {headerLogo && (
-              <div className="relative w-24 h-12 sm:w-32 sm:h-16">
+              <div className="relative w-16 h-12 sm:w-20 sm:h-16">
                 <Image
                   src={headerLogo.imageUrl}
                   alt={headerLogo.description}
