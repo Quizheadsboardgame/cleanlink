@@ -4,8 +4,10 @@ import Link from "next/link"
 import Image from "next/image"
 import placeholderData from "@/app/lib/placeholder-images.json"
 import { Sparkles } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 
 export function Footer() {
+  const { t } = useLanguage()
   const bannerLogo = placeholderData.placeholderImages.find(img => img.id === "banner-logo")
 
   return (
@@ -33,15 +35,15 @@ export function Footer() {
             <span className="text-3xl font-bold font-headline portal-text-gradient tracking-tighter">CleanLink</span>
             <div className="flex items-center justify-center md:justify-end gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.3em]">
               <Sparkles className="w-3 h-3" />
-              <span>Powered by AI (Harley)</span>
+              <span>{t.footer.tagline}</span>
             </div>
           </div>
           <div className="space-y-1">
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium opacity-50">
-              © 2024 SMART HARLEY TECHNOLOGIES
+              {t.footer.copyright}
             </p>
             <p className="text-[9px] text-muted-foreground/40 uppercase tracking-[0.2em]">
-              Advanced Infrastructure Management System
+              {t.footer.subtext}
             </p>
           </div>
         </div>

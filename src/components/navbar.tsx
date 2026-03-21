@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus, Sparkles } from "lucide-react"
+import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus, Sparkles, Languages } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -14,25 +14,28 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import placeholderData from "@/app/lib/placeholder-images.json"
+import { useLanguage } from "@/context/language-context"
 
 export function Navbar() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const navItems = [
-    { href: "/", label: "Stores Order", icon: PlusCircle, color: "text-[#6E76F5]" },
-    { href: "/faulty-equipment", label: "Faulty Equipment", icon: Hammer, color: "text-[#F59E0B]" },
-    { href: "/incomplete-task", label: "Incomplete Task", icon: AlertTriangle, color: "text-[#EF4444]" },
-    { href: "/additional-hours", label: "Request Hours", icon: Clock, color: "text-[#D946EF]" },
-    { href: "/referral", label: "Refer a Friend", icon: UserPlus, color: "text-[#FACC15]" },
-    { href: "/cover-work", label: "Cover Work", icon: CalendarDays, color: "text-[#0EA5E9]" },
-    { href: "/status", label: "Status Board", icon: LayoutList, color: "text-white" },
-    { href: "/important-info", label: "Information", icon: Info, color: "text-orange-500" },
-    { href: "/how-to-use", label: "How to Use", icon: BookOpen, color: "text-[#84CC16]" },
+    { href: "/", label: t.nav.stores, icon: PlusCircle, color: "text-[#6E76F5]" },
+    { href: "/faulty-equipment", label: t.nav.faulty, icon: Hammer, color: "text-[#F59E0B]" },
+    { href: "/incomplete-task", label: t.nav.incomplete, icon: AlertTriangle, color: "text-[#EF4444]" },
+    { href: "/additional-hours", label: t.nav.hours, icon: Clock, color: "text-[#D946EF]" },
+    { href: "/referral", label: t.nav.referral, icon: UserPlus, color: "text-[#FACC15]" },
+    { href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "text-[#0EA5E9]" },
+    { href: "/status", label: t.nav.status, icon: LayoutList, color: "text-white" },
+    { href: "/important-info", label: t.nav.info, icon: Info, color: "text-orange-500" },
+    { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "text-[#84CC16]" },
+    { href: "/language", label: t.nav.language, icon: Languages, color: "text-primary" },
   ]
 
   const activeItem = navItems.find(item => item.href === pathname) || navItems[0]
