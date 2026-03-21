@@ -40,7 +40,7 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-24 flex items-center relative">
+      <div className="container mx-auto px-4 h-32 flex items-center relative">
         {/* Menu far left */}
         <div className="z-10">
           {mounted ? (
@@ -83,7 +83,7 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Logo Image in the middle */}
+        {/* Branding in the middle */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <Link href="/" className="flex flex-col items-center pointer-events-auto">
             {headerLogo && (
@@ -97,6 +97,7 @@ export function Navbar() {
                 />
               </div>
             )}
+            <span className="text-xl font-bold font-headline portal-text-gradient -mt-1">CleanLink</span>
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mt-0.5">
               Powered by HARLEY
             </span>
@@ -105,7 +106,6 @@ export function Navbar() {
 
         {/* Right side (Empty) */}
         <div className="ml-auto flex items-center">
-          {/* Logo on the right removed as per user request */}
         </div>
       </div>
     </nav>
