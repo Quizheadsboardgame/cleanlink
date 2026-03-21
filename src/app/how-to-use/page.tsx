@@ -86,6 +86,20 @@ export default function HowToUsePage() {
       icon: CalendarDays,
       color: "text-[#0EA5E9]",
       bg: "bg-[#0EA5E9]/10"
+    },
+    {
+      title: "Status Board",
+      description: "Monitor all submissions in real-time. Transparent tracking with review countdowns.",
+      icon: LayoutList,
+      color: "text-white",
+      bg: "bg-white/10"
+    },
+    {
+      title: "Information",
+      description: "Access key management contacts and standard operating procedures.",
+      icon: MessageSquare,
+      color: "text-orange-500",
+      bg: "bg-orange-500/10"
     }
   ]
 

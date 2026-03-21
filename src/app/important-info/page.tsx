@@ -148,7 +148,7 @@ export default function ImportantInfoPage() {
 
           {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <Loader2 className="w-10 h-10 text-primary animate-spin" />
+              <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
               <p className="text-muted-foreground">Retrieving information...</p>
             </div>
           ) : !infoItems || infoItems.length === 0 ? (
@@ -172,7 +172,7 @@ export default function ImportantInfoPage() {
                 return (
                   <div key={cat} className="space-y-4">
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="border-primary/30 text-primary uppercase tracking-wider px-3 py-1">
+                      <Badge variant="outline" className="border-orange-500/30 text-orange-500 uppercase tracking-wider px-3 py-1">
                         {cat}
                       </Badge>
                       <div className="h-px flex-1 bg-white/5" />
@@ -180,11 +180,11 @@ export default function ImportantInfoPage() {
                     
                     <div className="grid gap-4 sm:grid-cols-2">
                       {items.map((item) => (
-                        <Card key={item.id} className="glass-panel border-white/5 transition-all hover:border-primary/20">
+                        <Card key={item.id} className="glass-panel border-white/5 transition-all hover:border-orange-500/20">
                           <CardHeader className="p-5 pb-2">
                             <CardTitle className="text-lg font-headline flex items-center justify-between">
                               <span className="flex items-center gap-2">
-                                {cat === 'Management' ? <ShieldCheck className="w-4 h-4 text-primary" /> : <Info className="w-4 h-4 text-primary" />}
+                                {cat === 'Management' ? <ShieldCheck className="w-4 h-4 text-orange-500" /> : <Info className="w-4 h-4 text-orange-500" />}
                                 {item.title}
                               </span>
                             </CardTitle>

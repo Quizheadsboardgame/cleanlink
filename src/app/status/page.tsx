@@ -89,7 +89,7 @@ const getTaskMeta = (type: string) => {
     case 'Staff Referral':
       return { icon: UserPlus, color: 'text-[#FACC15]', bg: 'bg-[#FACC15]/10', border: 'border-[#FACC15]/20' };
     default:
-      return { icon: Clock, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' };
+      return { icon: Clock, color: 'text-white', bg: 'bg-white/10', border: 'border-white/20' };
   }
 }
 
@@ -124,7 +124,7 @@ export default function StatusBoardPage() {
 
           {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <Loader2 className="w-10 h-10 text-cyan-400 animate-spin" />
+              <Loader2 className="w-10 h-10 text-white animate-spin" />
               <p className="text-muted-foreground">Syncing status board...</p>
             </div>
           ) : !tasks || tasks.length === 0 ? (

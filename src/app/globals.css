@@ -95,12 +95,12 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Important Info - Emerald/Teal */
+/* Important Info - Orange */
 .info-gradient {
-  background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
 }
 .info-text-gradient {
-  background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -115,12 +115,12 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Status Board - Cyan */
+/* Status Board - White/Silver */
 .status-gradient {
-  background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
 }
 .status-text-gradient {
-  background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

@@ -30,8 +30,8 @@ export function Navbar() {
     { href: "/additional-hours", label: "Request Hours", icon: Clock, color: "text-[#D946EF]" },
     { href: "/referral", label: "Refer a Friend", icon: UserPlus, color: "text-[#FACC15]" },
     { href: "/cover-work", label: "Cover Work", icon: CalendarDays, color: "text-[#0EA5E9]" },
-    { href: "/status", label: "Status Board", icon: LayoutList, color: "text-[#06B6D4]" },
-    { href: "/important-info", label: "Information", icon: Info, color: "text-[#10B981]" },
+    { href: "/status", label: "Status Board", icon: LayoutList, color: "text-white" },
+    { href: "/important-info", label: "Information", icon: Info, color: "text-orange-500" },
     { href: "/how-to-use", label: "How to Use", icon: BookOpen, color: "text-[#84CC16]" },
   ]
 
