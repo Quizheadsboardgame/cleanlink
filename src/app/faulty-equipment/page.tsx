@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 import { FaultyEquipmentForm } from "@/components/faulty-equipment-form"
 
 export default function FaultyEquipmentPage() {
@@ -14,14 +15,7 @@ export default function FaultyEquipmentPage() {
         <FaultyEquipmentForm />
       </main>
 
-      <footer className="border-t border-white/5 py-8 mt-auto">
-        <div className="container mx-auto px-4 flex justify-center items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold font-headline portal-text-gradient">PortalFlow</span>
-            <span className="text-xs text-muted-foreground">© 2024 Stock Management</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

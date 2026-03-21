@@ -3,6 +3,7 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, doc } from "firebase/firestore"
@@ -113,6 +114,7 @@ export default function TasksPage() {
             </CardContent>
           </Card>
         </main>
+        <Footer />
       </div>
     )
   }
@@ -206,14 +208,7 @@ export default function TasksPage() {
         </div>
       </main>
 
-      <footer className="border-t border-white/5 py-8 mt-auto">
-        <div className="container mx-auto px-4 flex justify-center items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold font-headline portal-text-gradient">PortalFlow</span>
-            <span className="text-xs text-muted-foreground">© 2024 Stock Management</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
