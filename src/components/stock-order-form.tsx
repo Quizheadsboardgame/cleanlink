@@ -81,23 +81,20 @@ export function StockOrderForm() {
   }
 
   const handleWhatsAppSubmit = () => {
-    if (!name || !site || !date || items.some(i => !i.name || i.quantity < 1)) {
+    if (!name || !site || !date) {
       toast({
         variant: "destructive",
-        title: "Incomplete Order",
-        description: "Please fill in all order details before submitting."
+        title: "Missing Information",
+        description: "Please fill in your name, select a date, and choose a site."
       })
       return
     }
 
     const dateStr = format(date, "yyyy-MM-dd")
-    const phone = "447000000000" // Replace with your target number
+    const phone = "447000000000"
     
-    let message = `Stock Order\n`
-    message += `Name: ${name}\n`
-    message += `Date: ${dateStr}\n`
-    message += `Site: ${site}\n\n`
-    message += `Items:\n`
+    // Exactly matching the message structure from your provided code
+    let message = `Stock Order\nName: ${name}\nDate: ${dateStr}\nSite: ${site}\n\nItems:\n`
     
     items.forEach((item) => {
       if (item.name && item.quantity) {
@@ -106,13 +103,13 @@ export function StockOrderForm() {
     })
 
     const encodedMessage = encodeURIComponent(message)
-    const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`
+    const url = `https://wa.me/${phone}?text=${encodedMessage}`
     
-    window.open(whatsappUrl, '_blank')
+    window.open(url, '_blank')
     
     toast({
       title: "Opening WhatsApp",
-      description: "Your order details have been prepared for sending."
+      description: "Redirecting to dispatch your order."
     })
   }
 
@@ -125,16 +122,16 @@ export function StockOrderForm() {
               <Package className="w-6 h-6 text-primary" />
               Stock Order Form
             </CardTitle>
-            <CardDescription>Enter order details and dispatch via WhatsApp.</CardDescription>
+            <CardDescription>Fill out the details below to prepare your order.</CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-8">
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label className="text-muted-foreground flex items-center gap-2">
-                  <User className="w-4 h-4" /> Full Name
+                  <User className="w-4 h-4" /> Name
                 </Label>
                 <Input 
-                  placeholder="e.g. John Doe" 
+                  placeholder="Enter your name" 
                   value={name} 
                   onChange={(e) => setName(e.target.value)}
                   className="bg-secondary/50 border-white/5 focus:border-primary/50"
@@ -142,7 +139,7 @@ export function StockOrderForm() {
               </div>
               <div className="space-y-2">
                 <Label className="text-muted-foreground flex items-center gap-2">
-                  <CalendarIcon className="w-4 h-4" /> Order Date
+                  <CalendarIcon className="w-4 h-4" /> Date
                 </Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -172,9 +169,9 @@ export function StockOrderForm() {
 
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> Target Site
+                <Building2 className="w-4 h-4" /> Site
               </Label>
-              <Select onValueChange={setSite}>
+              <Select onValueChange={setSite} value={site}>
                 <SelectTrigger className="bg-secondary/50 border-white/5">
                   <SelectValue placeholder="Select a site" />
                 </SelectTrigger>
@@ -188,7 +185,7 @@ export function StockOrderForm() {
 
             <div className="space-y-4 pt-4">
               <div className="flex items-center justify-between">
-                <Label className="text-lg font-headline">Order Items</Label>
+                <Label className="text-lg font-headline">Items</Label>
                 <Button 
                   onClick={addItem} 
                   variant="outline" 
@@ -200,7 +197,7 @@ export function StockOrderForm() {
               </div>
 
               <div className="space-y-3">
-                {items.map((item, index) => (
+                {items.map((item) => (
                   <div key={item.id} className="flex gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="flex-1">
                       <Input 
@@ -248,7 +245,7 @@ export function StockOrderForm() {
       <div className="space-y-6">
         <Card className="glass-panel border-none animate-fade-in delay-100">
           <CardHeader>
-            <CardTitle className="text-lg font-headline">Order Preview</CardTitle>
+            <CardTitle className="text-lg font-headline">Live Preview</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
              <div className="p-4 rounded-lg bg-white/5 border border-white/5 text-xs font-mono whitespace-pre-wrap leading-relaxed">
@@ -257,21 +254,21 @@ export function StockOrderForm() {
                Date: {date ? format(date, "yyyy-MM-dd") : "..."}{"\n"}
                Site: {site || "..."}{"\n\n"}
                Items:{"\n"}
-               {items.filter(i => i.name).map((i, idx) => (
+               {items.filter(i => i.name && i.quantity).map((i, idx) => (
                  <div key={idx}>- {i.name}: {i.quantity}</div>
                ))}
-               {items.filter(i => i.name).length === 0 && "..."}
+               {items.filter(i => i.name && i.quantity).length === 0 && "..."}
              </div>
           </CardContent>
         </Card>
 
         <Card className="glass-panel border-none overflow-hidden animate-fade-in delay-200">
           <div className="portal-gradient p-6 text-white">
-            <h3 className="text-xl font-bold font-headline mb-2">Fleet Management</h3>
-            <p className="text-sm opacity-80 mb-6">Your site selection is now updated with the latest campus locations.</p>
+            <h3 className="text-xl font-bold font-headline mb-2">Fleet Support</h3>
+            <p className="text-sm opacity-80 mb-6">Site selection is synced with the master campus inventory list.</p>
             <div className="flex items-center gap-2 text-xs bg-white/10 rounded-lg p-2 backdrop-blur-sm">
               <Building2 className="w-4 h-4" />
-              <span>{SITES.length} Locations Configured</span>
+              <span>{SITES.length} Validated Sites</span>
             </div>
           </div>
         </Card>
