@@ -41,9 +41,9 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-32 flex items-center relative">
+      <div className="container mx-auto px-4 h-32 flex items-center">
         {/* Menu far left */}
-        <div className="z-10">
+        <div className="flex-shrink-0">
           {mounted ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -84,9 +84,9 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Branding in the middle */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="flex items-center gap-2 pointer-events-auto">
+        {/* Branding far right */}
+        <div className="ml-auto flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2">
             {headerLogo && (
               <div className="relative w-16 h-12 sm:w-20 sm:h-16">
                 <Image
@@ -105,10 +105,6 @@ export function Navbar() {
               </span>
             </div>
           </Link>
-        </div>
-
-        {/* Right side (Empty) */}
-        <div className="ml-auto flex items-center">
         </div>
       </div>
     </nav>
