@@ -3,13 +3,12 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { Clock, Send, Building2, User, Loader2, Calendar } from "lucide-react"
+import { Clock, Send, User, Loader2, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
@@ -17,7 +16,6 @@ import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
-import { SITES } from "@/components/stock-order-form"
 
 export function AdditionalHoursForm() {
   const { toast } = useToast()
@@ -28,7 +26,6 @@ export function AdditionalHoursForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
-  const [site, setSite] = useState("")
   const [requestType, setRequestType] = useState<"Permanent" | "Temporary">("Permanent")
   const [datesFree, setDatesFree] = useState("")
   const [timesAvailable, setTimesAvailable] = useState("")
@@ -45,7 +42,7 @@ export function AdditionalHoursForm() {
       return
     }
 
-    if (!name || !site || !timesAvailable || (requestType === "Temporary" && !datesFree)) {
+    if (!name || !timesAvailable || (requestType === "Temporary" && !datesFree)) {
       toast({
         variant: "destructive",
         title: "Missing Information",
@@ -63,7 +60,6 @@ export function AdditionalHoursForm() {
     const requestData = {
       id: requestId,
       cleanerName: name,
-      site: site,
       requestType: requestType,
       datesFree: datesFree,
       timesAvailable: timesAvailable,
@@ -78,7 +74,7 @@ export function AdditionalHoursForm() {
       id: requestId,
       stockOrderId: requestId,
       title: `Extra Hours: ${name}`,
-      description: `Type: ${requestType}. Site: ${site}. Availability: ${timesAvailable}. ${datesFree ? `Dates: ${datesFree}` : ""}`,
+      description: `Type: ${requestType}. Availability: ${timesAvailable}. ${datesFree ? `Dates: ${datesFree}` : ""}`,
       status: 'Pending Review',
       ownerId: user.uid,
       type: 'Additional Hours',
@@ -107,33 +103,16 @@ export function AdditionalHoursForm() {
           <CardDescription>Submit a request for extra hours (permanent or temporary).</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
-          <div className="grid sm:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label className="text-muted-foreground flex items-center gap-2">
-                <User className="w-4 h-4" /> Cleaner Name
-              </Label>
-              <Input 
-                placeholder="Enter your name" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> Site
-              </Label>
-              <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
-                  <SelectValue placeholder="Select a site" />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
-                  {SITES.map(s => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-2">
+            <Label className="text-muted-foreground flex items-center gap-2">
+              <User className="w-4 h-4" /> Cleaner Name
+            </Label>
+            <Input 
+              placeholder="Enter your name" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+            />
           </div>
 
           <div className="space-y-3">
