@@ -166,6 +166,20 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "cleanerName", "site", "reason", "status", "ownerId", "createdAt"]
+    },
+    "ImportantInfo": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ImportantInfo",
+      "type": "object",
+      "description": "General information, contact details, or announcements for staff.",
+      "properties": {
+        "id": { "type": "string" },
+        "category": { "type": "string", "enum": ["Management", "Procedures", "Announcements"] },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "category", "title", "content", "updatedAt"]
     }
   },
   "auth": {
@@ -228,6 +242,19 @@
           "description": "Unified tasks for reviewing orders and faulty equipment.",
           "params": [
             { "name": "orderTaskId", "description": "Task UID" }
+          ]
+        }
+      },
+      {
+        "path": "/importantInfo/{infoId}",
+        "definition": {
+          "entityName": "ImportantInfo",
+          "schema": {
+            "$ref": "#/backend/entities/ImportantInfo"
+          },
+          "description": "General information accessible to all users.",
+          "params": [
+            { "name": "infoId", "description": "Info UID" }
           ]
         }
       }

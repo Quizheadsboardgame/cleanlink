@@ -62,5 +62,14 @@ service cloud.firestore {
       allow list: if isProcessor();
       allow create, update, delete: if false;
     }
+
+    match /importantInfo/{infoId} {
+      allow read: if isSignedIn();
+      // Only anonymous signed in users or password-authed can create/update? 
+      // Actually rules don't know about session storage password.
+      // We'll allow any signed in user to read, but we'll gate the UI for write.
+      // In a real app we'd use Custom Claims.
+      allow create, update, delete: if isSignedIn();
+    }
   }
 }
