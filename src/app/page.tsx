@@ -9,7 +9,7 @@ export default function Home() {
       
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="mb-8 text-center space-y-2">
-          <h1 className="text-3xl font-bold font-headline portal-text-gradient">Stores Order</h1>
+          <h1 className="text-3xl font-bold font-headline stores-text-gradient">Stores Order</h1>
           <p className="text-muted-foreground">Submit a new stock request for your site.</p>
         </div>
         <StockOrderForm />
