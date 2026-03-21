@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -20,7 +19,6 @@ import { SITES } from "@/components/stock-order-form"
 
 const REASONS = [
   "Door was locked / No access",
-  "Staff working late",
   "Area occupied",
   "Maintenance in progress",
   "Health & Safety concern",
