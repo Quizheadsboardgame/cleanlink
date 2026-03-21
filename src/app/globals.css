@@ -45,12 +45,12 @@
 
 /* Page Specific Identities */
 
-/* Stores Order - Blue/Indigo (Primary) */
-.portal-gradient, .stores-gradient {
-  background: linear-gradient(135deg, #6E76F5 0%, #14ADFF 100%);
+/* Stores Order - Indigo (Primary) */
+.portal-gradient {
+  background: linear-gradient(135deg, #6E76F5 0%, #4F46E5 100%);
 }
-.portal-text-gradient, .stores-text-gradient {
-  background: linear-gradient(135deg, #6E76F5 0%, #14ADFF 100%);
+.portal-text-gradient {
+  background: linear-gradient(135deg, #6E76F5 0%, #4F46E5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -75,12 +75,22 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Important Info - Emerald/Teal */
+/* Important Info & Guide - Emerald/Teal */
 .info-gradient {
   background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);
 }
 .info-text-gradient {
   background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Status Board - Cyan */
+.status-gradient {
+  background: linear-gradient(135deg, #14ADFF 0%, #06B6D4 100%);
+}
+.status-text-gradient {
+  background: linear-gradient(135deg, #14ADFF 0%, #06B6D4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -101,4 +111,12 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 15s linear infinite;
 }

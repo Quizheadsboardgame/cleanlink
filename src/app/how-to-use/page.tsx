@@ -3,8 +3,8 @@
 import * as React from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { BookOpen, MousePointerClick, CheckCircle2, Zap, ShieldCheck, Clock, MessageSquare, Smartphone } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { BookOpen, MousePointerClick, Zap, ShieldCheck, Clock, MessageSquare, Smartphone } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 export default function HowToUsePage() {
@@ -13,19 +13,19 @@ export default function HowToUsePage() {
       title: "Select Your Form",
       description: "Use the top-left menu to choose between Stores Order, Faulty Equipment, or Incomplete Task reports.",
       icon: MousePointerClick,
-      color: "text-primary"
+      color: "text-emerald-400"
     },
     {
       title: "Fill in Details",
       description: "Provide your name, select your site, and add the necessary items or descriptions for your request.",
       icon: BookOpen,
-      color: "text-blue-400"
+      color: "text-emerald-500"
     },
     {
       title: "Submit & Track",
       description: "Hit the submit button and head to the Status Board to see your request's progress in real-time.",
       icon: SendIcon,
-      color: "text-green-400"
+      color: "text-emerald-300"
     }
   ]
 
@@ -69,12 +69,12 @@ export default function HowToUsePage() {
           {/* How to Submit Section */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1">GETTING STARTED</Badge>
+              <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 px-3 py-1">GETTING STARTED</Badge>
               <h2 className="text-2xl font-bold font-headline">How to Submit</h2>
             </div>
             <div className="grid gap-6 sm:grid-cols-3">
               {steps.map((step, idx) => (
-                <Card key={idx} className="glass-panel border-white/5 transition-all hover:border-primary/20">
+                <Card key={idx} className="glass-panel border-white/5 transition-all hover:border-emerald-500/20">
                   <CardHeader>
                     <div className={`${step.color} bg-white/5 w-12 h-12 rounded-xl flex items-center justify-center mb-2`}>
                       <step.icon className="w-6 h-6" />
@@ -92,14 +92,14 @@ export default function HowToUsePage() {
           {/* Benefits Section */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1">WHY USE PORTALFLOW</Badge>
+              <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 px-3 py-1">WHY USE PORTALFLOW</Badge>
               <h2 className="text-2xl font-bold font-headline">System Benefits</h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {benefits.map((benefit, idx) => (
                 <Card key={idx} className="glass-panel border-white/5 p-6 flex gap-4">
-                  <div className="bg-primary/10 p-3 rounded-full h-fit">
-                    <benefit.icon className="w-5 h-5 text-primary" />
+                  <div className="bg-emerald-500/10 p-3 rounded-full h-fit">
+                    <benefit.icon className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div className="space-y-1">
                     <h3 className="font-bold font-headline">{benefit.title}</h3>

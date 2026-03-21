@@ -61,7 +61,7 @@ function CountdownTimer({ createdAt }: { createdAt: string }) {
   if (!timeLeft) return <span className="opacity-20">---</span>;
 
   return (
-    <div className="flex items-center gap-1.5 text-xs font-mono bg-primary/5 text-primary px-2 py-1 rounded border border-primary/10">
+    <div className="flex items-center gap-1.5 text-xs font-mono bg-cyan-500/5 text-cyan-400 px-2 py-1 rounded border border-cyan-500/10">
       <Timer className="w-3 h-3" />
       <span>Review in: {timeLeft}</span>
     </div>
@@ -93,13 +93,13 @@ export default function StatusBoardPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold font-headline info-text-gradient">Public Status Board</h1>
+            <h1 className="text-3xl font-bold font-headline status-text-gradient">Public Status Board</h1>
             <p className="text-muted-foreground">Track the progress of all submitted orders and reports.</p>
           </div>
 
           {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <Loader2 className="w-10 h-10 text-primary animate-spin" />
+              <Loader2 className="w-10 h-10 text-cyan-400 animate-spin" />
               <p className="text-muted-foreground">Syncing status board...</p>
             </div>
           ) : !tasks || tasks.length === 0 ? (
@@ -119,17 +119,17 @@ export default function StatusBoardPage() {
           ) : (
             <div className="grid gap-4">
               {tasks.map((task) => (
-                <Card key={task.id} className="glass-panel overflow-hidden transition-all hover:border-primary/20">
+                <Card key={task.id} className="glass-panel overflow-hidden transition-all hover:border-cyan-500/20">
                   <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <div className={cn(
                         "p-3 rounded-xl",
-                        task.status === 'Completed' ? "bg-green-500/10" : "bg-primary/10"
+                        task.status === 'Completed' ? "bg-green-500/10" : "bg-cyan-500/10"
                       )}>
                         {task.status === 'Completed' ? (
                           <CheckCircle2 className="w-5 h-5 text-green-500" />
                         ) : (
-                          <Clock className="w-5 h-5 text-primary animate-pulse" />
+                          <Clock className="w-5 h-5 text-cyan-400 animate-pulse" />
                         )}
                       </div>
                       <div className="space-y-1">
@@ -158,7 +158,7 @@ export default function StatusBoardPage() {
                     <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                       <Badge className={cn(
                         "rounded-lg px-3 py-1 text-xs font-bold",
-                        task.status === 'Completed' ? "bg-green-500/20 text-green-400 border-green-500/20" : "bg-primary/20 text-primary border-primary/20"
+                        task.status === 'Completed' ? "bg-green-500/20 text-green-400 border-green-500/20" : "bg-cyan-500/20 text-cyan-400 border-cyan-500/20"
                       )}>
                         {task.status}
                       </Badge>

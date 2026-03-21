@@ -16,12 +16,12 @@ export function Navbar() {
   const pathname = usePathname()
 
   const navItems = [
-    { href: "/", label: "Stores Order", icon: PlusCircle },
-    { href: "/faulty-equipment", label: "Faulty Equipment", icon: Hammer },
-    { href: "/incomplete-task", label: "Incomplete Task", icon: AlertTriangle },
-    { href: "/status", label: "Status Board", icon: LayoutList },
-    { href: "/important-info", label: "Information", icon: Info },
-    { href: "/how-to-use", label: "How to Use", icon: BookOpen },
+    { href: "/", label: "Stores Order", icon: PlusCircle, color: "text-[#6E76F5]" },
+    { href: "/faulty-equipment", label: "Faulty Equipment", icon: Hammer, color: "text-[#F59E0B]" },
+    { href: "/incomplete-task", label: "Incomplete Task", icon: AlertTriangle, color: "text-[#EF4444]" },
+    { href: "/status", label: "Status Board", icon: LayoutList, color: "text-[#14ADFF]" },
+    { href: "/important-info", label: "Information", icon: Info, color: "text-[#10B981]" },
+    { href: "/how-to-use", label: "How to Use", icon: BookOpen, color: "text-[#10B981]" },
   ]
 
   const activeItem = navItems.find(item => item.href === pathname) || navItems[0]
@@ -34,8 +34,8 @@ export function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl shadow-lg hover:bg-white/5 transition-all active:scale-95">
-                <Menu className="w-5 h-5 text-primary" />
-                <span className="font-headline font-bold text-base hidden xs:inline-block">
+                <Menu className={cn("w-5 h-5", activeItem.color)} />
+                <span className={cn("font-headline font-bold text-base hidden xs:inline-block", activeItem.color)}>
                   {activeItem.label}
                 </span>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
@@ -47,11 +47,13 @@ export function Navbar() {
                   <DropdownMenuItem className={cn(
                     "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-colors mb-1 last:mb-0",
                     pathname === item.href 
-                      ? "bg-primary/10 text-primary font-bold" 
+                      ? "bg-white/5 font-bold" 
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                   )}>
-                    <item.icon className={cn("w-5 h-5", pathname === item.href ? "text-primary" : "text-muted-foreground")} />
-                    <span className="text-sm font-medium">{item.label}</span>
+                    <item.icon className={cn("w-5 h-5", item.color)} />
+                    <span className={cn("text-sm font-medium", pathname === item.href ? item.color : "")}>
+                      {item.label}
+                    </span>
                   </DropdownMenuItem>
                 </Link>
               ))}
