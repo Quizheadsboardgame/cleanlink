@@ -11,6 +11,7 @@ import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
 import { CheckCircle2, Clock, Building2, Loader2, ListTodo } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 export default function StatusBoardPage() {
   const { user, isUserLoading } = useUser()
