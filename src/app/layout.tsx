@@ -1,9 +1,9 @@
-
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { FirebaseClientProvider } from "@/firebase/client-provider";
 import { ScrollingBanner } from "@/components/scrolling-banner";
+import { ReviewTasksFab } from "@/components/review-tasks-fab";
 
 export const metadata: Metadata = {
   title: 'PortalFlow | Professional Stock Ordering',
@@ -26,6 +26,7 @@ export default function RootLayout({
         <FirebaseClientProvider>
           <ScrollingBanner />
           {children}
+          <ReviewTasksFab />
           <Toaster />
         </FirebaseClientProvider>
       </body>

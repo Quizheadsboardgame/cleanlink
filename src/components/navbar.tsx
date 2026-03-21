@@ -1,6 +1,6 @@
 "use client"
 
-import { Boxes, ClipboardList, PlusCircle, Hammer, AlertTriangle, Info } from "lucide-react"
+import { Boxes, PlusCircle, Hammer, AlertTriangle, Info } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -72,15 +72,6 @@ export function Navbar() {
             )}>
               <Info className="w-4 h-4" />
               <span>Information</span>
-            </button>
-          </Link>
-          <Link href="/tasks">
-            <button className={cn(
-              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
-              pathname === "/tasks" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            )}>
-              <ClipboardList className="w-4 h-4" />
-              <span>Review Tasks</span>
             </button>
           </Link>
         </div>
