@@ -139,7 +139,7 @@ export function StockOrderForm() {
 
     toast({
       title: "Order Submitted",
-      description: "Your stock order has been saved and queued for review."
+      description: "Thank you for submitting the form, this will be reviewed the next working day by 12pm."
     })
 
     setTimeout(() => {

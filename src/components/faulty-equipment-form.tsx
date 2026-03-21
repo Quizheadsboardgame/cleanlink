@@ -85,7 +85,7 @@ export function FaultyEquipmentForm() {
 
     toast({
       title: "Report Submitted",
-      description: "The faulty equipment report has been saved and queued for review."
+      description: "Thank you for submitting the form, this will be reviewed the next working day by 12pm."
     })
 
     setTimeout(() => {

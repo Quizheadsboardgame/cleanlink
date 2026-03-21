@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -92,7 +93,7 @@ export function IncompleteTaskForm() {
 
     toast({
       title: "Report Submitted",
-      description: "The incomplete task report has been saved and queued for review."
+      description: "Thank you for submitting the form, this will be reviewed the next working day by 12pm."
     })
 
     setTimeout(() => {
