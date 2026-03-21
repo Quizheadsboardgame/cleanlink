@@ -85,9 +85,9 @@ export function Navbar() {
 
         {/* Branding in the middle */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="flex flex-col items-center pointer-events-auto">
+          <Link href="/" className="flex items-center gap-3 sm:gap-4 pointer-events-auto">
             {headerLogo && (
-              <div className="relative w-32 h-16 sm:w-48 sm:h-20">
+              <div className="relative w-24 h-12 sm:w-32 sm:h-16">
                 <Image
                   src={headerLogo.imageUrl}
                   alt={headerLogo.description}
@@ -97,10 +97,12 @@ export function Navbar() {
                 />
               </div>
             )}
-            <span className="text-xl font-bold font-headline portal-text-gradient -mt-1">CleanLink</span>
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mt-0.5">
-              Powered by HARLEY
-            </span>
+            <div className="flex flex-col items-start">
+              <span className="text-xl sm:text-2xl font-bold font-headline portal-text-gradient leading-none">CleanLink</span>
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mt-1 whitespace-nowrap">
+                Powered by HARLEY
+              </span>
+            </div>
           </Link>
         </div>
 
