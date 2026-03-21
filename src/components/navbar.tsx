@@ -1,12 +1,9 @@
-
 "use client"
 
 import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import placeholderData from "@/app/lib/placeholder-images.json"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +14,6 @@ import { Button } from "@/components/ui/button"
 
 export function Navbar() {
   const pathname = usePathname()
-  const bannerLogo = placeholderData.placeholderImages.find(img => img.id === "banner-logo")
 
   const navItems = [
     { href: "/", label: "Stores Order", icon: PlusCircle },
@@ -31,7 +27,7 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-40 flex items-center relative">
+      <div className="container mx-auto px-4 h-24 flex items-center relative">
         {/* Menu far left */}
         <div className="z-10">
           <DropdownMenu>
@@ -74,20 +70,8 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Picture far right */}
-        <div className="ml-auto z-10">
-          {bannerLogo && (
-            <div className="relative w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] overflow-hidden">
-              <Image
-                src={bannerLogo.imageUrl}
-                alt={bannerLogo.description}
-                fill
-                className="object-contain"
-                data-ai-hint={bannerLogo.imageHint}
-              />
-            </div>
-          )}
-        </div>
+        {/* Placeholder for symmetry if needed, or just empty space */}
+        <div className="ml-auto w-12 sm:w-24 h-12"></div>
       </div>
     </nav>
   )
