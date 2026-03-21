@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -24,7 +23,6 @@ export default function TasksPage() {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
 
-  // Load authorization state from session storage on mount
   useEffect(() => {
     const auth = sessionStorage.getItem("portalflow_auth")
     if (auth === "true") {
@@ -36,7 +34,6 @@ export default function TasksPage() {
     e.preventDefault()
     setIsChecking(true)
     
-    // Artificial delay for feel
     setTimeout(() => {
       if (password === "Harley") {
         setIsAuthorized(true)
@@ -81,7 +78,7 @@ export default function TasksPage() {
               <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
                 <Lock className="w-6 h-6 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-headline portal-text-gradient">Protected Area</CardTitle>
+              <CardTitle className="text-2xl font-headline tasks-text-gradient">Protected Area</CardTitle>
               <CardDescription>Enter the management password to review submitted orders.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -92,14 +89,14 @@ export default function TasksPage() {
                     placeholder="Enter Password" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-secondary/50 border-white/5 text-center text-lg tracking-widest"
+                    className="bg-secondary/50 border-white/5 text-center text-lg tracking-widest text-white"
                     autoFocus
                   />
                 </div>
                 <Button 
                   type="submit" 
                   disabled={isChecking}
-                  className="w-full portal-gradient text-white gap-2 h-12 rounded-xl"
+                  className="w-full tasks-gradient text-white gap-2 h-12 rounded-xl shadow-lg"
                 >
                   {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
                   Unlock Dashboard
@@ -119,7 +116,7 @@ export default function TasksPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="space-y-6">
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold font-headline portal-text-gradient">Review Tasks</h1>
+            <h1 className="text-3xl font-bold font-headline tasks-text-gradient">Review Tasks</h1>
             <p className="text-muted-foreground">Manage and track your submitted stock orders.</p>
           </div>
 
@@ -137,7 +134,7 @@ export default function TasksPage() {
                 <div className="space-y-2">
                   <h3 className="text-xl font-semibold">No tasks found</h3>
                   <p className="text-muted-foreground max-w-xs mx-auto">
-                    You haven't submitted any stock orders yet. Go to "New Order" to get started.
+                    You haven't submitted any forms yet. Use the navigation to report something.
                   </p>
                 </div>
               </CardContent>
@@ -172,7 +169,7 @@ export default function TasksPage() {
                         </div>
                         <div className="flex items-center gap-2 bg-white/5 p-2 rounded-md">
                           <Package className="w-4 h-4 text-primary" />
-                          <span className="truncate">Ref: {task.stockOrderId}</span>
+                          <span className="truncate">Type: {task.type}</span>
                         </div>
                       </div>
                     </div>

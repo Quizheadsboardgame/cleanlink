@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -16,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
-import { doc, collection } from "firebase/firestore"
+import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
@@ -167,7 +166,7 @@ export function StockOrderForm() {
                 placeholder="Enter your name" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50"
+                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -179,7 +178,7 @@ export function StockOrderForm() {
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal bg-secondary/50 border-white/5",
+                      "w-full justify-start text-left font-normal bg-secondary/50 border-white/5 text-white",
                       !date && "text-muted-foreground"
                     )}
                   >
@@ -193,7 +192,7 @@ export function StockOrderForm() {
                     selected={date}
                     onSelect={setDate}
                     initialFocus
-                    className="bg-card"
+                    className="bg-card text-white"
                   />
                 </PopoverContent>
               </Popover>
@@ -206,10 +205,10 @@ export function StockOrderForm() {
                 <Building2 className="w-4 h-4" /> Site
               </Label>
               <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5">
+                <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
                   <SelectValue placeholder="Select a site" />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px]">
+                <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
                   {SITES.map(s => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
@@ -228,7 +227,7 @@ export function StockOrderForm() {
                 <div className="grid gap-1.5 leading-none">
                   <Label
                     htmlFor="delivered"
-                    className="text-sm font-medium cursor-pointer leading-tight"
+                    className="text-sm font-medium cursor-pointer leading-tight text-white"
                   >
                     Need stores delivered
                   </Label>
@@ -246,7 +245,7 @@ export function StockOrderForm() {
                 />
                 <Label
                   htmlFor="clinical"
-                  className="text-sm font-medium cursor-pointer"
+                  className="text-sm font-medium cursor-pointer text-white"
                 >
                   Taken from Clinical school stores
                 </Label>
@@ -256,7 +255,7 @@ export function StockOrderForm() {
 
           <div className="space-y-4 pt-4">
             <div className="flex items-center justify-between">
-              <Label className="text-lg font-headline">Items</Label>
+              <Label className="text-lg font-headline text-white">Items</Label>
               <Button 
                 onClick={addItem} 
                 variant="outline" 
@@ -276,7 +275,7 @@ export function StockOrderForm() {
                         placeholder="Item Name" 
                         value={item.name}
                         onChange={(e) => updateItem(item.id, "name", e.target.value)}
-                        className="bg-secondary/30 border-white/5"
+                        className="bg-secondary/30 border-white/5 text-white"
                       />
                     </div>
                     <div className="w-24">
@@ -286,7 +285,7 @@ export function StockOrderForm() {
                         placeholder="Qty"
                         value={item.quantity || ""}
                         onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
-                        className="bg-secondary/30 border-white/5"
+                        className="bg-secondary/30 border-white/5 text-white"
                       />
                     </div>
                   </div>
@@ -296,7 +295,7 @@ export function StockOrderForm() {
                         placeholder="Code (optional)" 
                         value={item.code}
                         onChange={(e) => updateItem(item.id, "code", e.target.value)}
-                        className="bg-secondary/30 border-white/5"
+                        className="bg-secondary/30 border-white/5 text-white"
                       />
                     </div>
                     <Button 
@@ -318,7 +317,7 @@ export function StockOrderForm() {
           <Button 
             onClick={handleSubmit}
             disabled={isSubmitting || isUserLoading}
-            className="portal-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
+            className="stores-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             Submit Order

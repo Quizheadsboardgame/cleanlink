@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -98,7 +97,7 @@ export function FaultyEquipmentForm() {
       <Card className="glass-panel overflow-hidden border-none shadow-2xl">
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
-            <Hammer className="w-6 h-6 text-primary" />
+            <Hammer className="w-6 h-6 text-[#F59E0B]" />
             Faulty Equipment Report
           </CardTitle>
           <CardDescription>Request a replacement for faulty or broken equipment.</CardDescription>
@@ -113,7 +112,7 @@ export function FaultyEquipmentForm() {
                 placeholder="Enter your name" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50"
+                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -121,10 +120,10 @@ export function FaultyEquipmentForm() {
                 <Building2 className="w-4 h-4" /> Site
               </Label>
               <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5">
+                <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
                   <SelectValue placeholder="Select a site" />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px]">
+                <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
                   {SITES.map(s => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
@@ -141,7 +140,7 @@ export function FaultyEquipmentForm() {
               placeholder="e.g. Vacuum Cleaner, Mop, Floor Buffer" 
               value={equipment} 
               onChange={(e) => setEquipment(e.target.value)}
-              className="bg-secondary/50 border-white/5 focus:border-primary/50"
+              className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
             />
           </div>
 
@@ -151,7 +150,7 @@ export function FaultyEquipmentForm() {
               placeholder="Please describe what is wrong with the equipment..." 
               value={description} 
               onChange={(e) => setDescription(e.target.value)}
-              className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px]"
+              className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px] text-white"
             />
           </div>
         </CardContent>
@@ -159,7 +158,7 @@ export function FaultyEquipmentForm() {
           <Button 
             onClick={handleSubmit}
             disabled={isSubmitting || isUserLoading}
-            className="portal-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
+            className="faulty-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(245,158,11,0.2)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             Submit Report

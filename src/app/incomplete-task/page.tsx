@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/navbar"
 import { IncompleteTaskForm } from "@/components/incomplete-task-form"
 
@@ -9,7 +8,7 @@ export default function IncompleteTaskPage() {
       
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="mb-8 text-center space-y-2">
-          <h1 className="text-3xl font-bold font-headline portal-text-gradient">Incomplete Task</h1>
+          <h1 className="text-3xl font-bold font-headline incomplete-text-gradient">Incomplete Task</h1>
           <p className="text-muted-foreground">Report issues that prevented you from finishing a cleaning task.</p>
         </div>
         <IncompleteTaskForm />

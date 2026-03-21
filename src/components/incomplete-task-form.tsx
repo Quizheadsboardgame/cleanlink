@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -106,7 +105,7 @@ export function IncompleteTaskForm() {
       <Card className="glass-panel overflow-hidden border-none shadow-2xl">
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
-            <AlertTriangle className="w-6 h-6 text-primary" />
+            <AlertTriangle className="w-6 h-6 text-[#EF4444]" />
             Incomplete Task Report
           </CardTitle>
           <CardDescription>Report why a cleaning task could not be completed at your site.</CardDescription>
@@ -121,7 +120,7 @@ export function IncompleteTaskForm() {
                 placeholder="Enter your name" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50"
+                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -129,10 +128,10 @@ export function IncompleteTaskForm() {
                 <Building2 className="w-4 h-4" /> Site
               </Label>
               <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5">
+                <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
                   <SelectValue placeholder="Select a site" />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px]">
+                <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
                   {SITES.map(s => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
@@ -146,10 +145,10 @@ export function IncompleteTaskForm() {
               <Info className="w-4 h-4" /> Reason for Incomplete Task
             </Label>
             <Select onValueChange={setReason} value={reason}>
-              <SelectTrigger className="bg-secondary/50 border-white/5">
+              <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
                 <SelectValue placeholder="Select a reason" />
               </SelectTrigger>
-              <SelectContent className="bg-card border-white/10">
+              <SelectContent className="bg-card border-white/10 text-white">
                 {REASONS.map(r => (
                   <SelectItem key={r} value={r}>{r}</SelectItem>
                 ))}
@@ -163,7 +162,7 @@ export function IncompleteTaskForm() {
               placeholder="Provide more context (e.g. room number, specific staff member)..." 
               value={details} 
               onChange={(e) => setDetails(e.target.value)}
-              className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px]"
+              className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px] text-white"
             />
           </div>
         </CardContent>
@@ -171,7 +170,7 @@ export function IncompleteTaskForm() {
           <Button 
             onClick={handleSubmit}
             disabled={isSubmitting || isUserLoading}
-            className="portal-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
+            className="incomplete-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(239,68,68,0.2)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             Submit Report

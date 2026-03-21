@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -13,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Phone, Mail, User, Info, Plus, Trash2, Loader2, ShieldCheck, Edit2 } from "lucide-react"
+import { Info, Plus, Loader2, ShieldCheck } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -26,7 +25,6 @@ export default function ImportantInfoPage() {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   
-  // Form state
   const [category, setCategory] = useState("Management")
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
@@ -80,18 +78,18 @@ export default function ImportantInfoPage() {
         <div className="space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="space-y-1">
-              <h1 className="text-3xl font-bold font-headline portal-text-gradient">Important Information</h1>
+              <h1 className="text-3xl font-bold font-headline info-text-gradient">Important Information</h1>
               <p className="text-muted-foreground">Management contacts and essential procedures.</p>
             </div>
             
             {isAuthorized && (
               <Dialog open={isAdding} onOpenChange={setIsAdding}>
                 <DialogTrigger asChild>
-                  <Button className="portal-gradient text-white gap-2 rounded-xl shadow-lg">
+                  <Button className="info-gradient text-white gap-2 rounded-xl shadow-lg">
                     <Plus className="w-4 h-4" /> Add Information
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="glass-panel border-none">
+                <DialogContent className="glass-panel border-none text-foreground">
                   <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">New Information Entry</DialogTitle>
                   </DialogHeader>
@@ -99,10 +97,10 @@ export default function ImportantInfoPage() {
                     <div className="space-y-2">
                       <Label>Category</Label>
                       <Select onValueChange={setCategory} defaultValue={category}>
-                        <SelectTrigger className="bg-secondary/50 border-white/5">
+                        <SelectTrigger className="bg-secondary/50 border-white/5 text-foreground">
                           <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
-                        <SelectContent className="bg-card border-white/10">
+                        <SelectContent className="bg-card border-white/10 text-foreground">
                           <SelectItem value="Management">Management Contacts</SelectItem>
                           <SelectItem value="Procedures">Standard Procedures</SelectItem>
                           <SelectItem value="Announcements">Announcements</SelectItem>
@@ -115,7 +113,7 @@ export default function ImportantInfoPage() {
                         placeholder="e.g. Area Manager - Jane Doe" 
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="bg-secondary/50 border-white/5"
+                        className="bg-secondary/50 border-white/5 text-foreground"
                       />
                     </div>
                     <div className="space-y-2">
@@ -124,11 +122,11 @@ export default function ImportantInfoPage() {
                         placeholder="Enter contact details or instruction text..." 
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="bg-secondary/50 border-white/5 min-h-[100px]"
+                        className="bg-secondary/50 border-white/5 min-h-[100px] text-foreground"
                       />
                     </div>
                     <DialogFooter>
-                      <Button type="submit" disabled={isSubmitting} className="w-full portal-gradient text-white">
+                      <Button type="submit" disabled={isSubmitting} className="w-full info-gradient text-white">
                         {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                         Save Information
                       </Button>

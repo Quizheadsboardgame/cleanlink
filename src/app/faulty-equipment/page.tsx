@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/navbar"
 import { FaultyEquipmentForm } from "@/components/faulty-equipment-form"
 
@@ -9,7 +8,7 @@ export default function FaultyEquipmentPage() {
       
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="mb-8 text-center space-y-2">
-          <h1 className="text-3xl font-bold font-headline portal-text-gradient">Equipment Replacement</h1>
+          <h1 className="text-3xl font-bold font-headline faulty-text-gradient">Equipment Replacement</h1>
           <p className="text-muted-foreground">Report faulty equipment to request a replacement.</p>
         </div>
         <FaultyEquipmentForm />
