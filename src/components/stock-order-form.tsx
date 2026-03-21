@@ -162,7 +162,7 @@ export function StockOrderForm() {
                 placeholder="Enter your name" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full"
               />
             </div>
             <div className="space-y-2">
@@ -173,7 +173,7 @@ export function StockOrderForm() {
                 type="date"
                 value={dateStr}
                 onChange={(e) => setDateStr(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full appearance-none"
               />
             </div>
           </div>
@@ -184,7 +184,7 @@ export function StockOrderForm() {
                 <Building2 className="w-4 h-4" /> Site
               </Label>
               <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
+                <SelectTrigger className="h-12 bg-secondary/50 border-white/5 text-white">
                   <SelectValue placeholder="Select a site" />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
