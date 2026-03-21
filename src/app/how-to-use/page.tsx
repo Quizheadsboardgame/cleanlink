@@ -4,28 +4,80 @@ import * as React from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, MousePointerClick, Zap, ShieldCheck, Clock, MessageSquare, Smartphone } from "lucide-react"
+import { 
+  BookOpen, 
+  MousePointerClick, 
+  Zap, 
+  ShieldCheck, 
+  Clock, 
+  MessageSquare, 
+  Smartphone,
+  PlusCircle,
+  Hammer,
+  AlertTriangle,
+  CalendarDays,
+  Send,
+  LayoutList
+} from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 export default function HowToUsePage() {
   const steps = [
     {
       title: "Select Your Form",
-      description: "Use the top-left menu to choose between Stores Order, Faulty Equipment, or Incomplete Task reports.",
+      description: "Use the top-left menu to choose between Stores, Equipment, Tasks, or Shift requests.",
       icon: MousePointerClick,
       color: "text-emerald-400"
     },
     {
       title: "Fill in Details",
-      description: "Provide your name, select your site, and add the necessary items or descriptions for your request.",
+      description: "Provide your name, select your site, and add the necessary information for your specific request.",
       icon: BookOpen,
       color: "text-emerald-500"
     },
     {
       title: "Submit & Track",
-      description: "Hit the submit button and head to the Status Board to see your request's progress in real-time.",
-      icon: SendIcon,
+      description: "Hit submit and monitor the Status Board to see exactly when management reviews your post.",
+      icon: Send,
       color: "text-emerald-300"
+    }
+  ]
+
+  const features = [
+    {
+      title: "Stores Order",
+      description: "Request cleaning supplies and consumables. Note: Deliveries can take up to 3 working days.",
+      icon: PlusCircle,
+      color: "text-[#6E76F5]",
+      bg: "bg-[#6E76F5]/10"
+    },
+    {
+      title: "Faulty Equipment",
+      description: "Report broken vacuums, mops, or buffers. Management reviews these for next-day replacement.",
+      icon: Hammer,
+      color: "text-[#F59E0B]",
+      bg: "bg-[#F59E0B]/10"
+    },
+    {
+      title: "Incomplete Task",
+      description: "Report if access issues (locked doors) or hazards prevented you from finishing your work.",
+      icon: AlertTriangle,
+      color: "text-[#EF4444]",
+      bg: "bg-[#EF4444]/10"
+    },
+    {
+      title: "Additional Hours",
+      description: "Apply for permanent shift increases or temporary extra hours when you have extra availability.",
+      icon: Clock,
+      color: "text-[#D946EF]",
+      bg: "bg-[#D946EF]/10"
+    },
+    {
+      title: "Cover Work",
+      description: "Pick up extra shifts posted by managers. Note the countdown: interest must be logged before the deadline.",
+      icon: CalendarDays,
+      color: "text-[#0EA5E9]",
+      bg: "bg-[#0EA5E9]/10"
     }
   ]
 
@@ -38,7 +90,7 @@ export default function HowToUsePage() {
     {
       title: "Live Status Board",
       description: "Every submission includes a live countdown to its expected review time, ensuring total transparency.",
-      icon: Clock
+      icon: LayoutList
     },
     {
       title: "Universal Access",
@@ -46,8 +98,8 @@ export default function HowToUsePage() {
       icon: Smartphone
     },
     {
-      title: "Digital Reliability",
-      description: "All submissions are stored securely in the cloud, meaning nothing gets lost or overlooked.",
+      title: "Proactive Shifts",
+      description: "The Cover Work board allows you to proactively find extra income opportunities across all Lot 4 sites.",
       icon: ShieldCheck
     }
   ]
@@ -56,19 +108,19 @@ export default function HowToUsePage() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
-        <div className="space-y-12">
+      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-5xl">
+        <div className="space-y-16">
           {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold font-headline info-text-gradient">Guide to PortalFlow</h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Everything you need to know about using our professional stock management and reporting platform.
+              Everything you need to know about using our professional stock management and reporting platform for Lot 4.
             </p>
           </div>
 
-          {/* How to Submit Section */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-3">
+          {/* Quick Steps */}
+          <section className="space-y-8">
+            <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 px-3 py-1">GETTING STARTED</Badge>
               <h2 className="text-2xl font-bold font-headline">How to Submit</h2>
             </div>
@@ -89,9 +141,32 @@ export default function HowToUsePage() {
             </div>
           </section>
 
+          {/* Feature Directory */}
+          <section className="space-y-8">
+            <div className="flex items-center gap-3 justify-center sm:justify-start">
+              <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1">REPORTS & REQUESTS</Badge>
+              <h2 className="text-2xl font-bold font-headline">What can I do?</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {features.map((feature, idx) => (
+                <Card key={idx} className="glass-panel border-white/5 hover:bg-white/[0.02] transition-colors">
+                  <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                    <div className={`${feature.bg} p-2.5 rounded-lg`}>
+                      <feature.icon className={`w-5 h-5 ${feature.color}`} />
+                    </div>
+                    <CardTitle className="text-base font-headline">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-xs text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
           {/* Benefits Section */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-3">
+          <section className="space-y-8">
+            <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 px-3 py-1">WHY USE PORTALFLOW</Badge>
               <h2 className="text-2xl font-bold font-headline">System Benefits</h2>
             </div>
@@ -115,17 +190,19 @@ export default function HowToUsePage() {
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
               <MessageSquare className="w-32 h-32" />
             </div>
-            <div className="relative z-10 space-y-4">
-              <h2 className="text-2xl font-bold font-headline">Need Emergency Help?</h2>
-              <p className="max-w-xl opacity-90">
-                While PortalFlow is the fastest way to handle standard stock and equipment requests, always call your manager immediately for site emergencies or health and safety risks.
-              </p>
+            <div className="relative z-10 space-y-6">
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold font-headline">Need Emergency Help?</h2>
+                <p className="max-w-xl opacity-90 leading-relaxed">
+                  While PortalFlow is the fastest way to handle standard stock and equipment requests, always call your manager immediately for site emergencies, health and safety risks, or urgent access issues.
+                </p>
+              </div>
               <div className="flex flex-wrap gap-4">
-                <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold">
-                  Next-Day Review by 12 PM
+                <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2">
+                  <Clock className="w-4 h-4" /> Next-Day Review by 12 PM
                 </div>
-                <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold">
-                  Mon - Fri Coverage
+                <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" /> Mon - Fri Coverage
                 </div>
               </div>
             </div>
@@ -135,25 +212,5 @@ export default function HowToUsePage() {
 
       <Footer />
     </div>
-  )
-}
-
-function SendIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m22 2-7 20-4-9-9-4Z" />
-      <path d="M22 2 11 13" />
-    </svg>
   )
 }
