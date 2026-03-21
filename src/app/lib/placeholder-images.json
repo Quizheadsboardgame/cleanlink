@@ -14,9 +14,9 @@
       "imageHint": "corporate logo"
     },
     {
-      "id": "header-secondary-logo",
-      "description": "CleanLink Header Logo",
-      "imageUrl": "https://i.ibb.co/WZG8cGC/Untitled-2.jpg",
+      "id": "header-right-logo",
+      "description": "CleanLink Header Right Logo",
+      "imageUrl": "https://i.ibb.co/LDbGKZ2w/Untitled-2.png",
       "imageHint": "brand logo"
     }
   ]

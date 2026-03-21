@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react"
 import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
@@ -13,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+import placeholderData from "@/app/lib/placeholder-images.json"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -35,6 +37,7 @@ export function Navbar() {
   ]
 
   const activeItem = navItems.find(item => item.href === pathname) || navItems[0]
+  const rightLogo = placeholderData.placeholderImages.find(img => img.id === "header-right-logo")
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
@@ -91,6 +94,21 @@ export function Navbar() {
               Powered by HARLEY
             </span>
           </Link>
+        </div>
+
+        {/* Right Logo */}
+        <div className="flex-shrink-0 z-10 ml-auto pointer-events-auto">
+          {rightLogo && (
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+              <Image
+                src={rightLogo.imageUrl}
+                alt={rightLogo.description}
+                fill
+                className="object-contain"
+                data-ai-hint={rightLogo.imageHint}
+              />
+            </div>
+          )}
         </div>
       </div>
     </nav>
