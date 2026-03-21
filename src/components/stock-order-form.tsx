@@ -9,8 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
@@ -50,7 +48,7 @@ export function StockOrderForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
   const [site, setSite] = useState("")
-  const [date, setDate] = useState<Date>()
+  const [dateStr, setDateStr] = useState("")
   const [needStoresDelivered, setNeedStoresDelivered] = useState(false)
   const [takenFromClinicalSchool, setTakenFromClinicalSchool] = useState(false)
   const [items, setItems] = useState<OrderItem[]>([
@@ -83,7 +81,7 @@ export function StockOrderForm() {
       return
     }
 
-    if (!name || !site || !date) {
+    if (!name || !site || !dateStr) {
       toast({
         variant: "destructive",
         title: "Missing Information",
@@ -101,7 +99,7 @@ export function StockOrderForm() {
     const orderData = {
       id: stockOrderId,
       customerName: name,
-      orderDate: date.toISOString(),
+      orderDate: new Date(dateStr).toISOString(),
       site: site,
       status: 'Submitted',
       ownerId: user.uid,
@@ -173,29 +171,12 @@ export function StockOrderForm() {
               <Label className="text-muted-foreground flex items-center gap-2">
                 <CalendarIcon className="w-4 h-4" /> Date
               </Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal bg-secondary/50 border-white/5 text-white",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-white/10" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                    className="bg-card text-white"
-                  />
-                </PopoverContent>
-              </Popover>
+              <Input 
+                type="date"
+                value={dateStr}
+                onChange={(e) => setDateStr(e.target.value)}
+                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white h-10 block"
+              />
             </div>
           </div>
 
