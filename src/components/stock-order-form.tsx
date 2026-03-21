@@ -1,8 +1,9 @@
+
 "use client"
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Loader2 } from "lucide-react"
+import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Loader2, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -36,7 +37,8 @@ export function StockOrderForm() {
   const [site, setSite] = useState("")
   const [dateStr, setDateStr] = useState("")
   const [needStoresDelivered, setNeedStoresDelivered] = useState(false)
-  const [takenFromClinicalSchool, setTakenFromClinicalSchool] = useState(false)
+  const [isPickedUp, setIsPickedUp] = useState(false)
+  const [pickupLocation, setPickupLocation] = useState("")
   const [items, setItems] = useState<OrderItem[]>([
     { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }
   ])
@@ -76,6 +78,15 @@ export function StockOrderForm() {
       return
     }
 
+    if (isPickedUp && !pickupLocation) {
+      toast({
+        variant: "destructive",
+        title: t.common.missingInfo,
+        description: t.stores.pickedUpLocationLabel
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     const stockOrderId = Math.random().toString(36).substr(2, 9)
@@ -90,7 +101,8 @@ export function StockOrderForm() {
       status: 'Submitted',
       ownerId: user.uid,
       needStoresDelivered,
-      takenFromClinicalSchool,
+      isPickedUp,
+      pickupLocation: isPickedUp ? pickupLocation : "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
@@ -112,7 +124,7 @@ export function StockOrderForm() {
       id: stockOrderId,
       stockOrderId: stockOrderId,
       title: `Stock Order: ${name}`,
-      description: `Site: ${site}. Delivered: ${needStoresDelivered ? "Yes" : "No"}. Stores: ${takenFromClinicalSchool ? "Yes" : "No"}.`,
+      description: `Site: ${site}. Delivered: ${needStoresDelivered ? "Yes" : "No"}. Picked Up: ${isPickedUp ? `Yes (${pickupLocation})` : "No"}.`,
       status: 'Pending Review',
       ownerId: user.uid,
       type: 'Stock Order',
@@ -200,18 +212,34 @@ export function StockOrderForm() {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 bg-secondary/20 p-3 rounded-lg border border-white/5 transition-colors hover:bg-secondary/30">
-                <Checkbox 
-                  id="clinical" 
-                  checked={takenFromClinicalSchool}
-                  onCheckedChange={(checked) => setTakenFromClinicalSchool(!!checked)}
-                />
-                <Label
-                  htmlFor="clinical"
-                  className="text-sm font-medium cursor-pointer text-white"
-                >
-                  {t.stores.clinicalLabel}
-                </Label>
+              <div className="flex flex-col gap-4 bg-secondary/20 p-3 rounded-lg border border-white/5 transition-colors hover:bg-secondary/30">
+                <div className="flex items-center space-x-3">
+                  <Checkbox 
+                    id="pickedUp" 
+                    checked={isPickedUp}
+                    onCheckedChange={(checked) => setIsPickedUp(!!checked)}
+                  />
+                  <Label
+                    htmlFor="pickedUp"
+                    className="text-sm font-medium cursor-pointer text-white"
+                  >
+                    {t.stores.pickedUpLabel}
+                  </Label>
+                </div>
+                
+                {isPickedUp && (
+                  <div className="pl-7 space-y-2 animate-in fade-in slide-in-from-left-2 duration-300">
+                    <Label className="text-xs text-muted-foreground flex items-center gap-2">
+                      <MapPin className="w-3 h-3 text-primary" /> {t.stores.pickedUpLocationLabel}
+                    </Label>
+                    <Input 
+                      placeholder={t.stores.sitePlaceholder} 
+                      value={pickupLocation}
+                      onChange={(e) => setPickupLocation(e.target.value)}
+                      className="h-10 bg-secondary/30 border-white/5 focus:border-primary/50 text-white text-sm"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

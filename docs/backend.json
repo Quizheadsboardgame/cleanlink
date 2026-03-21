@@ -28,6 +28,18 @@
           "type": "string",
           "description": "The current workflow status of the stock order (e.g., 'Draft', 'Submitted', 'Archived'). 'Submitted' indicates a corresponding OrderTask has been created."
         },
+        "needStoresDelivered": {
+          "type": "boolean",
+          "description": "Whether the items need to be delivered to the site."
+        },
+        "isPickedUp": {
+          "type": "boolean",
+          "description": "Whether the items were picked up from a specific location."
+        },
+        "pickupLocation": {
+          "type": "string",
+          "description": "The location where the items were picked up from, if applicable."
+        },
         "createdAt": {
           "type": "string",
           "description": "Timestamp indicating when the stock order record was initially created.",
