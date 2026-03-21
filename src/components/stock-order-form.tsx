@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -22,11 +21,40 @@ interface OrderItem {
 }
 
 const SITES = [
-  "North Campus Warehouse",
-  "South Distribution Center",
-  "Central Hub Plaza",
-  "Eastern Logistics Park",
-  "West Coast Station"
+  "ANNE MCLAREN",
+  "CEDAR",
+  "MRC EPIDEMIOLOGY LEVEL 3",
+  "WBIC RPU BASEMENT",
+  "JOHN VAN GEEST - JVG",
+  "HERSCHEL SMITH BUILDING - HSB",
+  "BARTON HOUSE",
+  "COTON HOUSE",
+  "CLINICAL SCHOOLS",
+  "GRANTCHESTER HOUSE",
+  "BAY 13",
+  "WEST FORVIE",
+  "CLIFFORD ALLBUTT BUILDING - CAB",
+  "ISLAND RESEARCH BUILDING - IRB",
+  "OBS",
+  "PAEDIATRICS LEVEL 8",
+  "SURGERY LEVEL 9",
+  "X RAY BLOCK RADIOLOGY LEVEL 5",
+  "JEFFREY CHEAH OFFICE",
+  "EAST FORVIE (IPH)",
+  "STRAGEWAYS (SLR)",
+  "MEDICINE LEVEL 5",
+  "IMS LEVELS 4 & 5",
+  "OLD IMS - LAB BLOCK 4",
+  "NEURO SPACE",
+  "P&A LEVEL 4",
+  "WOLFSON BRAIN WBIC",
+  "BIO-REPOSITORY LAB LEVEL 1",
+  "ACCI LEVEL 6",
+  "POST DOC",
+  "HLRI BUILDING",
+  "MRC WATERBEACH STORAGE",
+  "TMS F&G LEVEL 2",
+  "E7"
 ]
 
 export function StockOrderForm() {
@@ -62,19 +90,23 @@ export function StockOrderForm() {
       return
     }
 
-    const dateStr = format(date, "PPP")
-    let message = `📦 *New Stock Order - PortalFlow*\n\n`
-    message += `👤 *User:* ${name}\n`
-    message += `📅 *Date:* ${dateStr}\n`
-    message += `📍 *Site:* ${site}\n\n`
-    message += `📝 *Items:*\n`
+    const dateStr = format(date, "yyyy-MM-dd")
+    const phone = "447000000000" // Replace with your target number
     
-    items.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} (${item.quantity})\n`
+    let message = `Stock Order\n`
+    message += `Name: ${name}\n`
+    message += `Date: ${dateStr}\n`
+    message += `Site: ${site}\n\n`
+    message += `Items:\n`
+    
+    items.forEach((item) => {
+      if (item.name && item.quantity) {
+        message += `- ${item.name}: ${item.quantity}\n`
+      }
     })
 
     const encodedMessage = encodeURIComponent(message)
-    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`
     
     window.open(whatsappUrl, '_blank')
     
@@ -91,7 +123,7 @@ export function StockOrderForm() {
           <CardHeader className="border-b border-white/5 bg-white/[0.02]">
             <CardTitle className="font-headline text-2xl flex items-center gap-2">
               <Package className="w-6 h-6 text-primary" />
-              New Stock Order
+              Stock Order Form
             </CardTitle>
             <CardDescription>Enter order details and dispatch via WhatsApp.</CardDescription>
           </CardHeader>
@@ -144,9 +176,9 @@ export function StockOrderForm() {
               </Label>
               <Select onValueChange={setSite}>
                 <SelectTrigger className="bg-secondary/50 border-white/5">
-                  <SelectValue placeholder="Select warehouse or campus" />
+                  <SelectValue placeholder="Select a site" />
                 </SelectTrigger>
-                <SelectContent className="bg-card border-white/10">
+                <SelectContent className="bg-card border-white/10 max-h-[300px]">
                   {SITES.map(s => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
@@ -172,7 +204,7 @@ export function StockOrderForm() {
                   <div key={item.id} className="flex gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="flex-1">
                       <Input 
-                        placeholder="Item name" 
+                        placeholder="Item (e.g. Hand towels)" 
                         value={item.name}
                         onChange={(e) => updateItem(item.id, "name", e.target.value)}
                         className="bg-secondary/30 border-white/5"
@@ -182,8 +214,9 @@ export function StockOrderForm() {
                       <Input 
                         type="number" 
                         min="1" 
-                        value={item.quantity}
-                        onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 1)}
+                        placeholder="Qty"
+                        value={item.quantity || ""}
+                        onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
                         className="bg-secondary/30 border-white/5"
                       />
                     </div>
@@ -206,7 +239,7 @@ export function StockOrderForm() {
               onClick={handleWhatsAppSubmit}
               className="portal-gradient text-white font-semibold gap-2 px-8 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)]"
             >
-              <Send className="w-5 h-5" /> Submit via WhatsApp
+              <Send className="w-5 h-5" /> Send via WhatsApp
             </Button>
           </CardFooter>
         </Card>
@@ -215,39 +248,30 @@ export function StockOrderForm() {
       <div className="space-y-6">
         <Card className="glass-panel border-none animate-fade-in delay-100">
           <CardHeader>
-            <CardTitle className="text-lg font-headline">Recent Orders</CardTitle>
+            <CardTitle className="text-lg font-headline">Order Preview</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer border border-white/5">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Package className="w-5 h-5" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Order #PF-202{i}</p>
-                  <p className="text-xs text-muted-foreground">North Warehouse • 12 Items</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs font-semibold text-accent">Pending</p>
-                </div>
-              </div>
-            ))}
+             <div className="p-4 rounded-lg bg-white/5 border border-white/5 text-xs font-mono whitespace-pre-wrap leading-relaxed">
+               <span className="text-accent">Stock Order</span>{"\n"}
+               Name: {name || "..."}{"\n"}
+               Date: {date ? format(date, "yyyy-MM-dd") : "..."}{"\n"}
+               Site: {site || "..."}{"\n\n"}
+               Items:{"\n"}
+               {items.filter(i => i.name).map((i, idx) => (
+                 <div key={idx}>- {i.name}: {i.quantity}</div>
+               ))}
+               {items.filter(i => i.name).length === 0 && "..."}
+             </div>
           </CardContent>
         </Card>
 
         <Card className="glass-panel border-none overflow-hidden animate-fade-in delay-200">
           <div className="portal-gradient p-6 text-white">
-            <h3 className="text-xl font-bold font-headline mb-2">Pro Analytics</h3>
-            <p className="text-sm opacity-80 mb-6">Track your logistics performance across all sites in real-time.</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                <p className="text-xs opacity-70">Deliveries</p>
-                <p className="text-2xl font-bold">124</p>
-              </div>
-              <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-                <p className="text-xs opacity-70">Efficiency</p>
-                <p className="text-2xl font-bold">98%</p>
-              </div>
+            <h3 className="text-xl font-bold font-headline mb-2">Fleet Management</h3>
+            <p className="text-sm opacity-80 mb-6">Your site selection is now updated with the latest campus locations.</p>
+            <div className="flex items-center gap-2 text-xs bg-white/10 rounded-lg p-2 backdrop-blur-sm">
+              <Building2 className="w-4 h-4" />
+              <span>{SITES.length} Locations Configured</span>
             </div>
           </div>
         </Card>
