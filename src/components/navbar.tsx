@@ -3,23 +3,40 @@
 
 import { Boxes, ClipboardList, PlusCircle } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import placeholderData from "@/app/lib/placeholder-images.json"
 
 export function Navbar() {
   const pathname = usePathname()
+  const bannerLogo = placeholderData.placeholderImages.find(img => img.id === "banner-logo")
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="portal-gradient p-1.5 rounded-lg">
-            <Boxes className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold font-headline tracking-tight portal-text-gradient hidden sm:inline-block">
-            PortalFlow
-          </span>
-        </Link>
+        <div className="flex items-center gap-4">
+          {bannerLogo && (
+            <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-white/10">
+              <Image
+                src={bannerLogo.imageUrl}
+                alt={bannerLogo.description}
+                fill
+                className="object-cover"
+                data-ai-hint={bannerLogo.imageHint}
+              />
+            </div>
+          )}
+          
+          <Link href="/" className="flex items-center gap-2">
+            <div className="portal-gradient p-1.5 rounded-lg">
+              <Boxes className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold font-headline tracking-tight portal-text-gradient hidden sm:inline-block">
+              PortalFlow
+            </span>
+          </Link>
+        </div>
 
         <div className="flex items-center gap-1 sm:gap-4">
           <Link href="/">

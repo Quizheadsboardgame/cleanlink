@@ -6,6 +6,12 @@
       "description": "Abstract tech waves in indigo and cyan",
       "imageUrl": "https://picsum.photos/seed/portalflow1/1200/400",
       "imageHint": "abstract tech"
+    },
+    {
+      "id": "banner-logo",
+      "description": "Corporate emblem or logo",
+      "imageUrl": "https://picsum.photos/seed/bannerlogo/100/100",
+      "imageHint": "corporate logo"
     }
   ]
 }
