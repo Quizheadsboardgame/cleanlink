@@ -1,3 +1,4 @@
+
 "use client"
 
 import { ClipboardList } from "lucide-react"
@@ -7,14 +8,13 @@ import { usePathname } from "next/navigation"
 export function ReviewTasksFab() {
   const pathname = usePathname()
   
-  // Optionally hide on the tasks page itself, or keep it for absolute consistency
-  // if (pathname === "/tasks") return null
-
   return (
     <Link href="/tasks" className="fixed bottom-6 right-6 z-[70] group">
-      <div className="flex items-center gap-2 px-5 py-3.5 rounded-2xl tasks-gradient text-white shadow-[0_10px_40px_rgba(139,92,246,0.4)] transition-all hover:scale-105 active:scale-95 border border-white/20">
-        <ClipboardList className="w-5 h-5 shadow-sm" />
-        <span className="font-bold text-sm tracking-wide">Review Tasks</span>
+      <div className="flex items-center justify-center w-14 h-14 rounded-full tasks-gradient text-white shadow-[0_10px_40px_rgba(139,92,246,0.4)] transition-all hover:scale-110 active:scale-95 border border-white/20">
+        <ClipboardList className="w-6 h-6 shadow-sm" />
+        <span className="absolute right-full mr-3 px-2 py-1 rounded bg-black/80 text-[10px] font-bold uppercase tracking-wider text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+          Management Portal
+        </span>
       </div>
     </Link>
   )
