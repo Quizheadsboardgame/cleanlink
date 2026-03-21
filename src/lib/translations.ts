@@ -1,3 +1,4 @@
+
 export const translations = {
   en: {
     nav: {
@@ -11,6 +12,7 @@ export const translations = {
       info: "Help & Contacts",
       guide: "How it Works",
       language: "Change Language",
+      concern: "Report a Concern",
     },
     footer: {
       tagline: "Powered by Harley:work smarter",
@@ -122,6 +124,20 @@ export const translations = {
       successDesc: "Thanks! Management will reach out to them soon.",
       missingFields: "Please fill in your friend's name and contact info."
     },
+    concern: {
+      title: "Report a Concern",
+      description: "Report a concern about a staff member or safety. This is private to management.",
+      typeLabel: "What is your concern about?",
+      typeStaff: "Another Staff Member",
+      typeSafety: "Health & Safety Issue",
+      siteLabel: "Where did this happen?",
+      detailsLabel: "Please describe your concern",
+      detailsPlaceholder: "Provide as much detail as possible...",
+      submit: "Submit Private Report",
+      successTitle: "Report Received",
+      successDesc: "Your report has been sent directly to management. It will be reviewed privately.",
+      missingFields: "Please select a type and provide details.",
+    },
     status: {
       title: "Check Progress",
       description: "See what's happening with your requests here.",
@@ -145,7 +161,7 @@ export const translations = {
     }
   },
   es: {
-    nav: { stores: "Pedir Suministros", faulty: "Equipo Roto", incomplete: "Tarea sin Terminar", hours: "Más Horas", referral: "Traer a un Amigo", cover: "Turnos Extras", status: "Ver Progreso", info: "Ayuda y Contactos", guide: "Cómo Funciona", language: "Cambiar Idioma" },
+    nav: { stores: "Pedir Suministros", faulty: "Equipo Roto", incomplete: "Tarea sin Terminar", hours: "Más Horas", referral: "Traer a un Amigo", cover: "Turnos Extras", status: "Ver Progreso", info: "Ayuda y Contactos", guide: "Cómo Funciona", language: "Cambiar Idioma", concern: "Reportar Inquietud" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 TECNOLOGÍAS SMART HARLEY", subtext: "Gestión Inteligente para Limpieza" },
     language: { title: "Elegir Idioma", description: "Seleccione el idioma que prefiere usar.", select: "Elegir un Idioma", back: "Volver al Inicio" },
     common: { submit: "Enviar Ahora", loading: "Enviando...", site: "Tu Sitio", name: "Tu Nombre", date: "Fecha", back: "Atrás", error: "Algo salió mal", success: "¡Listo!", wait: "Un momento...", auth: "Conectando...", missingInfo: "Faltan detalles", emergency: "Si es una emergencia, llame a su jefe de inmediato.", select: "Seleccione..." },
@@ -154,11 +170,12 @@ export const translations = {
     incomplete: { title: "Tarea sin Terminar", description: "¿No pudiste acabar un trabajo? Cuéntanos por qué.", reason: "¿Por qué no se terminó?", details: "Más detalles (Opcional)", detailsPlaceholder: "¿Algo más?", submit: "Enviar Info", successTitle: "¡Información Enviada!", successDesc: "Gracias. Lo revisaremos mañana.", missingFields: "Por favor elige una razón.", reasons: ["Puerta cerrada / Sin llave", "Había gente", "Estaban en mantenimiento", "No era seguro", "Otro"] },
     hours: { title: "Más Horas", description: "¿Quieres más turnos o más horas en tu sitio?", requestType: "¿Qué buscas?", permanent: "Fijo (Cada semana)", temporary: "Temporal (Solo unos días)", datesFree: "¿Qué días puedes?", datesPlaceholder: "ej. Lunes a viernes", timesAvailable: "¿A qué horas?", timesPlaceholder: "ej. 4 PM a 8 PM", submit: "Enviar Solicitud", successTitle: "¡Solicitud Enviada!", successDesc: "Gracias. Miraremos el horario.", missingFields: "Dinos qué horas buscas." },
     referral: { title: "Traer a un Amigo", description: "¿Conoces a alguien? ¡Cuéntanos!", yourName: "Tu Nombre", friendInfo: "Datos del Amigo", friendName: "Nombre del Amigo", email: "Su Email", phone: "Su Teléfono", extraInfo: "¿Algo más?", extraPlaceholder: "Experiencia o disponibilidad...", submit: "Enviar Datos", successTitle: "¡Amigo Recomendado!", successDesc: "¡Gracias! Le llamaremos pronto.", missingFields: "Pon el nombre y contacto de tu amigo." },
+    concern: { title: "Reportar Inquietud", description: "Informa sobre un colega o seguridad. Privado para la gerencia.", typeLabel: "¿Sobre qué es tu inquietud?", typeStaff: "Otro Miembro del Staff", typeSafety: "Problema de Salud y Seguridad", siteLabel: "¿Dónde ocurrió?", detailsLabel: "Describe tu inquietud", detailsPlaceholder: "Proporciona tantos detalles como sea posible...", submit: "Enviar Reporte Privado", successTitle: "Reporte Recibido", successDesc: "Tu reporte ha sido enviado directamente a la gerencia.", missingFields: "Selecciona un tipo y proporciona detalles." },
     status: { title: "Ver Progreso", description: "Mira cómo van tus pedidos aquí.", loading: "Actualizando...", noTasks: "Sin pedidos", noTasksDesc: "No has enviado nada últimamente.", underReview: "Revisando", processing: "En proceso", reviewIn: "Revisión en:", managerUpdate: "Mensaje del Jefe" },
     guide: { title: "Cómo usar CleanLink", description: "Una guía fácil para usar esta app.", workflow: "3 Pasos Fáciles", capabilities: "¿Qué puedo hacer?", benefits: "Cómo te ayuda", emergencyTitle: "¿Necesitas ayuda urgente?", emergencyDesc: "Si hay una emergencia real, llama a tu jefe ya.", developer: "Hecho por Smart Harley Technology" }
   },
   pt: {
-    nav: { stores: "Pedir Material", faulty: "Equipamento Estragado", incomplete: "Tarefa Incompleta", hours: "Mais Horas", referral: "Trazer um Amigo", cover: "Turnos Extras", status: "Ver Progresso", info: "Ajuda e Contatos", guide: "Como Funciona", language: "Mudar Idioma" },
+    nav: { stores: "Pedir Material", faulty: "Equipamento Estragado", incomplete: "Tarefa Incompleta", hours: "Mais Horas", referral: "Trazer um Amigo", cover: "Turnos Extras", status: "Ver Progresso", info: "Ajuda e Contatos", guide: "Como Funciona", language: "Mudar Idioma", concern: "Relatar Inquietude" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 TECNOLOGIAS SMART HARLEY", subtext: "Gestão Inteligente para Limpeza" },
     language: { title: "Escolher Idioma", description: "Escolha o idioma que quer usar.", select: "Escolha um Idioma", back: "Voltar ao Início" },
     common: { submit: "Enviar Agora", loading: "Enviando...", site: "O seu Local", name: "O seu Nome", date: "Data", back: "Voltar", error: "Algo correu mal", success: "Pronto!", wait: "Um momento...", auth: "Ligando...", missingInfo: "Faltam detalhes", emergency: "Em emergência, ligue para o chefe já.", select: "Selecione..." },
@@ -167,24 +184,26 @@ export const translations = {
     incomplete: { title: "Tarefa Incompleta", description: "Não acabou o trabalho? Diga-nos porquê.", reason: "Porque não acabou?", details: "Mais detalhes", detailsPlaceholder: "Mais alguma coisa?", submit: "Enviar Info", successTitle: "Informação Enviada!", successDesc: "Obrigado. Vamos ver amanhã.", missingFields: "Escolha uma razão.", reasons: ["Porta trancada / Sem chave", "Havia gente", "Manutenção no local", "Não era seguro", "Outro"] },
     hours: { title: "Mais Horas", description: "Quer mais turnos ou mais horas no seu local?", requestType: "O que procura?", permanent: "Fixo (Todas as semanas)", temporary: "Temporário (Só uns dias)", datesFree: "Que dias pode?", datesPlaceholder: "ex. Segunda a quarta", timesAvailable: "A que horas?", timesPlaceholder: "ex. 16:00 às 20:00", submit: "Enviar Pedido", successTitle: "Pedido Enviado!", successDesc: "Obrigado. Vamos ver o horário.", missingFields: "Diga que horas procura." },
     referral: { title: "Trazer um Amigo", description: "Conhece alguém? Diga-nos!", yourName: "O seu Nome", friendInfo: "Dados do Amigo", friendName: "Nome do Amigo", email: "Email", phone: "Telemóvel", extraInfo: "Mais info?", extraPlaceholder: "Experiência ou disponibilidade...", submit: "Enviar Dados", successTitle: "Amigo Recomendado!", successDesc: "Obrigado! Vamos ligar em breve.", missingFields: "Ponha o nome e contacto do amigo." },
+    concern: { title: "Relatar Inquietude", description: "Relate sobre um colega ou segurança. Privado para a gerência.", typeLabel: "Sobre o que é a sua inquietude?", typeStaff: "Outro Membro do Staff", typeSafety: "Problema de Saúde e Segurança", siteLabel: "Onde ocorreu?", detailsLabel: "Descreva a sua inquietude", detailsPlaceholder: "Forneça o máximo de detalhes possível...", submit: "Enviar Relatório Privado", successTitle: "Relatório Recebido", successDesc: "O seu relatório foi enviado diretamente à gerência.", missingFields: "Selecione um tipo e forneça detalhes." },
     status: { title: "Ver Progresso", description: "Veja como estão os seus pedidos.", loading: "Atualizando...", noTasks: "Sem pedidos", noTasksDesc: "Não enviou nada ultimamente.", underReview: "Revisando", processing: "Em processo", reviewIn: "Revisão em:", managerUpdate: "Mensagem do Chefe" },
     guide: { title: "Como usar CleanLink", description: "Um guia fácil para usar esta app.", workflow: "3 Passos Fécis", capabilities: "O que posso fazer?", benefits: "Como ajuda você", emergencyTitle: "Precisa de ajuda urgente?", emergencyDesc: "Em emergência real, ligue já para o chefe.", developer: "Feito por Smart Harley Technology" }
   },
   pl: {
-    nav: { stores: "Zamów Środki", faulty: "Zepsuty Sprzęt", incomplete: "Nieskończone Zadanie", hours: "Dodatkowe Godziny", referral: "Poleć Znajomego", cover: "Dodatkowe Zmiany", status: "Sprawdź Postęp", info: "Pomoc i Kontakty", guide: "Jak to Działa", language: "Zmień Język" },
+    nav: { stores: "Zamów Środki", faulty: "Zepsuty Sprzęt", incomplete: "Nieskończone Zadanie", hours: "Dodatkowe Godziny", referral: "Poleć Znajomego", cover: "Dodatkowe Zmiany", status: "Sprawdź Postęp", info: "Pomoc i Kontakty", guide: "Jak to Działa", language: "Zmień Język", concern: "Zgłoś Obawę" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Inteligentne Zarządzanie Sprzątaniem" },
     language: { title: "Wybierz Język", description: "Wybierz język, w którym chcesz używać aplikacji.", select: "Wybierz Język", back: "Wróć do Menu" },
     common: { submit: "Wyślij Teraz", loading: "Wysyłanie...", site: "Twoje Miejsce Pracy", name: "Twoje Imię", date: "Data", back: "Wstecz", error: "Coś poszło nie tak", success: "Gotowe!", wait: "Chwileczkę...", auth: "Łączenie...", missingInfo: "Uzupełnij szczegóły", emergency: "W nagłych wypadkach zadzwoń natychmiast do przełożonego.", select: "Wybierz..." },
-    stores: { title: "Zamów Środki", description: "Potrzebujesz materiałów do sprzątania? Daj nam znać.", nameLabel: "Twoje Imię", namePlaceholder: "Wpisz imię i nazwisko", dateLabel: "Dzisiejsza Data", siteLabel: "Gdzie pracujesz?", sitePlaceholder: "Nazwa obiektu", deliveredLabel: "Czy potrzebujesz dostawy?", deliveredSub: "Uwaga: Dostawa trwa zwykle około 3 dni robocze.", pickedUpLabel: "Czy odebrałeś sam?", pickedUpLocationLabel: "Skąd odebrałeś?", itemsTitle: "Czego potrzebujesz?", addItem: "Dodaj kolejny przedmiot", itemNamePlaceholder: "Przedmiot (np. Niebieska Rolka)", qtyPlaceholder: "Ile sztuk?", codePlaceholder: "Kod (jeśli znasz)", submit: "Wyślij Zamówienie", successTitle: "Zamówienie Wysłane!", successDesc: "Mamy Twoje zamówienie. Sprawdzimy je do 12:00 jutro.", missingFields: "Wpisz imię, datę i nazwę obiektu." },
+    stores: { title: "Zamów Środki", description: "Potrzebujesz materiałów do sprzątania? Daj nam znać.", nameLabel: "Twoje Imię", namePlaceholder: "Wpisz imię i nazwisko", dateLabel: "Dzisiejsza Data", siteLabel: "Gdzie pracujesz?", sitePlaceholder: "Nazwa obiektu", deliveredLabel: "Czy potrzebujesz dostawy?", deliveredSub: "Uwaga: Dostawa trwa zwykle okołp 3 dni robocze.", pickedUpLabel: "Czy odebrałeś sam?", pickedUpLocationLabel: "Skąd odebrałeś?", itemsTitle: "Czego potrzebujesz?", addItem: "Dodaj kolejny przedmiot", itemNamePlaceholder: "Przedmiot (np. Niebieska Rolka)", qtyPlaceholder: "Ile sztuk?", codePlaceholder: "Kod (jeśli znasz)", submit: "Wyślij Zamówienie", successTitle: "Zamówienie Wysłane!", successDesc: "Mamy Twoje zamówienie. Sprawdzimy je do 12:00 jutro.", missingFields: "Wpisz imię, datę i nazwę obiektu." },
     faulty: { title: "Zepsuty Sprzęt", description: "Zepsuło się narzędzie? Poproś o nowe.", cleanerName: "Twoje Imię", site: "Gdzie jest ten sprzęt?", equipment: "Co jest zepsute?", equipmentPlaceholder: "np. Odkurzacz, Mop", faultDescription: "Co się stało?", faultPlaceholder: "Opisz, co nie działa...", submit: "Wyślij Zgłoszenie", successTitle: "Zgłoszenie Wysłane!", successDesc: "Dzięki! Sprawdzimy to jutro do 12:00.", missingFields: "Uzupełnij wszystkie pola." },
     incomplete: { title: "Nieskończone Zadanie", description: "Nie skończyłeś pracy? Daj nam znać dlaczego.", reason: "Dlaczego zadanie nie zostało skończone?", details: "Więcej szczegółów (opcjonalnie)", detailsPlaceholder: "Coś jeszcze powinniśmy wiedzieć?", submit: "Wyślij Info", successTitle: "Informacja Wysłana!", successDesc: "Dzięki. Sprawdzimy to jutro.", missingFields: "Wybierz powód z listy.", reasons: ["Drzwi zamknięte / Brak klucza", "Ludzie przeszkadzali", "Trwała konserwacja", "Nie było bezpiecznie", "Inne"] },
     hours: { title: "Dodatkowe Godziny", description: "Chcesz więcej zmian lub godzin w swojej lokalizacji?", requestType: "Czego szukasz?", permanent: "Stałe (co tydzień)", temporary: "Tymczasowe (tylko na kilka dni)", datesFree: "W jakie dni możesz pracować?", datesPlaceholder: "np. Poniedziałek - piątek w przyszłym tygodniu", timesAvailable: "W jakich godzinach?", timesPlaceholder: "np. 16:00 - 20:00", submit: "Wyślij Prośbę", successTitle: "Prośba Wysłana!", successDesc: "Dzięki! Sprawdzimy grafik i damy znać.", missingFields: "Powiedz nam, jakich godzin szukasz." },
     referral: { title: "Poleć Znajomego", description: "Znasz kogoś do pracy? Daj nam znać!", yourName: "Twoje Imię", friendInfo: "Dane Znajomego", friendName: "Imię i Nazwisko Znajomego", email: "E-mail", phone: "Numer Telefonu", extraInfo: "Coś jeszcze?", extraPlaceholder: "Napisz o jego doświadczeniu lub kiedy może zacząć...", submit: "Wyślij Dane", successTitle: "Znajomy Polecony!", successDesc: "Dzięki! Skontaktujemy się z nim wkrótce.", missingFields: "Wpisz imię i dane kontaktowe znajomego." },
+    concern: { title: "Zgłoś Obawę", description: "Zgłoś obawę dotyczącą pracownika lub bezpieczeństwa. Prywatne dla zarządu.", typeLabel: "Czego dotyczy Twoja obawa?", typeStaff: "Inny Pracownik", typeSafety: "Kwestia Zdrowia i Bezpieczeństwa", siteLabel: "Gdzie to się stało?", detailsLabel: "Opisz swoją obawę", detailsPlaceholder: "Podaj jak najwięcej szczegółów...", submit: "Wyślij Prywatny Raport", successTitle: "Raport Otrzymany", successDesc: "Twój raport został wysłany bezpośrednio do zarządu.", missingFields: "Wybierz typ i podaj szczegóły." },
     status: { title: "Sprawdź Postęp", description: "Tu sprawdzisz, co dzieje się z Twoimi prośbami.", loading: "Aktualizacja...", noTasks: "Brak aktywnych próśb", noTasksDesc: "Ostatnio nic nie wysyłałeś.", underReview: "Sprawdzamy teraz", processing: "W trakcie realizacji", reviewIn: "Sprawdzenie za:", managerUpdate: "Wiadomość od Managera" },
     guide: { title: "Jak używać CleanLink", description: "Prosta instrukcja używania aplikacji w pracy.", workflow: "3 Proste Kroki", capabilities: "Co mogę zrobić?", benefits: "Jak to pomaga?", emergencyTitle: "Potrzebujesz pomocy teraz?", emergencyDesc: "W nagłych wypadkach dzwoń natychmiast do szefa.", developer: "Stworzone przez Smart Harley Technology" }
   },
   ro: {
-    nav: { stores: "Comandă Stoc", faulty: "Echipament Defect", incomplete: "Sarcină Incompletă", hours: "Solicitare Ore", referral: "Recomandă un Prieten", cover: "Acoperire Schimburi", status: "Panou Stare", info: "Informații", guide: "Ghid Utilizare", language: "Limbă" },
+    nav: { stores: "Comandă Stoc", faulty: "Echipament Defect", incomplete: "Sarcină Incompletă", hours: "Solicitare Ore", referral: "Recomandă un Prieten", cover: "Acoperire Schimburi", status: "Panou Stare", info: "Informații", guide: "Ghid Utilizare", language: "Limbă", concern: "Raportează o Îngrijorare" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Sistem Avansat de Management al Infrastructurii" },
     language: { title: "Limba Interfeței", description: "Selectați limba preferată pentru matricea CleanLink.", select: "Selectați Limba", back: "Revenire la Consolă" },
     common: { submit: "Trimite", loading: "Se procesează...", site: "Locație", name: "Nume", date: "Dată", back: "Înapoi", error: "Eroare", success: "Succes", wait: "Așteptați o clipă", auth: "Autentificare...", missingInfo: "Informații lipsă", emergency: "Formularele vor fi revizuite în următoarea zi lucrătoare.", select: "Selectați..." },
@@ -193,11 +212,12 @@ export const translations = {
     incomplete: { title: "Raport Sarcină Incompletă", description: "Raportați de ce o sarcină nu a fost finalizată.", reason: "Motiv", details: "Detalii Suplimentare", detailsPlaceholder: "Mai mult context...", submit: "Trimite Raport", successTitle: "Raport Trimis", successDesc: "Va fi revizuit în următoarea zi lucrătoare.", missingFields: "Completați câmpurile obligatorii.", reasons: ["Ușă încuiată / Fără acces", "Zonă ocupată", "Mentenanță în curs", "Sănătate și Siguranță", "Altele"] },
     hours: { title: "Solicitare Ore Suplimentare", description: "Solicitați ture extra sau ore permanente.", requestType: "Tip Solicitare", permanent: "Ore Permanente", temporary: "Ore Temporare", datesFree: "Date Specifice", datesPlaceholder: "ex: Luni - Miercuri viitoare", timesAvailable: "Intervale Disponibile", timesPlaceholder: "ex: Luni - Vineri 16:00 - 20:00", submit: "Trimite Solicitarea", successTitle: "Solicitare Trimisă", successDesc: "Mulțumim, va fi revizuită.", missingFields: "Completați câmpurile obligatorii." },
     referral: { title: "Recomandă un Prieten", description: "Recomandați pe cineva pentru echipa de curățenie.", yourName: "Numele Dvs. Complet", friendInfo: "Informații Prieten", friendName: "Numele Prietenului", email: "Email", phone: "Telefon", extraInfo: "Informații Extra", extraPlaceholder: "Disponibilitate sau experiență...", submit: "Trimite Recomandarea", successTitle: "Recomandare Trimisă", successDesc: "Mulțumim pentru recomandare!", missingFields: "Completați câmpurile obligatorii." },
+    concern: { title: "Raportează o Îngrijorare", description: "Raportează o problemă despre un coleg sau siguranță. Privat pentru management.", typeLabel: "Despre ce este îngrijorarea ta?", typeStaff: "Alt Membru al Staff-ului", typeSafety: "Problemă de Sănătate și Siguranță", siteLabel: "Unde s-a întâmplat?", detailsLabel: "Descrie îngrijorarea ta", detailsPlaceholder: "Oferă cât mai multe detalii...", submit: "Trimite Raport Privat", successTitle: "Raport Primit", successDesc: "Raportul tău a fost trimis direct către management.", missingFields: "Selectează un tip și oferă detalii." },
     status: { title: "Panou Stare", description: "Urmăriți progresul solicitărilor.", loading: "Sincronizare...", noTasks: "Fără sarcini active", noTasksDesc: "Nu există trimiteri în sistem.", underReview: "În revizuire", processing: "În procesare", reviewIn: "Revizuire în:", managerUpdate: "Update Manager" },
-    guide: { title: "Ghid CleanLink", description: "Aflați cum să gestionați comenzile și rapoartele ușor.", workflow: "Pasos Simples", capabilities: "Ce Puteți Face", benefits: "Beneficii", emergencyTitle: "Ajutor Urgent?", emergencyDesc: "În urgențe, sunați supervizorul imediat.", developer: "Creat de Smart Harley Technology" }
+    guide: { title: "Ghid CleanLink", description: "Aflați cum să gestionați comenzile și rapoartele ușor.", workflow: "3 Pași Simpli", capabilities: "Ce Puteți Face", benefits: "Beneficii", emergencyTitle: "Ajutor Urgent?", emergencyDesc: "În urgențe, sunați supervizorul imediat.", developer: "Creat de Smart Harley Technology" }
   },
   hu: {
-    nav: { stores: "Raktári Rendelés", faulty: "Hibás Felszerelés", incomplete: "Befejezetlen Feladat", hours: "Órák Igénylése", referral: "Barát Ajánlása", cover: "Helyettesítés", status: "Állapotjelző Tábla", info: "Információk", guide: "Útmutató", language: "Nyelv" },
+    nav: { stores: "Raktári Rendelés", faulty: "Hibás Felszerelés", incomplete: "Befejezetlen Feladat", hours: "Órák Igénylése", referral: "Barát Ajánlása", cover: "Helyettesítés", status: "Állapotjelző Tábla", info: "Információk", guide: "Útmutató", language: "Nyelv", concern: "Panasz Bejelentése" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Infrastruktúra Kezelő Rendszer" },
     language: { title: "Nyelv", description: "Válassza ki a kívánt nyelvet.", select: "Választás", back: "Vissza" },
     common: { submit: "Küldés", loading: "Feldolgozás...", site: "Helyszín", name: "Név", date: "Dátum", back: "Vissza", error: "Hiba", success: "Siker", wait: "Pillanat", auth: "Hitelesítés...", missingInfo: "Hiányzó adatok", emergency: "A beküldött űrlapokat holnap bíráljuk el.", select: "Választás..." },
@@ -206,11 +226,12 @@ export const translations = {
     incomplete: { title: "Befejezetlen", description: "Miért maradt el?", reason: "Indok", details: "Részletek", detailsPlaceholder: "Infó...", submit: "Küldés", successTitle: "Siker", successDesc: "Holnap bíráljuk.", missingFields: "Töltsd ki a mezőket.", reasons: ["Zárva", "Foglalt", "Karbantartás", "Biztonság", "Egyéb"] },
     hours: { title: "Plusz Órák", description: "Plusz műszak kérése.", requestType: "Típus", permanent: "Állandó", temporary: "Ideiglenes", datesFree: "Dátumok", datesPlaceholder: "Mikor?", timesAvailable: "Idősáv", timesPlaceholder: "pl. 16:00-20:00", submit: "Küldés", successTitle: "Siker", successDesc: "Bíráljuk.", missingFields: "Mindent tölts ki." },
     referral: { title: "Barát Ajánlása", description: "Ajánlj valakit a csapatba.", yourName: "Neved", friendInfo: "Barát", friendName: "Barát neve", email: "Email", phone: "Telefon", extraInfo: "Extra", extraPlaceholder: "Tapasztalat...", submit: "Küldés", successTitle: "Siker", successDesc: "Köszi az ajánlást!", missingFields: "Mindent tölts ki." },
+    concern: { title: "Panasz Bejelentése", description: "Jelentsen panaszt munkatársról vagy biztonságról. Bizalmas kezelés.", typeLabel: "Mivel kapcsolatos a panasza?", typeStaff: "Másik munkatárs", typeSafety: "Egészségügyi és biztonsági kérdés", siteLabel: "Hol történt?", detailsLabel: "Írja le a panaszát", detailsPlaceholder: "Adjon meg annyi részletet, amennyit csak tud...", submit: "Bizalmas jelentés küldése", successTitle: "Jelentés fogadva", successDesc: "Jelentését közvetlenül a vezetőségnek továbbítottuk.", missingFields: "Válasszon típust és adjon meg részleteket." },
     status: { title: "Állapot", description: "Kövesse nyomon a kéréseit.", loading: "Szinkron...", noTasks: "Nincs feladat", noTasksDesc: "Nincs beküldött kérés.", underReview: "Bírálat alatt", processing: "Feldolgozás", reviewIn: "Bírálat:", managerUpdate: "Vezetői infó" },
-    guide: { title: "Útmutató", description: "Tanulja meg kezelni rendeléseit és jelentéseit.", workflow: "Egyszerű Lépések", capabilities: "Mit Tehet", benefits: "Előnyök", emergencyTitle: "Sürgős Segítség?", emergencyDesc: "Vészhelyzetben hívja felettesét.", developer: "Készítette: Smart Harley Technology" }
+    guide: { title: "Útmutató", description: "Tanulja meg kezelni rendeléseit és jelentéseit.", workflow: "3 Egyszerű Lépés", capabilities: "Mit Tehet", benefits: "Előnyök", emergencyTitle: "Sürgős Segítség?", emergencyDesc: "Vészhelyzetben hívja felettesét.", developer: "Készítette: Smart Harley Technology" }
   },
   cs: {
-    nav: { stores: "Objednávka", faulty: "Závada", incomplete: "Nedokončeno", hours: "Hodiny", referral: "Doporučit", cover: "Záskok", status: "Stav", info: "Info", guide: "Návod", language: "Jazyk" },
+    nav: { stores: "Objednávka", faulty: "Závada", incomplete: "Nedokončeno", hours: "Hodiny", referral: "Doporučit", cover: "Záskok", status: "Stav", info: "Info", guide: "Návod", language: "Jazyk", concern: "Nahlásit Problém" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Systém Správy" },
     language: { title: "Jazyk", description: "Vyberte jazyk.", select: "Vybrat", back: "Zpět" },
     common: { submit: "Odeslat", loading: "Čekejte...", site: "Lokalita", name: "Jméno", date: "Datum", back: "Zpět", error: "Chyba", success: "Úspěch", wait: "Moment", auth: "Ověřování...", missingInfo: "Chybějící info", emergency: "Zkontrolujeme zítra.", select: "Vybrat..." },
@@ -219,11 +240,12 @@ export const translations = {
     incomplete: { title: "Nedokončeno", description: "Proč nebylo hotovo?", reason: "Důvod", details: "Podrobnosti", detailsPlaceholder: "Více info...", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zítra zkontrolujeme.", missingFields: "Vyplňte pole.", reasons: ["Zavřeno", "Obsazeno", "Údržba", "BHP", "Jiné"] },
     hours: { title: "Hodiny Navíc", description: "Žádost o směny.", requestType: "Typ", permanent: "Stálé", temporary: "Záskok", datesFree: "Data", datesPlaceholder: "Kdy?", timesAvailable: "Čas", timesPlaceholder: "např. 16-20", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme.", missingFields: "Vyplňte vše." },
     referral: { title: "Doporučit", description: "Doporučte někoho.", yourName: "Vaše Jméno", friendInfo: "Přítel", friendName: "Jméno přítele", email: "Email", phone: "Telefon", extraInfo: "Extra", extraPlaceholder: "Zkušenosti...", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Díky!", missingFields: "Vyplňte vše." },
+    concern: { title: "Nahlásit Problém", description: "Nahlaste problém s pracovníkem nebo bezpečností. Soukromé pro vedení.", typeLabel: "Čeho se týká váš problém?", typeStaff: "Jiný pracovník", typeSafety: "Zdravotní a bezpečnostní problém", siteLabel: "Kde se to stalo?", detailsLabel: "Popište svůj problém", detailsPlaceholder: "Uveďte co nejvíce podrobností...", submit: "Odeslat soukromé hlášení", successTitle: "Hlášení přijato", successDesc: "Vaše hlášení bylo odesláno přímo vedení.", missingFields: "Vyberte typ a uveďte podrobnosti." },
     status: { title: "Stav", description: "Sledujte své požadavky.", loading: "Synchronizace...", noTasks: "Bez úkolů", noTasksDesc: "Nic v systému.", underReview: "Kontrola", processing: "Zpracování", reviewIn: "Kontrola za:", managerUpdate: "Poznámka Manažera" },
-    guide: { title: "Návod", description: "Naučte se ovládat své objednávky a hlášení.", workflow: "Snadné Kroky", capabilities: "Co Lze Dělat", benefits: "Výhody", emergencyTitle: "Nutná Pomoc?", emergencyDesc: "V nouzi volejte šéfa.", developer: "Vytvořeno Smart Harley Technology" }
+    guide: { title: "Návod", description: "Naučte se ovládat své objednávky a hlášení.", workflow: "3 Snadné Kroky", capabilities: "Co Lze Dělat", benefits: "Výhody", emergencyTitle: "Nutná Pomoc?", emergencyDesc: "V nouzi volejte šéfa.", developer: "Vytvořeno Smart Harley Technology" }
   },
   bg: {
-    nav: { stores: "Поръчка", faulty: "Повреда", incomplete: "Незавършено", hours: "Часове", referral: "Препоръка", cover: "Смяна", status: "Статус", info: "Инфо", guide: "Ръководство", language: "Език" },
+    nav: { stores: "Поръчка", faulty: "Повреда", incomplete: "Незавършено", hours: "Часове", referral: "Препоръка", cover: "Смяна", status: "Статус", info: "Инфо", guide: "Ръководство", language: "Език", concern: "Сигнал за проблем" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Система за Управление" },
     language: { title: "Език", description: "Изберете език.", select: "Избор", back: "Назад" },
     common: { submit: "Изпрати", loading: "Чакайте...", site: "Обект", name: "Име", date: "Дата", back: "Назад", error: "Грешка", success: "Успех", wait: "Момент", auth: "Проверка...", missingInfo: "Липси", emergency: "Преглед утре.", select: "Избор..." },
@@ -232,21 +254,23 @@ export const translations = {
     incomplete: { title: "Незавършено", description: "Защо не е готово?", reason: "Причина", details: "Детайли", detailsPlaceholder: "Още инфо...", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Преглед утре.", missingFields: "Попълнете полетата.", reasons: ["Заключено", "Заето", "Поддръжка", "Здраве", "Друго"] },
     hours: { title: "Още Часове", description: "Заявка за работа.", requestType: "Тип", permanent: "Постоянно", temporary: "Временно", datesFree: "Дати", datesPlaceholder: "Кога?", timesAvailable: "Време", timesPlaceholder: "напр. 16-20", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Ще прегледаме.", missingFields: "Попълнете всичко." },
     referral: { title: "Препоръка", description: "Някой за екипа?", yourName: "Ваше Име", friendInfo: "Приятел", friendName: "Име на приятел", email: "Имейл", phone: "Телефон", extraInfo: "Екстра", extraPlaceholder: "Опит...", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Благодарим!", missingFields: "Попълнете всичко." },
+    concern: { title: "Сигнал за проблем", description: "Съобщете за проблем със служител или безопасност. Поверително за ръководството.", typeLabel: "За какво се отнася вашият проблем?", typeStaff: "Друг служител", typeSafety: "Проблем със здравето и безопасността", siteLabel: "Къде се случи това?", detailsLabel: "Опишете проблема си", detailsPlaceholder: "Предоставете възможно най-много подробности...", submit: "Изпращане на поверителен сигнал", successTitle: "Сигналът е получен", successDesc: "Вашият сигнал е изпратен директно до ръководството.", missingFields: "Моля, изберете тип и предоставете подробности." },
     status: { title: "Статус", description: "Следете заявките си.", loading: "Синхрон...", noTasks: "Няма задачи", noTasksDesc: "Празно в системата.", underReview: "Проверява се", processing: "Обработка", reviewIn: "Преглед след:", managerUpdate: "Мениджър инфо" },
-    guide: { title: "Ръководство", description: "Научете се да ползвате поръчки и доклади.", workflow: "Прости стъпки", capabilities: "Какво Можете", benefits: "Предимства", emergencyTitle: "Спешна Помощ?", emergencyDesc: "При спешност звъннете на шефа.", developer: "Създадено от Smart Harley Technology" }
+    guide: { title: "Ръководство", description: "Научете се да ползвате поръчки и доклади.", workflow: "3 Прости стъпки", capabilities: "Какво Можете", benefits: "Предимства", emergencyTitle: "Спешна Помощ?", emergencyDesc: "При спешност звъннете на шефа.", developer: "Създадено от Smart Harley Technology" }
   },
   tr: {
-    nav: { stores: "Sipariş", faulty: "Arıza", incomplete: "Yarım Kalan", hours: "Saatler", referral: "Öneri", cover: "Vardiya", status: "Durum", info: "Bilgi", guide: "Rehber", language: "Dil" },
+    nav: { stores: "Sipariş", faulty: "Arıza", incomplete: "Yarım Kalan", hours: "Saatler", referral: "Öneri", cover: "Vardiya", status: "Durum", info: "Bilgi", guide: "Rehber", language: "Dil", concern: "Sorun Bildir" },
     footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Yönetim Sistemi" },
     language: { title: "Dil", description: "Dil seçin.", select: "Seç", back: "Geri" },
     common: { submit: "Gönder", loading: "Bekleyin...", site: "Saha", name: "İsim", date: "Tarih", back: "Geri", error: "Hata", success: "Başarılı", wait: "An", auth: "Doğrulama...", missingInfo: "Eksik", emergency: "Yarın incelenir.", select: "Seç..." },
-    stores: { title: "Sipariş", description: "Sipariş için doldurun.", nameLabel: "İsim", namePlaceholder: "İsminiz", dateLabel: "Tarih", siteLabel: "Saha", sitePlaceholder: "Saha adını girin", deliveredLabel: "Teslimat", deliveredSub: "3 iş günü", pickedUpLabel: "Konumdan alındı", pickedUpLocationLabel: "Nereden alındı?", itemsTitle: "Ürünler", addItem: "Ekle", itemNamePlaceholder: "Ürün", qtyPlaceholder: "Adet", codePlaceholder: "Kod", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "İsim, tarih ve saha girin." },
+    stores: { title: "Sipariş", description: "Sipariş için doldurun.", nameLabel: "İsim", namePlaceholder: "İsminiz", dateLabel: "Tarih", siteLabel: "Saha", sitePlaceholder: "Saha adını girin", deliveredLabel: "Teslimat", deliveredSub: "3 iş günü", pickedUpLabel: "Konumdan alındı", pickedUpLocationLabel: "Nereden alındı?", itemsTitle: "Ürünler", addItem: "Ekle", itemNamePlaceholder: "Ürün", qtyPlaceholder: "Adet", codePlaceholder: "Kod", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "İsim, tarihte saha girin." },
     faulty: { title: "Arıza", description: "Ekipman değişimi.", cleanerName: "İsim", site: "Saha", equipment: "Ekipman", equipmentPlaceholder: "örn. Süpürge", faultDescription: "Arıza", faultPlaceholder: "Sorun nedir?", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "Hepsini doldur." },
     incomplete: { title: "Yarım Kalan", description: "Neden bitmedi?", reason: "Neden", details: "Detaylar", detailsPlaceholder: "Daha fazla...", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın bakılır.", missingFields: "Alanları doldur.", reasons: ["Kilitli", "Dolu", "Bakım", "Güvenlik", "Diğer"] },
     hours: { title: "Ek Saat", description: "Vardiya talebi.", requestType: "Tür", permanent: "Kalıcı", temporary: "Geçici", datesFree: "Tarihler", datesPlaceholder: "Ne zaman?", timesAvailable: "Saatler", timesPlaceholder: "örn. 16-20", submit: "Gönder", successTitle: "Gönderildi", successDesc: "İncelenecek.", missingFields: "Hepsini doldur." },
     referral: { title: "Arkadaş Öner", description: "Ekip için birisi?", yourName: "Adınız", friendInfo: "Arkadaş", friendName: "Arkadaşın Adı", email: "E-posta", phone: "Telefon", extraInfo: "Ek", extraPlaceholder: "Deneyim...", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Teşekkürler!", missingFields: "Hepsini doldur." },
+    concern: { title: "Sorun Bildir", description: "Bir çalışan veya güvenlik hakkında sorun bildir. Yönetim için gizlidir.", typeLabel: "Sorununuz ne hakkında?", typeStaff: "Başka Bir Çalışan", typeSafety: "Sağlık ve Güvenlik Sorunu", siteLabel: "Nerede oldu?", detailsLabel: "Sorununuzu açıklayın", detailsPlaceholder: "Mümkün olduğunca çok detay verin...", submit: "Gizli Raporu Gönder", successTitle: "Rapor Alındı", successDesc: "Raporunuz doğrudan yönetime gönderilmiştir.", missingFields: "Lütfen bir tür seçin ve detayları belirtin." },
     status: { title: "Durum", description: "Taleplerinizi takip edin.", loading: "Senkron...", noTasks: "Görev yok", noTasksDesc: "Sistem boş.", underReview: "İncelemede", processing: "İşleniyor", reviewIn: "İnceleme:", managerUpdate: "Yönetici Notu" },
-    guide: { title: "Rehber", description: "Sipariş ve raporları kolayca yönetmeyi öğrenin.", workflow: "Basit Adımlar", capabilities: "Neler Yapılır", benefits: "Avantajlar", emergencyTitle: "Acil Yardım?", emergencyDesc: "Acil durumda amirinizi arayın.", developer: "Smart Harley Technology tarafından yapıldı" }
+    guide: { title: "Rehber", description: "Sipariş ve raporları kolayca yönetmeyi öğrenin.", workflow: "3 Basit Adım", capabilities: "Neler Yapılır", benefits: "Avantajlar", emergencyTitle: "Acil Yardım?", emergencyDesc: "Acil durumda amirinizi arayın.", developer: "Smart Harley Technology tarafından yapıldı" }
   },
   ar: {
     nav: {
@@ -260,6 +284,7 @@ export const translations = {
       info: "مساعدة وتواصل",
       guide: "كيفية الاستخدام",
       language: "تغيير اللغة",
+      concern: "إبلاغ عن مشكلة",
     },
     footer: {
       tagline: "Powered by Harley:work smarter",
@@ -370,6 +395,20 @@ export const translations = {
       successTitle: "تمت التوصية!",
       successDesc: "شكراً! ستتواصل الإدارة معهم قريباً.",
       missingFields: "يرجى كتابة اسم صديقك ومعلومات التواصل معه."
+    },
+    concern: {
+      title: "إبلاغ عن مشكلة",
+      description: "أبلغ عن مشكلة تتعلق بموظف آخر أو السلامة. هذا البلاغ سري للإدارة فقط.",
+      typeLabel: "ما هو موضوع بلاغك؟",
+      typeStaff: "موظف آخر",
+      typeSafety: "مشكلة تتعلق بالصحة والسلامة",
+      siteLabel: "أين حدث هذا؟",
+      detailsLabel: "يرجى وصف مشكلتك",
+      detailsPlaceholder: "قدم أكبر قدر ممكن من التفاصيل...",
+      submit: "إرسال بلاغ سري",
+      successTitle: "تم استلام البلاغ",
+      successDesc: "تم إرسال بلاغك مباشرة إلى الإدارة. سيتم مراجعته بخصوصية تامة.",
+      missingFields: "يرجى اختيار نوع البلاغ وتقديم التفاصيل.",
     },
     status: {
       title: "متابعة الطلبات",

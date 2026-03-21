@@ -137,7 +137,7 @@
         "type": {
           "type": "string",
           "description": "The category of task.",
-          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral"]
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern"]
         }
       },
       "required": [
@@ -149,119 +149,20 @@
         "createdAt"
       ]
     },
-    "FaultyEquipmentReport": {
+    "StaffConcern": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "FaultyEquipmentReport",
+      "title": "StaffConcern",
       "type": "object",
-      "description": "A report submitted by a cleaner to request replacement of faulty equipment.",
+      "description": "A private report submitted by a staff member regarding another staff member or a health and safety issue.",
       "properties": {
         "id": { "type": "string" },
-        "cleanerName": { "type": "string" },
+        "type": { "type": "string", "enum": ["Staff Member", "Health & Safety"] },
         "site": { "type": "string" },
-        "equipmentName": { "type": "string" },
-        "faultDescription": { "type": "string" },
-        "status": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "cleanerName", "site", "equipmentName", "faultDescription", "status", "ownerId", "createdAt"]
-    },
-    "IncompleteTaskReport": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "IncompleteTaskReport",
-      "type": "object",
-      "description": "A report explaining why a cleaning task could not be completed.",
-      "properties": {
-        "id": { "type": "string" },
-        "cleanerName": { "type": "string" },
-        "site": { "type": "string" },
-        "reason": { "type": "string" },
-        "details": { "type": "string" },
-        "status": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "cleanerName", "site", "reason", "status", "ownerId", "createdAt"]
-    },
-    "AdditionalHoursRequest": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AdditionalHoursRequest",
-      "type": "object",
-      "description": "A request submitted by a cleaner for permanent or temporary extra working hours.",
-      "properties": {
-        "id": { "type": "string" },
-        "cleanerName": { "type": "string" },
-        "site": { "type": "string" },
-        "requestType": { "type": "string", "enum": ["Permanent", "Temporary"] },
-        "datesFree": { "type": "string" },
-        "timesAvailable": { "type": "string" },
-        "status": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "cleanerName", "site", "requestType", "timesAvailable", "status", "ownerId", "createdAt"]
-    },
-    "StaffReferral": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "StaffReferral",
-      "type": "object",
-      "description": "A referral for a friend or family member to join the cleaning team.",
-      "properties": {
-        "id": { "type": "string" },
-        "referrerName": { "type": "string" },
-        "friendName": { "type": "string" },
-        "friendEmail": { "type": "string", "format": "email" },
-        "friendPhone": { "type": "string" },
-        "extraInfo": { "type": "string" },
-        "status": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "referrerName", "friendName", "friendEmail", "friendPhone", "status", "ownerId", "createdAt"]
-    },
-    "ImportantInfo": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ImportantInfo",
-      "type": "object",
-      "description": "General information, contact details, or announcements for staff.",
-      "properties": {
-        "id": { "type": "string" },
-        "category": { "type": "string", "enum": ["Management", "Procedures", "Announcements"] },
-        "title": { "type": "string" },
-        "content": { "type": "string" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "category", "title", "content", "updatedAt"]
-    },
-    "CoverWorkPost": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "CoverWorkPost",
-      "type": "object",
-      "description": "A post created by a manager for upcoming cover work opportunities.",
-      "properties": {
-        "id": { "type": "string" },
-        "title": { "type": "string" },
-        "location": { "type": "string" },
         "description": { "type": "string" },
-        "deadline": { "type": "string", "format": "date-time" },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string" }
       },
-      "required": ["id", "title", "deadline", "createdAt"]
-    },
-    "CoverWorkResponse": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "CoverWorkResponse",
-      "type": "object",
-      "description": "A response from a cleaner expressing interest in a cover work post.",
-      "properties": {
-        "id": { "type": "string" },
-        "postId": { "type": "string" },
-        "cleanerName": { "type": "string" },
-        "notes": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "postId", "cleanerName", "ownerId", "createdAt"]
+      "required": ["id", "type", "site", "description", "createdAt", "status"]
     }
   },
   "auth": {
@@ -273,125 +174,15 @@
   "firestore": {
     "structure": [
       {
-        "path": "/users/{userId}/stockOrders/{stockOrderId}",
+        "path": "/staffConcerns/{concernId}",
         "definition": {
-          "entityName": "StockOrder",
+          "entityName": "StaffConcern",
           "schema": {
-            "$ref": "#/backend/entities/StockOrder"
+            "$ref": "#/backend/entities/StaffConcern"
           },
-          "description": "Stores individual stock orders created by a user.",
+          "description": "Private concerns submitted by staff.",
           "params": [
-            { "name": "userId", "description": "Owner UID" },
-            { "name": "stockOrderId", "description": "Order UID" }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/additionalHoursRequests/{requestId}",
-        "definition": {
-          "entityName": "AdditionalHoursRequest",
-          "schema": {
-            "$ref": "#/backend/entities/AdditionalHoursRequest"
-          },
-          "description": "Stores requests for additional working hours.",
-          "params": [
-            { "name": "userId", "description": "Owner UID" },
-            { "name": "requestId", "description": "Request UID" }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/referrals/{referralId}",
-        "definition": {
-          "entityName": "StaffReferral",
-          "schema": {
-            "$ref": "#/backend/entities/StaffReferral"
-          },
-          "description": "Stores friend referrals submitted by staff.",
-          "params": [
-            { "name": "userId", "description": "Owner UID" },
-            { "name": "referralId", "description": "Referral UID" }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/faultyEquipmentReports/{reportId}",
-        "definition": {
-          "entityName": "FaultyEquipmentReport",
-          "schema": {
-            "$ref": "#/backend/entities/FaultyEquipmentReport"
-          },
-          "description": "Stores faulty equipment reports submitted by cleaners.",
-          "params": [
-            { "name": "userId", "description": "Owner UID" },
-            { "name": "reportId", "description": "Report UID" }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/incompleteTaskReports/{reportId}",
-        "definition": {
-          "entityName": "IncompleteTaskReport",
-          "schema": {
-            "$ref": "#/backend/entities/IncompleteTaskReport"
-          },
-          "description": "Stores reports regarding incomplete cleaning tasks.",
-          "params": [
-            { "name": "userId", "description": "Owner UID" },
-            { "name": "reportId", "description": "Report UID" }
-          ]
-        }
-      },
-      {
-        "path": "/orderTasks/{orderTaskId}",
-        "definition": {
-          "entityName": "OrderTask",
-          "schema": {
-            "$ref": "#/backend/entities/OrderTask"
-          },
-          "description": "Unified tasks for reviewing orders, equipment, and referrals.",
-          "params": [
-            { "name": "orderTaskId", "description": "Task UID" }
-          ]
-        }
-      },
-      {
-        "path": "/importantInfo/{infoId}",
-        "definition": {
-          "entityName": "ImportantInfo",
-          "schema": {
-            "$ref": "#/backend/entities/ImportantInfo"
-          },
-          "description": "General information accessible to all users.",
-          "params": [
-            { "name": "infoId", "description": "Info UID" }
-          ]
-        }
-      },
-      {
-        "path": "/coverWorkPosts/{postId}",
-        "definition": {
-          "entityName": "CoverWorkPost",
-          "schema": {
-            "$ref": "#/backend/entities/CoverWorkPost"
-          },
-          "description": "Managers' posts for cover work.",
-          "params": [
-            { "name": "postId", "description": "Post UID" }
-          ]
-        }
-      },
-      {
-        "path": "/coverWorkPosts/{postId}/responses/{responseId}",
-        "definition": {
-          "entityName": "CoverWorkResponse",
-          "schema": {
-            "$ref": "#/backend/entities/CoverWorkResponse"
-          },
-          "description": "Cleaners' responses to cover work posts.",
-          "params": [
-            { "name": "postId", "description": "Post UID" },
-            { "name": "responseId", "description": "Response UID" }
+            { "name": "concernId", "description": "Concern UID" }
           ]
         }
       }

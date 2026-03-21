@@ -18,7 +18,8 @@ import {
   BookOpen, 
   Languages,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  ShieldAlert
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { cn } from "@/lib/utils"
@@ -34,9 +35,9 @@ export default function HomeHub() {
     { href: "/referral", label: t.nav.referral, icon: UserPlus, color: "referral-text-gradient", border: "hover:border-[#FACC15]/40", bg: "bg-[#FACC15]/5", desc: "Invite others to join the team." },
     { href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "cover-text-gradient", border: "hover:border-[#0EA5E9]/40", bg: "bg-[#0EA5E9]/5", desc: "Find and pick up available cover shifts." },
     { href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5", desc: "Track your submitted forms and requests." },
+    { href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5", desc: "Submit a private concern to management." },
     { href: "/important-info", label: t.nav.info, icon: Info, color: "info-text-gradient", border: "hover:border-orange-500/40", bg: "bg-orange-500/5", desc: "Contact details and site procedures." },
     { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5", desc: "Learn how to use the CleanLink matrix." },
-    { href: "/language", label: t.nav.language, icon: Languages, color: "portal-text-gradient", border: "hover:border-primary/40", bg: "bg-primary/5", desc: "Change the interface language." },
   ]
 
   return (

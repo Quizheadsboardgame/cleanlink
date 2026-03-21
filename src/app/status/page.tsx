@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,7 +10,7 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus, ShieldAlert } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/context/language-context"
@@ -41,7 +42,8 @@ function CountdownTimer({ createdAt, status, colorClass }: { createdAt: string, 
   useEffect(() => {
     const updateTimer = () => {
       const now = new Date();
-      const diff = targetDate.getTime() - now.getTime();
+      const target = new Date(targetDate);
+      const diff = target.getTime() - now.getTime();
 
       if (diff <= 0) {
         setTimeLeft(t.status.underReview);
@@ -90,6 +92,8 @@ const getTaskMeta = (type: string) => {
       return { icon: Clock, color: 'text-[#D946EF]', bg: 'bg-[#D946EF]/10', border: 'border-[#D946EF]/20' };
     case 'Staff Referral':
       return { icon: UserPlus, color: 'text-[#FACC15]', bg: 'bg-[#FACC15]/10', border: 'border-[#FACC15]/20' };
+    case 'Staff Concern':
+      return { icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20' };
     default:
       return { icon: Clock, color: 'text-white', bg: 'bg-white/10', border: 'border-white/20' };
   }
@@ -171,7 +175,9 @@ export default function StatusBoardPage() {
                           </div>
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-lg">{task.title.split(':')[0]}</span>
+                              <span className="font-bold text-lg">
+                                {task.type === 'Staff Concern' ? 'Confidential Report' : task.title.split(':')[0]}
+                              </span>
                               <Badge variant="outline" className={cn("text-[10px] uppercase tracking-tighter h-5", meta.border, meta.color)}>
                                 {task.type}
                               </Badge>

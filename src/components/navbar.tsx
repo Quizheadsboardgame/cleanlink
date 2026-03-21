@@ -1,7 +1,8 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
-import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus, Sparkles, Languages, Home } from "lucide-react"
+import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus, Sparkles, Languages, Home, ShieldAlert } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -33,6 +34,7 @@ export function Navbar() {
     { href: "/additional-hours", label: t.nav.hours, icon: Clock, color: "text-[#D946EF]" },
     { href: "/referral", label: t.nav.referral, icon: UserPlus, color: "text-[#FACC15]" },
     { href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "text-[#0EA5E9]" },
+    { href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500" },
     { href: "/status", label: t.nav.status, icon: LayoutList, color: "text-white" },
     { href: "/important-info", label: t.nav.info, icon: Info, color: "text-orange-500" },
     { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "text-[#84CC16]" },
