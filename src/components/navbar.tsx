@@ -70,8 +70,15 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Placeholder for symmetry if needed, or just empty space */}
-        <div className="ml-auto w-12 sm:w-24 h-12"></div>
+        {/* Lot info on the right */}
+        <div className="ml-auto flex flex-col items-end gap-0.5">
+          <span className="text-xs sm:text-sm font-bold font-headline text-primary uppercase tracking-wider">
+            Lot 4
+          </span>
+          <span className="text-[10px] sm:text-xs font-medium text-muted-foreground/80 whitespace-nowrap">
+            Addenbrooke's
+          </span>
+        </div>
       </div>
     </nav>
   )
