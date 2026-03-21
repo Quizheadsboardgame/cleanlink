@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState } from "react"
-import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package } from "lucide-react"
+import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Hash } from "lucide-react"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,6 +19,7 @@ interface OrderItem {
   id: string
   name: string
   quantity: number
+  code?: string
 }
 
 const SITES = [
@@ -66,11 +67,11 @@ export function StockOrderForm() {
   const [needStoresDelivered, setNeedStoresDelivered] = useState(false)
   const [takenFromClinicalSchool, setTakenFromClinicalSchool] = useState(false)
   const [items, setItems] = useState<OrderItem[]>([
-    { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1 }
+    { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }
   ])
 
   const addItem = () => {
-    setItems([...items, { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1 }])
+    setItems([...items, { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }])
   }
 
   const removeItem = (id: string) => {
@@ -106,7 +107,8 @@ export function StockOrderForm() {
     
     items.forEach((item) => {
       if (item.name && item.quantity) {
-        message += `- ${item.name}: ${item.quantity}\n`
+        const codeText = item.code ? ` [Code: ${item.code}]` : ""
+        message += `- ${item.name}${codeText}: ${item.quantity}\n`
       }
     })
 
@@ -243,34 +245,46 @@ export function StockOrderForm() {
 
             <div className="space-y-3">
               {items.map((item) => (
-                <div key={item.id} className="flex gap-3">
-                  <div className="flex-1">
-                    <Input 
-                      placeholder="Item (e.g. Hand towels)" 
-                      value={item.name}
-                      onChange={(e) => updateItem(item.id, "name", e.target.value)}
-                      className="bg-secondary/30 border-white/5"
-                    />
+                <div key={item.id} className="flex flex-col sm:flex-row gap-3 p-3 bg-secondary/10 rounded-lg border border-white/5">
+                  <div className="flex-1 flex gap-3">
+                    <div className="flex-1">
+                      <Input 
+                        placeholder="Item Name" 
+                        value={item.name}
+                        onChange={(e) => updateItem(item.id, "name", e.target.value)}
+                        className="bg-secondary/30 border-white/5"
+                      />
+                    </div>
+                    <div className="w-24">
+                      <Input 
+                        type="number" 
+                        min="1" 
+                        placeholder="Qty"
+                        value={item.quantity || ""}
+                        onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
+                        className="bg-secondary/30 border-white/5"
+                      />
+                    </div>
                   </div>
-                  <div className="w-24">
-                    <Input 
-                      type="number" 
-                      min="1" 
-                      placeholder="Qty"
-                      value={item.quantity || ""}
-                      onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
-                      className="bg-secondary/30 border-white/5"
-                    />
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <Input 
+                        placeholder="Code (optional)" 
+                        value={item.code}
+                        onChange={(e) => updateItem(item.id, "code", e.target.value)}
+                        className="bg-secondary/30 border-white/5"
+                      />
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => removeItem(item.id)}
+                      disabled={items.length <= 1}
+                      className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => removeItem(item.id)}
-                    disabled={items.length <= 1}
-                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
                 </div>
               ))}
             </div>
