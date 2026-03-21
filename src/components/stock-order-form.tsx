@@ -1,8 +1,9 @@
+
 "use client"
 
 import * as React from "react"
-import { useState } from "react"
-import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Hash } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +15,11 @@ import { Calendar } from "@/components/ui/calendar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
+import { useFirestore, useUser, useAuth } from "@/firebase"
+import { doc, collection, serverTimestamp } from "firebase/firestore"
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
+import { useRouter } from "next/navigation"
 
 interface OrderItem {
   id: string
@@ -23,44 +29,26 @@ interface OrderItem {
 }
 
 const SITES = [
-  "ANNE MCLAREN",
-  "CEDAR",
-  "MRC EPIDEMIOLOGY LEVEL 3",
-  "WBIC RPU BASEMENT",
-  "JOHN VAN GEEST - JVG",
-  "HERSCHEL SMITH BUILDING - HSB",
-  "BARTON HOUSE",
-  "COTON HOUSE",
-  "CLINICAL SCHOOLS",
-  "GRANTCHESTER HOUSE",
-  "BAY 13",
-  "WEST FORVIE",
-  "CLIFFORD ALLBUTT BUILDING - CAB",
-  "ISLAND RESEARCH BUILDING - IRB",
-  "OBS",
-  "PAEDIATRICS LEVEL 8",
-  "SURGERY LEVEL 9",
-  "X RAY BLOCK RADIOLOGY LEVEL 5",
-  "JEFFREY CHEAH OFFICE",
-  "EAST FORVIE (IPH)",
-  "STRAGEWAYS (SLR)",
-  "MEDICINE LEVEL 5",
-  "IMS LEVELS 4 & 5",
-  "OLD IMS - LAB BLOCK 4",
-  "NEURO SPACE",
-  "P&A LEVEL 4",
-  "WOLFSON BRAIN WBIC",
-  "BIO-REPOSITORY LAB LEVEL 1",
-  "ACCI LEVEL 6",
-  "POST DOC",
-  "HLRI BUILDING",
-  "MRC WATERBEACH STORAGE",
-  "TMS F&G LEVEL 2",
-  "E7"
+  "ANNE MCLAREN", "CEDAR", "MRC EPIDEMIOLOGY LEVEL 3", "WBIC RPU BASEMENT",
+  "JOHN VAN GEEST - JVG", "HERSCHEL SMITH BUILDING - HSB", "BARTON HOUSE",
+  "COTON HOUSE", "CLINICAL SCHOOLS", "GRANTCHESTER HOUSE", "BAY 13",
+  "WEST FORVIE", "CLIFFORD ALLBUTT BUILDING - CAB", "ISLAND RESEARCH BUILDING - IRB",
+  "OBS", "PAEDIATRICS LEVEL 8", "SURGERY LEVEL 9", "X RAY BLOCK RADIOLOGY LEVEL 5",
+  "JEFFREY CHEAH OFFICE", "EAST FORVIE (IPH)", "STRAGEWAYS (SLR)",
+  "MEDICINE LEVEL 5", "IMS LEVELS 4 & 5", "OLD IMS - LAB BLOCK 4",
+  "NEURO SPACE", "P&A LEVEL 4", "WOLFSON BRAIN WBIC", "BIO-REPOSITORY LAB LEVEL 1",
+  "ACCI LEVEL 6", "POST DOC", "HLRI BUILDING", "MRC WATERBEACH STORAGE",
+  "TMS F&G LEVEL 2", "E7"
 ]
 
 export function StockOrderForm() {
   const { toast } = useToast()
+  const router = useRouter()
+  const db = useFirestore()
+  const auth = useAuth()
+  const { user, isUserLoading } = useUser()
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
   const [site, setSite] = useState("")
   const [date, setDate] = useState<Date>()
@@ -69,6 +57,12 @@ export function StockOrderForm() {
   const [items, setItems] = useState<OrderItem[]>([
     { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }
   ])
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      initiateAnonymousSignIn(auth)
+    }
+  }, [user, isUserLoading, auth])
 
   const addItem = () => {
     setItems([...items, { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }])
@@ -84,7 +78,12 @@ export function StockOrderForm() {
     setItems(items.map(item => item.id === id ? { ...item, [field]: value } : item))
   }
 
-  const handleWhatsAppSubmit = () => {
+  const handleSubmit = () => {
+    if (!user) {
+      toast({ variant: "destructive", title: "Wait a moment", description: "Authenticating..." })
+      return
+    }
+
     if (!name || !site || !date) {
       toast({
         variant: "destructive",
@@ -94,33 +93,60 @@ export function StockOrderForm() {
       return
     }
 
-    const dateStr = format(date, "yyyy-MM-dd")
-    const phone = "447000000000"
-    
-    let message = `Stock Order\nName: ${name}\nDate: ${dateStr}\nSite: ${site}\n\n`
-    
-    message += `Delivery Details:\n`
-    message += `- Need stores delivered: ${needStoresDelivered ? "Yes" : "No"}\n`
-    message += `- Taken from Clinical school stores: ${takenFromClinicalSchool ? "Yes" : "No"}\n\n`
-    
-    message += `Items:\n`
-    
-    items.forEach((item) => {
+    setIsSubmitting(true)
+
+    const stockOrderId = Math.random().toString(36).substr(2, 9)
+    const orderRef = doc(db, 'users', user.uid, 'stockOrders', stockOrderId)
+    const taskRef = doc(db, 'orderTasks', stockOrderId)
+
+    const orderData = {
+      id: stockOrderId,
+      customerName: name,
+      orderDate: date.toISOString(),
+      site: site,
+      status: 'Submitted',
+      ownerId: user.uid,
+      needStoresDelivered,
+      takenFromClinicalSchool,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+
+    // Save main order
+    setDocumentNonBlocking(orderRef, orderData, { merge: true })
+
+    // Save individual items
+    items.forEach(item => {
       if (item.name && item.quantity) {
-        const codeText = item.code ? ` [Code: ${item.code}]` : ""
-        message += `- ${item.name}${codeText}: ${item.quantity}\n`
+        const itemRef = doc(db, 'users', user.uid, 'stockOrders', stockOrderId, 'orderItems', item.id)
+        setDocumentNonBlocking(itemRef, {
+          ...item,
+          stockOrderId,
+          ownerId: user.uid
+        }, { merge: true })
       }
     })
 
-    const encodedMessage = encodeURIComponent(message)
-    const url = `https://wa.me/${phone}?text=${encodedMessage}`
-    
-    window.open(url, '_blank')
-    
+    // Create a review task
+    const taskData = {
+      id: stockOrderId,
+      stockOrderId: stockOrderId,
+      title: `Process Stock Order for ${name}`,
+      description: `Site: ${site}. Delivered: ${needStoresDelivered ? "Yes" : "No"}. Stores: ${takenFromClinicalSchool ? "Yes" : "No"}.`,
+      status: 'Pending Review',
+      ownerId: user.uid,
+      createdAt: new Date().toISOString()
+    }
+    setDocumentNonBlocking(taskRef, taskData, { merge: true })
+
     toast({
-      title: "Opening WhatsApp",
-      description: "Redirecting to dispatch your order."
+      title: "Order Submitted",
+      description: "Your stock order has been saved and queued for review."
     })
+
+    setTimeout(() => {
+      router.push('/tasks')
+    }, 1500)
   }
 
   return (
@@ -131,7 +157,7 @@ export function StockOrderForm() {
             <Package className="w-6 h-6 text-primary" />
             Stock Order Form
           </CardTitle>
-          <CardDescription>Fill out the details below to prepare your order.</CardDescription>
+          <CardDescription>Fill out the details below to submit your order.</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-8">
           <div className="grid sm:grid-cols-2 gap-6">
@@ -292,10 +318,12 @@ export function StockOrderForm() {
         </CardContent>
         <CardFooter className="p-6 bg-white/[0.02] border-t border-white/5 flex justify-center">
           <Button 
-            onClick={handleWhatsAppSubmit}
+            onClick={handleSubmit}
+            disabled={isSubmitting || isUserLoading}
             className="portal-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
           >
-            <Send className="w-5 h-5" /> Send via WhatsApp
+            {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            Submit Order
           </Button>
         </CardFooter>
       </Card>
