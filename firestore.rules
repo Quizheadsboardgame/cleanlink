@@ -61,14 +61,24 @@ service cloud.firestore {
     }
 
     match /orderTasks/{orderTaskId} {
-      // Allow any signed-in user to see and update all tasks. 
-      allow get, list, update, delete: if request.auth != null;
-      allow create: if request.auth != null;
+      allow get, list, update, delete: if isSignedIn();
+      allow create: if isSignedIn();
     }
 
     match /importantInfo/{infoId} {
-      allow get, list: if request.auth != null;
-      allow create, update, delete: if request.auth != null;
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isSignedIn();
+    }
+
+    match /coverWorkPosts/{postId} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isSignedIn();
+
+      match /responses/{responseId} {
+        // Cleaners can create responses. Managers can see them.
+        allow create: if isSignedIn() && isSettingCorrectOwner(request.resource.data);
+        allow get, list: if isSignedIn(); // In a real app, this would be restricted to managers.
+      }
     }
   }
 }

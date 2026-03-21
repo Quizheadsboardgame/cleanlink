@@ -202,6 +202,36 @@
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "category", "title", "content", "updatedAt"]
+    },
+    "CoverWorkPost": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CoverWorkPost",
+      "type": "object",
+      "description": "A post created by a manager for upcoming cover work opportunities.",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "deadline": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "deadline", "createdAt"]
+    },
+    "CoverWorkResponse": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CoverWorkResponse",
+      "type": "object",
+      "description": "A response from a cleaner expressing interest in a cover work post.",
+      "properties": {
+        "id": { "type": "string" },
+        "postId": { "type": "string" },
+        "cleanerName": { "type": "string" },
+        "notes": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "postId", "cleanerName", "ownerId", "createdAt"]
     }
   },
   "auth": {
@@ -291,6 +321,33 @@
           "description": "General information accessible to all users.",
           "params": [
             { "name": "infoId", "description": "Info UID" }
+          ]
+        }
+      },
+      {
+        "path": "/coverWorkPosts/{postId}",
+        "definition": {
+          "entityName": "CoverWorkPost",
+          "schema": {
+            "$ref": "#/backend/entities/CoverWorkPost"
+          },
+          "description": "Managers' posts for cover work.",
+          "params": [
+            { "name": "postId", "description": "Post UID" }
+          ]
+        }
+      },
+      {
+        "path": "/coverWorkPosts/{postId}/responses/{responseId}",
+        "definition": {
+          "entityName": "CoverWorkResponse",
+          "schema": {
+            "$ref": "#/backend/entities/CoverWorkResponse"
+          },
+          "description": "Cleaners' responses to cover work posts.",
+          "params": [
+            { "name": "postId", "description": "Post UID" },
+            { "name": "responseId", "description": "Response UID" }
           ]
         }
       }
