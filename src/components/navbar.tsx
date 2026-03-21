@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
+import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus, Sparkles } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -39,29 +39,29 @@ export function Navbar() {
   const rightLogo = placeholderData.placeholderImages.find(img => img.id === "header-right-logo")
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/60 backdrop-blur-xl">
       <div className="container mx-auto px-4 h-32 flex items-center relative">
         {/* Menu far left */}
         <div className="flex-shrink-0 z-10">
           {mounted ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl shadow-lg hover:bg-white/5 transition-all active:scale-95">
-                  <Menu className={cn("w-5 h-5", activeItem.color)} />
+                <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-2xl shadow-lg hover:bg-white/5 transition-all active:scale-95 group">
+                  <Menu className={cn("w-5 h-5 transition-transform group-hover:rotate-90", activeItem.color)} />
                   <span className={cn("font-headline font-bold text-base hidden xs:inline-block", activeItem.color)}>
                     {activeItem.label}
                   </span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-xl">
+              <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-2xl">
                 {navItems.map((item) => (
                   <Link key={item.href} href={item.href}>
                     <DropdownMenuItem className={cn(
-                      "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-colors mb-1 last:mb-0",
+                      "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl transition-colors mb-1 last:mb-0",
                       pathname === item.href 
-                        ? "bg-white/5 font-bold" 
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                        ? "bg-white/10 font-bold" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                     )}>
                       <item.icon className={cn("w-5 h-5", item.color)} />
                       <span className={cn("text-sm font-medium", pathname === item.href ? item.color : "")}>
@@ -73,7 +73,7 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl opacity-50 cursor-default">
+            <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-2xl opacity-50 cursor-default">
               <Menu className="w-5 h-5 text-muted-foreground" />
               <span className="font-headline font-bold text-base hidden xs:inline-block text-muted-foreground">
                 Menu
@@ -85,25 +85,32 @@ export function Navbar() {
 
         {/* Branding Centered */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="flex flex-col items-center pointer-events-auto">
-            <span className="text-2xl sm:text-4xl font-bold font-headline portal-text-gradient leading-none tracking-tight">
-              CleanLink
-            </span>
-            <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.3em] mt-2 whitespace-nowrap opacity-80">
-              Powered by HARLEY
-            </span>
+          <Link href="/" className="flex flex-col items-center pointer-events-auto group">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-primary animate-pulse hidden sm:block" />
+              <span className="text-3xl sm:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter">
+                CleanLink
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 mt-2.5">
+              <span className="h-px w-4 bg-primary/30" />
+              <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] whitespace-nowrap opacity-70 group-hover:opacity-100 transition-opacity">
+                Powered by AI (Harley)
+              </span>
+              <span className="h-px w-4 bg-primary/30" />
+            </div>
           </Link>
         </div>
 
         {/* Right Logo */}
         <div className="flex-shrink-0 z-10 ml-auto pointer-events-auto">
           {rightLogo && (
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 animate-float">
               <Image
                 src={rightLogo.imageUrl}
                 alt={rightLogo.description}
                 fill
-                className="object-contain"
+                className="object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
                 data-ai-hint={rightLogo.imageHint}
               />
             </div>

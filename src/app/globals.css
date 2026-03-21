@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 247 14% 10%;
+    --background: 247 14% 5%;
     --foreground: 0 0% 100%;
-    --card: 247 14% 13%;
+    --card: 247 14% 8%;
     --card-foreground: 0 0% 100%;
-    --popover: 247 14% 10%;
+    --popover: 247 14% 5%;
     --popover-foreground: 0 0% 100%;
     --primary: 236 86% 70%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 247 14% 18%;
+    --secondary: 247 14% 12%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 247 14% 25%;
-    --muted-foreground: 247 10% 70%;
+    --muted: 247 14% 18%;
+    --muted-foreground: 247 10% 60%;
     --accent: 199 100% 54%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 247 14% 20%;
-    --input: 247 14% 20%;
+    --border: 247 14% 15%;
+    --input: 247 14% 15%;
     --ring: 236 86% 70%;
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 }
 
@@ -32,22 +32,46 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body;
+    @apply text-foreground font-body min-h-screen relative overflow-x-hidden;
+    background: radial-gradient(circle at 50% -20%, hsl(236, 86%, 15%) 0%, hsl(247, 14%, 5%) 100%);
+  }
+  body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline;
+    @apply font-headline tracking-tight;
   }
 }
 
 .glass-panel {
-  @apply bg-card/50 backdrop-blur-md border border-white/10;
+  @apply bg-card/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)];
+}
+
+.ai-glow {
+  text-shadow: 0 0 20px rgba(110, 118, 245, 0.4);
+}
+
+.portal-text-gradient {
+  background: linear-gradient(to bottom, #fff 30%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-background-fill-color: transparent;
+  @apply ai-glow;
 }
 
 /* Page Specific Identities */
 
-/* Stores Order - Indigo */
 .stores-gradient {
   background: linear-gradient(135deg, #6E76F5 0%, #4F46E5 100%);
+  box-shadow: 0 0 20px rgba(110, 118, 245, 0.2);
 }
 .stores-text-gradient {
   background: linear-gradient(135deg, #6E76F5 0%, #4F46E5 100%);
@@ -55,9 +79,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Faulty Equipment - Amber/Orange */
 .faulty-gradient {
   background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
 }
 .faulty-text-gradient {
   background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
@@ -65,9 +89,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Incomplete Task - Red/Rose */
 .incomplete-gradient {
   background: linear-gradient(135deg, #EF4444 0%, #BE123C 100%);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
 }
 .incomplete-text-gradient {
   background: linear-gradient(135deg, #EF4444 0%, #BE123C 100%);
@@ -75,9 +99,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Additional Hours - Fuchsia/Pink */
 .hours-gradient {
   background: linear-gradient(135deg, #D946EF 0%, #C026D3 100%);
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
 }
 .hours-text-gradient {
   background: linear-gradient(135deg, #D946EF 0%, #C026D3 100%);
@@ -85,9 +109,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Refer a Friend - Yellow/Gold */
 .referral-gradient {
   background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
 }
 .referral-text-gradient {
   background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
@@ -95,9 +119,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Important Info - Orange */
 .info-gradient {
   background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
+  box-shadow: 0 0 20px rgba(251, 146, 60, 0.2);
 }
 .info-text-gradient {
   background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
@@ -105,9 +129,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* How to Use - Lime/Green */
 .guide-gradient {
   background: linear-gradient(135deg, #84CC16 0%, #65A30D 100%);
+  box-shadow: 0 0 20px rgba(132, 204, 22, 0.2);
 }
 .guide-text-gradient {
   background: linear-gradient(135deg, #84CC16 0%, #65A30D 100%);
@@ -115,7 +139,6 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Status Board - White/Silver */
 .status-gradient {
   background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
 }
@@ -125,9 +148,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Review Tasks - Violet/Purple */
 .tasks-gradient {
   background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
 }
 .tasks-text-gradient {
   background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
@@ -135,9 +158,9 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Cover Work - Sky Blue */
 .cover-gradient {
   background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
 }
 .cover-text-gradient {
   background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
@@ -158,5 +181,13 @@
   100% { transform: translateX(-50%); }
 }
 .animate-marquee {
-  animation: marquee 7.5s linear infinite;
+  animation: marquee 12s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
