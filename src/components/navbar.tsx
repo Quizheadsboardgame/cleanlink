@@ -31,34 +31,12 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-40 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          {bannerLogo && (
-            <div className="relative w-[120px] h-[120px] overflow-hidden">
-              <Image
-                src={bannerLogo.imageUrl}
-                alt={bannerLogo.description}
-                fill
-                className="object-contain"
-                data-ai-hint={bannerLogo.imageHint}
-              />
-            </div>
-          )}
-          
-          <Link href="/" className="flex items-center gap-2">
-            <div className="portal-gradient p-1.5 rounded-lg">
-              <Boxes className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold font-headline tracking-tight portal-text-gradient hidden sm:inline-block">
-              PortalFlow
-            </span>
-          </Link>
-        </div>
-
-        <div className="flex items-center gap-4">
+      <div className="container mx-auto px-4 h-40 flex items-center relative">
+        {/* Menu far left */}
+        <div className="z-10">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-6 rounded-xl shadow-lg hover:bg-white/5 transition-all active:scale-95">
+              <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl shadow-lg hover:bg-white/5 transition-all active:scale-95">
                 <Menu className="w-5 h-5 text-primary" />
                 <span className="font-headline font-bold text-base hidden xs:inline-block">
                   {activeItem.label}
@@ -66,7 +44,7 @@ export function Navbar() {
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-xl">
+            <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-xl">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <DropdownMenuItem className={cn(
@@ -82,6 +60,33 @@ export function Navbar() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+
+        {/* PortalFlow in the middle */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <Link href="/" className="flex items-center gap-2 pointer-events-auto">
+            <div className="portal-gradient p-1.5 rounded-lg">
+              <Boxes className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl sm:text-2xl font-bold font-headline tracking-tight portal-text-gradient">
+              PortalFlow
+            </span>
+          </Link>
+        </div>
+
+        {/* Picture far right */}
+        <div className="ml-auto z-10">
+          {bannerLogo && (
+            <div className="relative w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] overflow-hidden">
+              <Image
+                src={bannerLogo.imageUrl}
+                alt={bannerLogo.description}
+                fill
+                className="object-contain"
+                data-ai-hint={bannerLogo.imageHint}
+              />
+            </div>
+          )}
         </div>
       </div>
     </nav>
