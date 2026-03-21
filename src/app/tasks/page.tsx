@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useMemoFirebase } from "@/firebase"
-import { collection, query, where, doc } from "firebase/firestore"
+import { collection, query, doc } from "firebase/firestore"
 import { updateDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { format } from "date-fns"
 import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2 } from "lucide-react"
@@ -53,10 +53,11 @@ export default function TasksPage() {
     }, 600)
   }
 
+  // Changed to query ALL tasks in the collection for management overview
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !user || !isAuthorized) return null
-    return query(collection(db, 'orderTasks'), where('ownerId', '==', user.uid))
-  }, [db, user, isAuthorized])
+    if (!db || !isAuthorized) return null
+    return query(collection(db, 'orderTasks'))
+  }, [db, isAuthorized])
 
   const { data: tasks, isLoading } = useCollection(tasksQuery)
 
@@ -79,7 +80,7 @@ export default function TasksPage() {
                 <Lock className="w-6 h-6 text-primary" />
               </div>
               <CardTitle className="text-2xl font-headline tasks-text-gradient">Protected Area</CardTitle>
-              <CardDescription>Enter the management password to review submitted orders.</CardDescription>
+              <CardDescription>Enter the management password to review all submitted orders.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin} className="space-y-4">
@@ -116,14 +117,14 @@ export default function TasksPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="space-y-6">
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold font-headline tasks-text-gradient">Review Tasks</h1>
-            <p className="text-muted-foreground">Manage and track your submitted stock orders.</p>
+            <h1 className="text-3xl font-bold font-headline tasks-text-gradient">Global Review Tasks</h1>
+            <p className="text-muted-foreground">Manage and track all stock orders submitted across the organization.</p>
           </div>
 
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-              <p className="text-muted-foreground animate-pulse">Loading tasks...</p>
+              <p className="text-muted-foreground animate-pulse">Loading all tasks...</p>
             </div>
           ) : !tasks || tasks.length === 0 ? (
             <Card className="glass-panel border-dashed py-20 text-center">
@@ -134,7 +135,7 @@ export default function TasksPage() {
                 <div className="space-y-2">
                   <h3 className="text-xl font-semibold">No tasks found</h3>
                   <p className="text-muted-foreground max-w-xs mx-auto">
-                    You haven't submitted any forms yet. Use the navigation to report something.
+                    There are no submissions currently pending review in the database.
                   </p>
                 </div>
               </CardContent>
