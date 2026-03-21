@@ -1,0 +1,218 @@
+{
+  "entities": {
+    "StockOrder": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "StockOrder",
+      "type": "object",
+      "description": "Represents a user-created stock order containing multiple items for a specific site, before or after submission.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the StockOrder entity."
+        },
+        "customerName": {
+          "type": "string",
+          "description": "The name of the customer or person placing the stock order."
+        },
+        "orderDate": {
+          "type": "string",
+          "description": "The date and time when the stock order was placed.",
+          "format": "date-time"
+        },
+        "site": {
+          "type": "string",
+          "description": "The designated site or location for which the stock order is being placed."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current workflow status of the stock order (e.g., 'Draft', 'Submitted', 'Archived'). 'Submitted' indicates a corresponding OrderTask has been created."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the stock order record was initially created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the stock order record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "customerName",
+        "orderDate",
+        "site",
+        "status",
+        "createdAt"
+      ]
+    },
+    "OrderItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderItem",
+      "type": "object",
+      "description": "Represents a single item and its quantity within a specific stock order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the OrderItem entity."
+        },
+        "stockOrderId": {
+          "type": "string",
+          "description": "Reference to the StockOrder this item belongs to. (Relationship: StockOrder 1:N OrderItem)"
+        },
+        "itemName": {
+          "type": "string",
+          "description": "The name or description of the item being ordered."
+        },
+        "quantity": {
+          "type": "number",
+          "description": "The numerical quantity of the item being ordered. Typically a positive integer."
+        }
+      },
+      "required": [
+        "id",
+        "stockOrderId",
+        "itemName",
+        "quantity"
+      ]
+    },
+    "OrderTask": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderTask",
+      "type": "object",
+      "description": "Represents a task generated upon submission of a stock order, used to manage its review and completion in a separate tab.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the OrderTask entity."
+        },
+        "stockOrderId": {
+          "type": "string",
+          "description": "Reference to the StockOrder associated with this task. (Relationship: StockOrder 1:1 OrderTask)"
+        },
+        "title": {
+          "type": "string",
+          "description": "A concise title for the order processing task, often derived from the stock order details (e.g., 'Process Stock Order for [Customer Name]')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the task, potentially including summary order details or specific instructions for processing."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current workflow status of the task (e.g., 'Pending Review', 'In Progress', 'Completed', 'Cancelled')."
+        },
+        "assignedToUserId": {
+          "type": "string",
+          "description": "Optional reference to the unique identifier of the user (e.g., from an external UserProfile entity) assigned to complete this task. (Relationship: UserProfile 1:N OrderTask)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the task was initially created.",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the task was marked as completed. This property will be null or omitted until completion.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "stockOrderId",
+        "title",
+        "description",
+        "status",
+        "createdAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/stockOrders/{stockOrderId}",
+        "definition": {
+          "entityName": "StockOrder",
+          "schema": {
+            "$ref": "#/backend/entities/StockOrder"
+          },
+          "description": "Stores individual stock orders created by a user. Includes denormalized 'ownerId' field matching '{userId}' for robust authorization independence and simple ownership rules. The 'status' field ('Draft', 'Submitted', 'Archived') explicitly tracks the order's lifecycle.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this stock order."
+            },
+            {
+              "name": "stockOrderId",
+              "description": "The unique identifier for the specific stock order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/stockOrders/{stockOrderId}/orderItems/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores individual items within a specific stock order. Includes denormalized 'ownerId' field, inheriting and matching '{userId}' from its parent StockOrder for authorization independence, simplifying security rules.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the parent stock order."
+            },
+            {
+              "name": "stockOrderId",
+              "description": "The unique identifier for the parent stock order."
+            },
+            {
+              "name": "orderItemId",
+              "description": "The unique identifier for the specific item within the stock order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orderTasks/{orderTaskId}",
+        "definition": {
+          "entityName": "OrderTask",
+          "schema": {
+            "$ref": "#/backend/entities/OrderTask"
+          },
+          "description": "Stores tasks generated upon stock order submission. Accessible to the original StockOrder owner (read-only for status) and designated processors (read/write). Includes denormalized 'ownerId' (the creator of the StockOrder) for authorization independence, and 'assignedToUserId' for granular task assignment.",
+          "params": [
+            {
+              "name": "orderTaskId",
+              "description": "The unique identifier for the order processing task."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_processor/{processorId}",
+        "definition": {
+          "entityName": "RoleProcessor",
+          "schema": {
+            "$ref": "#/backend/entities/RoleProcessor"
+          },
+          "description": "A sentinel collection to designate users with the 'processor' role. The document ID ('processorId') is the user's UID. The existence of a document grants the role, enabling Database Access Control (DBAC) for managing OrderTasks. This allows efficient role checks in security rules using 'exists()'.",
+          "params": [
+            {
+              "name": "processorId",
+              "description": "The unique identifier of the user who has the 'processor' role."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The proposed Firestore structure for PortalFlow prioritizes security, scalability, and debuggability by adhering to the core design principles. User-specific data, such as StockOrders and their associated OrderItems, are organized using path-based ownership within `/users/{userId}/stockOrders/{stockOrderId}` and `/users/{userId}/stockOrders/{stockOrderId}/orderItems/{orderItemId}` respectively. This ensures that only the authenticated user (identified by `request.auth.uid`) can access their own orders and items, making `list` operations inherently secure (QAPs). \n\nAuthorization Independence is achieved through strategic denormalization. Each `StockOrder` document will explicitly contain an `ownerId` field that matches the `{userId}` in its path. Similarly, every `OrderItem` document will also denormalize the `ownerId` from its parent `StockOrder`. This eliminates the need for expensive and complex `get()` calls to parent documents in security rules, allowing atomic operations and simplifying rule logic. \n\nOrder processing tasks are segregated into a top-level collection, `/orderTasks/{orderTaskId}`, because they have a different security posture. While the original StockOrder creator needs read access to their associated OrderTask (to check status), these tasks are primarily managed and updated by designated 'processor' users. To maintain Authorization Independence for this hybrid access, each `OrderTask` document denormalizes the `ownerId` (the UID of the StockOrder creator). This allows the creator to query and read their tasks securely using `where('ownerId', '==', request.auth.uid)` without any `get()` calls. Processor roles are implemented using the Database Access Control (DBAC) pattern with a dedicated sentinel collection, `/roles_processor/{processorId}`. A user is considered a 'processor' if their UID exists as a document ID in this collection. This allows security rules to check for processor privileges using `exists()` without relying on custom claims or complex data lookups within the task itself, further simplifying rules and enabling secure `list` access for processors (e.g., listing all tasks, or tasks assigned to them via `assignedToUserId`).\n\nThe use of a dedicated `status` field in both `StockOrder` and `OrderTask` documents ensures Explicit State Modeling, making the workflow predictable and easier to debug. Radical Consistency is applied through semantic naming (e.g., `userId`, `stockOrderId`, `orderItemId`) and standardized authorization fields like `ownerId` and `assignedToUserId`."
+  }
+}

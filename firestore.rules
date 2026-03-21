@@ -1,0 +1,143 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * FIRESTORE SECURITY RULES - PROTOTYPING MODE
+     *
+     * CORE PHILOSOPHY:
+     * This ruleset enforces a strict user-ownership model for personal data (orders) and a 
+     * role-based access model for shared administrative tasks (order processing). It prioritizes 
+     * authorization security while allowing for data schema flexibility during development.
+     *
+     * DATA STRUCTURE:
+     * - User-specific data is nested under /users/{userId}/... ensuring clear path-based ownership.
+     * - Collaborative tasks are located in the top-level /orderTasks/ collection.
+     * - Role-based permissions are managed via a sentinel /roles_processor/ collection.
+     *
+     * KEY SECURITY DECISIONS:
+     * - Ownership via Path: Access to stock orders is primarily granted based on the {userId} 
+     *   variable in the document path matching the authenticated user's UID.
+     * - Denormalization for Performance: The 'ownerId' field is required on StockOrders, 
+     *   OrderItems, and OrderTasks to allow for fast, non-recursive security checks and 
+     *   secure list queries (where 'ownerId' == auth.uid).
+     * - Role-Based Access Control (RBAC): Users with the 'processor' role can manage all 
+     *   OrderTasks. This role is verified by checking for the existence of the user's UID 
+     *   within the /roles_processor collection.
+     * - Hybrid Access for Tasks: Order creators can view the status of their associated 
+     *   OrderTasks, but only Processors can modify them.
+     */
+
+    // --- GLOBAL HELPER FUNCTIONS ---
+
+    /** @description Checks if the user is authenticated. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the user's UID matches the provided userId. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Checks if the authenticated user is the owner and the document exists. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    /** @description Checks if the authenticated user has the 'processor' role via sentinel collection. */
+    function isProcessor() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_processor/$(request.auth.uid));
+    }
+
+    /** @description Validates that the incoming data's ownerId matches the user's UID. */
+    function isSettingCorrectOwner(data) {
+      return data.ownerId == request.auth.uid;
+    }
+
+    // --- COLLECTION RULES ---
+
+    /**
+     * @description Rules for the user profile root.
+     * @path /users/{userId}
+     * @allow (create) if authenticated UID matches document ID.
+     * @deny (create) if UID mismatch.
+     * @principle Self-Creation / Ownership.
+     */
+    match /users/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Manages individual stock orders created by users.
+     * @path /users/{userId}/stockOrders/{stockOrderId}
+     * @allow (create) if ownerId in data matches path and auth.
+     * @deny (list) if user is not the owner of the path.
+     * @principle Path-based ownership and relational integrity validation.
+     */
+    match /users/{userId}/stockOrders/{stockOrderId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
+      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
+      allow delete: if isExistingOwner(userId);
+
+      /**
+       * @description Items within a specific stock order, inheriting ownership from the parent path.
+       * @path /users/{userId}/stockOrders/{stockOrderId}/orderItems/{orderItemId}
+       * @allow (create) if ownerId matches the authenticated user.
+       * @deny (update) if attempting to change the ownerId.
+       * @principle Sub-collection ownership inheritance and immutable relational fields.
+       */
+      match /orderItems/{orderItemId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
+        allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
+        allow delete: if isExistingOwner(userId);
+      }
+    }
+
+    /**
+     * @description Tasks generated from stock orders. Creators can read status; Processors have full control.
+     * @path /orderTasks/{orderTaskId}
+     * @allow (get) if user is the original order owner or a processor.
+     * @deny (write) if user is not a verified processor.
+     * @principle Shared access with role-based write restrictions.
+     */
+    match /orderTasks/{orderTaskId} {
+      // Owners can see their tasks via ownerId field; Processors can see all.
+      allow get, list: if isSignedIn() && (resource.data.ownerId == request.auth.uid || isProcessor());
+      
+      // Only processors can manage the lifecycle of a task.
+      allow create: if isProcessor();
+      allow update: if isProcessor() && resource != null;
+      allow delete: if isProcessor() && resource != null;
+    }
+
+    /**
+     * @description Sentinel collection for Processor roles. Document ID is the User UID.
+     * @path /roles_processor/{processorId}
+     * @allow (get) if authenticated (to check own role or others during processing).
+     * @deny (write) for all users (Admin/System managed).
+     * @principle Database Access Control (DBAC) via sentinel documents.
+     */
+    match /roles_processor/{processorId} {
+      allow get: if isSignedIn();
+      allow list: if isProcessor(); // Only processors can list the processor directory.
+      allow create, update, delete: if false; // Role assignment is handled via Admin SDK or Console.
+    }
+  }
+}
+
+/** 
+ * ARCHITECT NOTES:
+ * 1. Prototyping Flexibility: These rules do not check for specific field types (string, int) 
+ *    to allow your frontend to evolve quickly.
+ * 2. Mandatory Denormalization: Ensure every document in 'stockOrders', 'orderItems', and 
+ *    'orderTasks' includes an 'ownerId' field containing the UID of the user who created it.
+ * 3. Processor Setup: To test processor features, manually create a document in the 
+ *    'roles_processor' collection where the Document ID is the user's Firebase Auth UID.
+ * 4. List Security: Listing tasks relies on the ownerId field. Ensure your queries include 
+ *    .where('ownerId', '==', user.uid) for creators to avoid "Missing or insufficient permissions".
+ */
