@@ -121,7 +121,7 @@ export default function HowToUsePage() {
     },
     {
       title: "Proactive Shifts",
-      description: "The Cover Work board allows you to proactively find extra income opportunities across all Lot 4 sites.",
+      description: "The Cover Work board allows you to proactively find extra income opportunities across all sites.",
       icon: ShieldCheck
     }
   ]
@@ -136,7 +136,7 @@ export default function HowToUsePage() {
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold font-headline guide-text-gradient">Guide to CleanLink</h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Everything you need to know about using our professional stock management and reporting platform for Lot 4.
+              Everything you need to know about using our professional stock management and reporting platform.
             </p>
           </div>
 
@@ -229,6 +229,12 @@ export default function HowToUsePage() {
               </div>
             </div>
           </Card>
+
+          <div className="text-center pt-8 border-t border-white/5">
+            <p className="text-xs text-muted-foreground uppercase tracking-[0.2em] font-medium opacity-50">
+              This website is made by Smart Harley Technology
+            </p>
+          </div>
         </div>
       </main>
 
