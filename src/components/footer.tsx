@@ -8,7 +8,7 @@ export function Footer() {
   const bannerLogo = placeholderData.placeholderImages.find(img => img.id === "banner-logo")
 
   return (
-    <footer className="border-t border-white/5 py-6 mt-auto bg-background/50 backdrop-blur-sm">
+    <footer className="border-t border-white/5 py-6 mt-auto bg-black">
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo far left, half size (60x60) */}
         <div className="relative w-[60px] h-[60px]">
