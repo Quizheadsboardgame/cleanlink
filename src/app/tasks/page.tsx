@@ -1,26 +1,65 @@
 
 "use client"
 
+import * as React from "react"
+import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useMemoFirebase } from "@/firebase"
 import { collection, query, where, doc } from "firebase/firestore"
 import { updateDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Package, User, Building2, ChevronRight } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
+import { useToast } from "@/hooks/use-toast"
 
 export default function TasksPage() {
   const { user } = useUser()
   const db = useFirestore()
+  const { toast } = useToast()
+  
+  const [password, setPassword] = useState("")
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [isChecking, setIsChecking] = useState(false)
+
+  // Load authorization state from session storage on mount
+  useEffect(() => {
+    const auth = sessionStorage.getItem("portalflow_auth")
+    if (auth === "true") {
+      setIsAuthorized(true)
+    }
+  }, [])
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsChecking(true)
+    
+    // Artificial delay for feel
+    setTimeout(() => {
+      if (password === "Harley") {
+        setIsAuthorized(true)
+        sessionStorage.setItem("portalflow_auth", "true")
+        toast({
+          title: "Access Granted",
+          description: "Welcome back to the management portal.",
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Invalid Password",
+          description: "Please check your credentials and try again.",
+        })
+      }
+      setIsChecking(false)
+    }, 600)
+  }
 
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !user) return null
-    // Query for tasks owned by the current user
+    if (!db || !user || !isAuthorized) return null
     return query(collection(db, 'orderTasks'), where('ownerId', '==', user.uid))
-  }, [db, user])
+  }, [db, user, isAuthorized])
 
   const { data: tasks, isLoading } = useCollection(tasksQuery)
 
@@ -30,6 +69,47 @@ export default function TasksPage() {
       status: 'Completed',
       completedAt: new Date().toISOString()
     })
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center p-4">
+          <Card className="glass-panel w-full max-w-md border-none shadow-2xl">
+            <CardHeader className="text-center space-y-1">
+              <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
+                <Lock className="w-6 h-6 text-primary" />
+              </div>
+              <CardTitle className="text-2xl font-headline portal-text-gradient">Protected Area</CardTitle>
+              <CardDescription>Enter the management password to review submitted orders.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <Input 
+                    type="password" 
+                    placeholder="Enter Password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-secondary/50 border-white/5 text-center text-lg tracking-widest"
+                    autoFocus
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  disabled={isChecking}
+                  className="w-full portal-gradient text-white gap-2 h-12 rounded-xl"
+                >
+                  {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                  Unlock Dashboard
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    )
   }
 
   return (
