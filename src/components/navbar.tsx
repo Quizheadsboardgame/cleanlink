@@ -95,12 +95,14 @@ export function Navbar() {
                 CleanLink
               </span>
             </div>
-            <div className="flex items-center gap-1.5 mt-2.5">
-              <span className="h-px w-4 bg-primary/30" />
-              <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] whitespace-nowrap opacity-70 group-hover:opacity-100 transition-opacity">
-                Powered by AI (Harley)
-              </span>
-              <span className="h-px w-4 bg-primary/30" />
+            <div className="flex flex-col items-center mt-2.5">
+              <div className="flex items-center gap-1.5">
+                <span className="h-px w-4 bg-primary/30" />
+                <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] whitespace-nowrap opacity-70 group-hover:opacity-100 transition-opacity">
+                  Powered by Harley:Ai technology
+                </span>
+                <span className="h-px w-4 bg-primary/30" />
+              </div>
             </div>
           </Link>
         </div>
