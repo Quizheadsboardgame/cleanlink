@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { FirebaseClientProvider } from "@/firebase/client-provider";
@@ -7,8 +7,24 @@ import { ReviewTasksFab } from "@/components/review-tasks-fab";
 import { LanguageProvider } from "@/context/language-context";
 
 export const metadata: Metadata = {
-  title: 'CleanLink | Professional Stock Ordering',
-  description: 'Sleek, dynamic stock order management with WhatsApp integration.',
+  title: 'CleanLink | Professional AI-Powered Management',
+  description: 'A professional AI-driven web application for infrastructure and stock management, powered by Harley:Ai technology.',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'CleanLink',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#0a0a0c',
 };
 
 export default function RootLayout({
