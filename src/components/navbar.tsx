@@ -1,8 +1,7 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
-import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
+import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
@@ -84,36 +83,29 @@ export function Navbar() {
           )}
         </div>
 
-        {/* PortalFlow in the middle */}
+        {/* Logo Image in the middle */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <Link href="/" className="flex flex-col items-center pointer-events-auto">
-            <div className="flex items-center gap-2">
-              <div className="portal-gradient p-1.5 rounded-lg">
-                <Boxes className="w-5 h-5 text-white" />
+            {headerLogo && (
+              <div className="relative w-32 h-16 sm:w-48 sm:h-20">
+                <Image
+                  src={headerLogo.imageUrl}
+                  alt={headerLogo.description}
+                  fill
+                  className="object-contain"
+                  data-ai-hint={headerLogo.imageHint}
+                />
               </div>
-              <span className="text-xl sm:text-2xl font-bold font-headline tracking-tight portal-text-gradient">
-                PortalFlow
-              </span>
-            </div>
+            )}
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mt-0.5">
               Powered by HARLEY
             </span>
           </Link>
         </div>
 
-        {/* Secondary Logo on the right */}
+        {/* Right side (Empty) */}
         <div className="ml-auto flex items-center">
-          {headerLogo && (
-            <div className="relative w-24 h-16 sm:w-32 sm:h-20">
-              <Image
-                src={headerLogo.imageUrl}
-                alt={headerLogo.description}
-                fill
-                className="object-contain"
-                data-ai-hint={headerLogo.imageHint}
-              />
-            </div>
-          )}
+          {/* Logo on the right removed as per user request */}
         </div>
       </div>
     </nav>
