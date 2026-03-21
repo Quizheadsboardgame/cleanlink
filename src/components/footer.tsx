@@ -26,7 +26,7 @@ export function Footer() {
         {/* Brand info on the right */}
         <div className="flex flex-col items-end gap-1">
           <div className="flex items-center gap-1 flex-col">
-            <span className="text-xl font-bold font-headline portal-text-gradient">PortalFlow</span>
+            <span className="text-xl font-bold font-headline portal-text-gradient">CleanLink</span>
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Powered by HARLEY</span>
           </div>
           <span className="text-xs text-muted-foreground uppercase tracking-widest font-medium mt-2">

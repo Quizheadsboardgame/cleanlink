@@ -6,7 +6,7 @@ import { ScrollingBanner } from "@/components/scrolling-banner";
 import { ReviewTasksFab } from "@/components/review-tasks-fab";
 
 export const metadata: Metadata = {
-  title: 'PortalFlow | Professional Stock Ordering',
+  title: 'CleanLink | Professional Stock Ordering',
   description: 'Sleek, dynamic stock order management with WhatsApp integration.',
 };
 

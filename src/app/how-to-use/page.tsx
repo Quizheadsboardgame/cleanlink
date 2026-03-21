@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -121,7 +120,7 @@ export default function HowToUsePage() {
         <div className="space-y-16">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold font-headline info-text-gradient">Guide to PortalFlow</h1>
+            <h1 className="text-4xl md:text-5xl font-bold font-headline info-text-gradient">Guide to CleanLink</h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Everything you need to know about using our professional stock management and reporting platform for Lot 4.
             </p>
@@ -176,7 +175,7 @@ export default function HowToUsePage() {
           {/* Benefits Section */}
           <section className="space-y-8">
             <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 px-3 py-1">WHY USE PORTALFLOW</Badge>
+              <Badge variant="outline" className="border-emerald-500/30 text-emerald-400 px-3 py-1">WHY USE CLEANLINK</Badge>
               <h2 className="text-2xl font-bold font-headline">System Benefits</h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -203,7 +202,7 @@ export default function HowToUsePage() {
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold font-headline">Need Emergency Help?</h2>
                 <p className="max-w-xl opacity-90 leading-relaxed">
-                  While PortalFlow is the fastest way to handle standard stock and equipment requests, always call your manager immediately for site emergencies, health and safety risks, or urgent access issues.
+                  While CleanLink is the fastest way to handle standard stock and equipment requests, always call your manager immediately for site emergencies, health and safety risks, or urgent access issues.
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
