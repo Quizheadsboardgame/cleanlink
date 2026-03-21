@@ -93,7 +93,6 @@ export function StockOrderForm() {
     const dateStr = format(date, "yyyy-MM-dd")
     const phone = "447000000000"
     
-    // Exactly matching the message structure from your provided code
     let message = `Stock Order\nName: ${name}\nDate: ${dateStr}\nSite: ${site}\n\nItems:\n`
     
     items.forEach((item) => {
@@ -114,165 +113,131 @@ export function StockOrderForm() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-3">
-      <div className="lg:col-span-2 space-y-6">
-        <Card className="glass-panel overflow-hidden border-none shadow-2xl animate-fade-in">
-          <CardHeader className="border-b border-white/5 bg-white/[0.02]">
-            <CardTitle className="font-headline text-2xl flex items-center gap-2">
-              <Package className="w-6 h-6 text-primary" />
-              Stock Order Form
-            </CardTitle>
-            <CardDescription>Fill out the details below to prepare your order.</CardDescription>
-          </CardHeader>
-          <CardContent className="p-6 space-y-8">
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-muted-foreground flex items-center gap-2">
-                  <User className="w-4 h-4" /> Name
-                </Label>
-                <Input 
-                  placeholder="Enter your name" 
-                  value={name} 
-                  onChange={(e) => setName(e.target.value)}
-                  className="bg-secondary/50 border-white/5 focus:border-primary/50"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-muted-foreground flex items-center gap-2">
-                  <CalendarIcon className="w-4 h-4" /> Date
-                </Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal bg-secondary/50 border-white/5",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 border-white/10" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      className="bg-card"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
-
+    <div className="max-w-2xl mx-auto">
+      <Card className="glass-panel overflow-hidden border-none shadow-2xl">
+        <CardHeader className="border-b border-white/5 bg-white/[0.02]">
+          <CardTitle className="font-headline text-2xl flex items-center gap-2">
+            <Package className="w-6 h-6 text-primary" />
+            Stock Order Form
+          </CardTitle>
+          <CardDescription>Fill out the details below to prepare your order.</CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-8">
+          <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> Site
+                <User className="w-4 h-4" /> Name
               </Label>
-              <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5">
-                  <SelectValue placeholder="Select a site" />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px]">
-                  {SITES.map(s => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input 
+                placeholder="Enter your name" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)}
+                className="bg-secondary/50 border-white/5 focus:border-primary/50"
+              />
             </div>
-
-            <div className="space-y-4 pt-4">
-              <div className="flex items-center justify-between">
-                <Label className="text-lg font-headline">Items</Label>
-                <Button 
-                  onClick={addItem} 
-                  variant="outline" 
-                  size="sm" 
-                  className="gap-2 border-primary/20 hover:bg-primary/10 text-primary"
-                >
-                  <Plus className="w-4 h-4" /> Add Item
-                </Button>
-              </div>
-
-              <div className="space-y-3">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                    <div className="flex-1">
-                      <Input 
-                        placeholder="Item (e.g. Hand towels)" 
-                        value={item.name}
-                        onChange={(e) => updateItem(item.id, "name", e.target.value)}
-                        className="bg-secondary/30 border-white/5"
-                      />
-                    </div>
-                    <div className="w-24">
-                      <Input 
-                        type="number" 
-                        min="1" 
-                        placeholder="Qty"
-                        value={item.quantity || ""}
-                        onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
-                        className="bg-secondary/30 border-white/5"
-                      />
-                    </div>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={() => removeItem(item.id)}
-                      disabled={items.length <= 1}
-                      className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="p-6 bg-white/[0.02] border-t border-white/5 flex justify-end">
-            <Button 
-              onClick={handleWhatsAppSubmit}
-              className="portal-gradient text-white font-semibold gap-2 px-8 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)]"
-            >
-              <Send className="w-5 h-5" /> Send via WhatsApp
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
-
-      <div className="space-y-6">
-        <Card className="glass-panel border-none animate-fade-in delay-100">
-          <CardHeader>
-            <CardTitle className="text-lg font-headline">Live Preview</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <div className="p-4 rounded-lg bg-white/5 border border-white/5 text-xs font-mono whitespace-pre-wrap leading-relaxed">
-               <span className="text-accent">Stock Order</span>{"\n"}
-               Name: {name || "..."}{"\n"}
-               Date: {date ? format(date, "yyyy-MM-dd") : "..."}{"\n"}
-               Site: {site || "..."}{"\n\n"}
-               Items:{"\n"}
-               {items.filter(i => i.name && i.quantity).map((i, idx) => (
-                 <div key={idx}>- {i.name}: {i.quantity}</div>
-               ))}
-               {items.filter(i => i.name && i.quantity).length === 0 && "..."}
-             </div>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-panel border-none overflow-hidden animate-fade-in delay-200">
-          <div className="portal-gradient p-6 text-white">
-            <h3 className="text-xl font-bold font-headline mb-2">Fleet Support</h3>
-            <p className="text-sm opacity-80 mb-6">Site selection is synced with the master campus inventory list.</p>
-            <div className="flex items-center gap-2 text-xs bg-white/10 rounded-lg p-2 backdrop-blur-sm">
-              <Building2 className="w-4 h-4" />
-              <span>{SITES.length} Validated Sites</span>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground flex items-center gap-2">
+                <CalendarIcon className="w-4 h-4" /> Date
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal bg-secondary/50 border-white/5",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 border-white/10" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                    className="bg-card"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
-        </Card>
-      </div>
+
+          <div className="space-y-2">
+            <Label className="text-muted-foreground flex items-center gap-2">
+              <Building2 className="w-4 h-4" /> Site
+            </Label>
+            <Select onValueChange={setSite} value={site}>
+              <SelectTrigger className="bg-secondary/50 border-white/5">
+                <SelectValue placeholder="Select a site" />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-white/10 max-h-[300px]">
+                {SITES.map(s => (
+                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-lg font-headline">Items</Label>
+              <Button 
+                onClick={addItem} 
+                variant="outline" 
+                size="sm" 
+                className="gap-2 border-primary/20 hover:bg-primary/10 text-primary"
+              >
+                <Plus className="w-4 h-4" /> Add Item
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              {items.map((item) => (
+                <div key={item.id} className="flex gap-3">
+                  <div className="flex-1">
+                    <Input 
+                      placeholder="Item (e.g. Hand towels)" 
+                      value={item.name}
+                      onChange={(e) => updateItem(item.id, "name", e.target.value)}
+                      className="bg-secondary/30 border-white/5"
+                    />
+                  </div>
+                  <div className="w-24">
+                    <Input 
+                      type="number" 
+                      min="1" 
+                      placeholder="Qty"
+                      value={item.quantity || ""}
+                      onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
+                      className="bg-secondary/30 border-white/5"
+                    />
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => removeItem(item.id)}
+                    disabled={items.length <= 1}
+                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="p-6 bg-white/[0.02] border-t border-white/5 flex justify-center">
+          <Button 
+            onClick={handleWhatsAppSubmit}
+            className="portal-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
+          >
+            <Send className="w-5 h-5" /> Send via WhatsApp
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
