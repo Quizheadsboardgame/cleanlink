@@ -5,9 +5,7 @@ import { useState, useEffect } from "react"
 import { PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
-import placeholderData from "@/app/lib/placeholder-images.json"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,13 +35,12 @@ export function Navbar() {
   ]
 
   const activeItem = navItems.find(item => item.href === pathname) || navItems[0]
-  const headerLogo = placeholderData.placeholderImages.find(img => img.id === "header-secondary-logo")
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-32 flex items-center">
+      <div className="container mx-auto px-4 h-32 flex items-center relative">
         {/* Menu far left */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 z-10">
           {mounted ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -84,26 +81,15 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Branding far right */}
-        <div className="ml-auto flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            {headerLogo && (
-              <div className="relative w-16 h-12 sm:w-20 sm:h-16">
-                <Image
-                  src={headerLogo.imageUrl}
-                  alt={headerLogo.description}
-                  fill
-                  className="object-contain"
-                  data-ai-hint={headerLogo.imageHint}
-                />
-              </div>
-            )}
-            <div className="flex flex-col items-start">
-              <span className="text-xl sm:text-2xl font-bold font-headline portal-text-gradient leading-none">CleanLink</span>
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mt-1 whitespace-nowrap">
-                Powered by HARLEY
-              </span>
-            </div>
+        {/* Branding Centered */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <Link href="/" className="flex flex-col items-center pointer-events-auto">
+            <span className="text-2xl sm:text-4xl font-bold font-headline portal-text-gradient leading-none tracking-tight">
+              CleanLink
+            </span>
+            <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.3em] mt-2 whitespace-nowrap opacity-80">
+              Powered by HARLEY
+            </span>
           </Link>
         </div>
       </div>
