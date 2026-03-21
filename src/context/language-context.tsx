@@ -7,6 +7,7 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: TranslationPath;
+  isRTL: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -26,10 +27,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('cleanlink_lang', lang);
   };
 
+  const isRTL = language === 'ar';
+
+  useEffect(() => {
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, [language, isRTL]);
+
   const value = {
     language,
     setLanguage,
     t: translations[language],
+    isRTL,
   };
 
   return (

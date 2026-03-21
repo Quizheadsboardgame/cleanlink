@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Languages, Check, ArrowLeft, Sparkles } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
@@ -12,20 +12,26 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 
 export default function LanguagePage() {
-  const { language, setLanguage, t } = useLanguage()
+  const { language, setLanguage, t, isRTL } = useLanguage()
 
   const languageOptions: { id: Language; label: string; sub: string }[] = [
     { id: 'en', label: "English", sub: "Global Standard" },
     { id: 'es', label: "Español", sub: "Castellano" },
     { id: 'pt', label: "Português", sub: "Brasil / Portugal" },
     { id: 'pl', label: "Polski", sub: "Polska" },
+    { id: 'ro', label: "Română", sub: "România" },
+    { id: 'hu', label: "Magyar", sub: "Magyarország" },
+    { id: 'cs', label: "Čeština", sub: "Česko" },
+    { id: 'bg', label: "Български", sub: "България" },
+    { id: 'tr', label: "Türkçe", sub: "Türkiye" },
+    { id: 'ar', label: "العربية", sub: "الشرق الأوسط" },
   ]
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-2xl">
+      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="space-y-8">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-2 text-primary mb-2">
@@ -35,12 +41,12 @@ export default function LanguagePage() {
             <h1 className="text-4xl md:text-5xl font-bold font-headline portal-text-gradient tracking-tighter">
               {t.language.title}
             </h1>
-            <p className="text-muted-foreground text-lg opacity-80">
+            <p className="text-muted-foreground text-lg opacity-80 max-w-2xl mx-auto">
               {t.language.description}
             </p>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {languageOptions.map((opt) => (
               <Card 
                 key={opt.id}
@@ -60,7 +66,7 @@ export default function LanguagePage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg font-headline">{opt.label}</h3>
-                      <p className="text-xs text-muted-foreground">{opt.sub}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{opt.sub}</p>
                     </div>
                   </div>
                   {language === opt.id && (
@@ -73,10 +79,10 @@ export default function LanguagePage() {
             ))}
           </div>
 
-          <div className="pt-4 flex justify-center">
+          <div className="pt-8 flex justify-center">
             <Link href="/">
               <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-white">
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className={cn("w-4 h-4", isRTL && "rotate-180")} />
                 {t.language.back}
               </Button>
             </Link>
