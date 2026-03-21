@@ -15,7 +15,6 @@ import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
-import { SITES } from "@/components/stock-order-form"
 import { useLanguage } from "@/context/language-context"
 
 export function IncompleteTaskForm() {
@@ -121,16 +120,12 @@ export function IncompleteTaskForm() {
               <Label className="text-muted-foreground flex items-center gap-2">
                 <Building2 className="w-4 h-4" /> {t.incomplete.site || t.faulty.site}
               </Label>
-              <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
-                  <SelectValue placeholder={t.stores.sitePlaceholder} />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
-                  {SITES.map(s => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input 
+                placeholder={t.stores.sitePlaceholder} 
+                value={site} 
+                onChange={(e) => setSite(e.target.value)}
+                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+              />
             </div>
           </div>
 
@@ -140,7 +135,7 @@ export function IncompleteTaskForm() {
             </Label>
             <Select onValueChange={setReason} value={reason}>
               <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
-                <SelectValue placeholder={t.stores.sitePlaceholder} />
+                <SelectValue placeholder={t.common.select || "Select a reason"} />
               </SelectTrigger>
               <SelectContent className="bg-card border-white/10 text-white">
                 {t.incomplete.reasons.map(r => (

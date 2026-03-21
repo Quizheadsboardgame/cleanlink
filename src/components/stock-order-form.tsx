@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
@@ -23,19 +22,6 @@ interface OrderItem {
   quantity: number
   code?: string
 }
-
-export const SITES = [
-  "ANNE MCLAREN", "CEDAR", "MRC EPIDEMIOLOGY LEVEL 3", "WBIC RPU BASEMENT",
-  "JOHN VAN GEEST - JVG", "HERSCHEL SMITH BUILDING - HSB", "BARTON HOUSE",
-  "COTON HOUSE", "CLINICAL SCHOOLS", "GRANTCHESTER HOUSE", "BAY 13",
-  "WEST FORVIE", "CLIFFORD ALLBUTT BUILDING - CAB", "ISLAND RESEARCH BUILDING - IRB",
-  "OBS", "PAEDIATRICS LEVEL 8", "SURGERY LEVEL 9", "X RAY BLOCK RADIOLOGY LEVEL 5",
-  "JEFFREY CHEAH OFFICE", "EAST FORVIE (IPH)", "STRAGEWAYS (SLR)",
-  "MEDICINE LEVEL 5", "IMS LEVELS 4 & 5", "OLD IMS - LAB BLOCK 4",
-  "NEURO SPACE", "P&A LEVEL 4", "WOLFSON BRAIN WBIC", "BIO-REPOSITORY LAB LEVEL 1",
-  "ACCI LEVEL 6", "POST DOC", "HLRI BUILDING", "MRC WATERBEACH STORAGE",
-  "TMS F&G LEVEL 2", "E7"
-]
 
 export function StockOrderForm() {
   const { toast } = useToast()
@@ -185,16 +171,12 @@ export function StockOrderForm() {
               <Label className="text-muted-foreground flex items-center gap-2">
                 <Building2 className="w-4 h-4" /> {t.stores.siteLabel}
               </Label>
-              <Select onValueChange={setSite} value={site}>
-                <SelectTrigger className="h-12 bg-secondary/50 border-white/5 text-white">
-                  <SelectValue placeholder={t.stores.sitePlaceholder} />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
-                  {SITES.map(s => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input 
+                placeholder={t.stores.sitePlaceholder} 
+                value={site} 
+                onChange={(e) => setSite(e.target.value)}
+                className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full"
+              />
             </div>
 
             <div className="grid gap-4 pt-2">

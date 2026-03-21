@@ -1,4 +1,3 @@
-
 export const translations = {
   en: {
     nav: {
@@ -36,7 +35,8 @@ export const translations = {
       wait: "Wait a moment",
       auth: "Authenticating...",
       missingInfo: "Missing Information",
-      emergency: "Submitted forms will be reviewed the next working day, if an emergency please call your manager."
+      emergency: "Submitted forms will be reviewed the next working day, if an emergency please call your manager.",
+      select: "Select...",
     },
     stores: {
       title: "Stores Order Form",
@@ -45,7 +45,7 @@ export const translations = {
       namePlaceholder: "Enter your name",
       dateLabel: "Date",
       siteLabel: "Site",
-      sitePlaceholder: "Select a site",
+      sitePlaceholder: "Enter site name",
       deliveredLabel: "Need stores delivered",
       deliveredSub: "Please note stores can take 3 working days to be delivered",
       clinicalLabel: "Taken from Clinical school stores",
@@ -57,7 +57,7 @@ export const translations = {
       submit: "Submit Order",
       successTitle: "Order Submitted",
       successDesc: "Thank you for submitting the form, this will be reviewed the next working day by 12pm.",
-      missingFields: "Please fill in your name, select a date, and choose a site."
+      missingFields: "Please fill in your name, select a date, and enter a site."
     },
     faulty: {
       title: "Faulty Equipment Report",
@@ -179,7 +179,8 @@ export const translations = {
       wait: "Espere un momento",
       auth: "Autenticando...",
       missingInfo: "Información Faltante",
-      emergency: "Los formularios enviados se revisarán el siguiente día hábil, en caso de emergencia llame a su gerente."
+      emergency: "Los formularios enviados se revisarán el siguiente día hábil, en caso de emergencia llame a su gerente.",
+      select: "Seleccionar...",
     },
     stores: {
       title: "Pedido de Almacén",
@@ -188,7 +189,7 @@ export const translations = {
       namePlaceholder: "Ingrese su nombre",
       dateLabel: "Fecha",
       siteLabel: "Sitio",
-      sitePlaceholder: "Seleccione un sitio",
+      sitePlaceholder: "Ingrese nombre del sitio",
       deliveredLabel: "Necesito entrega",
       deliveredSub: "La entrega puede tardar 3 días hábiles",
       clinicalLabel: "Tomado de la escuela clínica",
@@ -316,7 +317,8 @@ export const translations = {
       wait: "Aguarde",
       auth: "Autenticando...",
       missingInfo: "Informação Faltante",
-      emergency: "Revisado no próximo dia útil."
+      emergency: "Revisado no próximo dia útil.",
+      select: "Selecionar...",
     },
     stores: {
       title: "Pedido de Estoque",
@@ -325,7 +327,7 @@ export const translations = {
       namePlaceholder: "Seu nome",
       dateLabel: "Data",
       siteLabel: "Local",
-      sitePlaceholder: "Selecione local",
+      sitePlaceholder: "Digite o nome do local",
       deliveredLabel: "Preciso de entrega",
       deliveredSub: "Pode levar 3 dias úteis",
       clinicalLabel: "Retirado da escola clínica",
@@ -453,7 +455,8 @@ export const translations = {
       wait: "Czekaj",
       auth: "Logowanie...",
       missingInfo: "Braki",
-      emergency: "Rozpatrzymy jutro."
+      emergency: "Rozpatrzymy jutro.",
+      select: "Wybierz...",
     },
     stores: {
       title: "Zamówienie",
@@ -462,7 +465,7 @@ export const translations = {
       namePlaceholder: "Twoje imię",
       dateLabel: "Data",
       siteLabel: "Miejsce",
-      sitePlaceholder: "Wybierz miejsce",
+      sitePlaceholder: "Wpisz nazwę miejsca",
       deliveredLabel: "Dostawa",
       deliveredSub: "Do 3 dni roboczych",
       clinicalLabel: "Z Clinical School",
@@ -558,21 +561,21 @@ export const translations = {
     nav: { stores: "Comandă Stoc", faulty: "Echipament Defect", incomplete: "Sarcină Incompletă", hours: "Solicitare Ore", referral: "Recomandă un Prieten", cover: "Acoperire Schimburi", status: "Panou Stare", info: "Informații", guide: "Ghid Utilizare", language: "Limbă" },
     footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Sistem Avansat de Management al Infrastructurii" },
     language: { title: "Limba Interfeței", description: "Selectați limba preferată pentru matricea CleanLink.", select: "Selectați Limba", back: "Revenire la Consolă" },
-    common: { submit: "Trimite", loading: "Se procesează...", site: "Locație", name: "Nume", date: "Dată", back: "Înapoi", error: "Eroare", success: "Succes", wait: "Așteptați o clipă", auth: "Autentificare...", missingInfo: "Informații lipsă", emergency: "Formularele vor fi revizuite în următoarea zi lucrătoare." },
-    stores: { title: "Comandă Stoc", description: "Completați detaliile pentru a trimite comanda.", nameLabel: "Nume", namePlaceholder: "Introduceți numele", dateLabel: "Data", siteLabel: "Locație", sitePlaceholder: "Selectați locația", deliveredLabel: "Necesită livrare", deliveredSub: "Livrarea poate dura 3 zile lucrătoare", clinicalLabel: "Luat din stocul școlii clinice", itemsTitle: "Articole", addItem: "Adăugare Articol", itemNamePlaceholder: "Nume articol", qtyPlaceholder: "Cant", codePlaceholder: "Cod (opțional)", submit: "Trimite Comanda", successTitle: "Comandă Trimisă", successDesc: "Mulțumim, va fi revizuită în următoarea zi lucrătoare.", missingFields: "Vă rugăm să completați numele, data și locația." },
+    common: { submit: "Trimite", loading: "Se procesează...", site: "Locație", name: "Nume", date: "Dată", back: "Înapoi", error: "Eroare", success: "Succes", wait: "Așteptați o clipă", auth: "Autentificare...", missingInfo: "Informații lipsă", emergency: "Formularele vor fi revizuite în următoarea zi lucrătoare.", select: "Selectați..." },
+    stores: { title: "Comandă Stoc", description: "Completați detaliile pentru a trimite comanda.", nameLabel: "Nume", namePlaceholder: "Introduceți numele", dateLabel: "Data", siteLabel: "Locație", sitePlaceholder: "Introduceți locația", deliveredLabel: "Necesită livrare", deliveredSub: "Livrarea poate dura 3 zile lucrătoare", clinicalLabel: "Luat din stocul școlii clinice", itemsTitle: "Articole", addItem: "Adăugare Articol", itemNamePlaceholder: "Nume articol", qtyPlaceholder: "Cant", codePlaceholder: "Cod (opțional)", submit: "Trimite Comanda", successTitle: "Comandă Trimisă", successDesc: "Mulțumim, va fi revizuită în următoarea zi lucrătoare.", missingFields: "Vă rugăm să completați numele, data și locația." },
     faulty: { title: "Raport Echipament Defect", description: "Solicitați înlocuirea echipamentului defect.", cleanerName: "Nume Cleaner", site: "Locație", equipment: "Nume Echipament", equipmentPlaceholder: "ex: Aspirator, Mop", faultDescription: "Descrierea Defecțiunii", faultPlaceholder: "Descrieți problema...", submit: "Trimite Raport", successTitle: "Raport Trimis", successDesc: "Va fi revizuit în următoarea zi lucrătoare.", missingFields: "Completați toate câmpurile." },
     incomplete: { title: "Raport Sarcină Incompletă", description: "Raportați de ce o sarcină nu a fost finalizată.", reason: "Motiv", details: "Detalii Suplimentare", detailsPlaceholder: "Mai mult context...", submit: "Trimite Raport", successTitle: "Raport Trimis", successDesc: "Va fi revizuit în următoarea zi lucrătoare.", missingFields: "Completați câmpurile obligatorii.", reasons: ["Ușă încuiată / Fără acces", "Zonă ocupată", "Mentenanță în curs", "Sănătate și Siguranță", "Altele"] },
     hours: { title: "Solicitare Ore Suplimentare", description: "Solicitați ture extra sau ore permanente.", requestType: "Tip Solicitare", permanent: "Ore Permanente", temporary: "Ore Temporare", datesFree: "Date Specifice", datesPlaceholder: "ex: Luni - Miercuri viitoare", timesAvailable: "Intervale Disponibile", timesPlaceholder: "ex: Luni - Vineri 16:00 - 20:00", submit: "Trimite Solicitarea", successTitle: "Solicitare Trimisă", successDesc: "Mulțumim, va fi revizuită.", missingFields: "Completați câmpurile obligatorii." },
     referral: { title: "Recomandă un Prieten", description: "Recomandați pe cineva pentru echipa de curățenie.", yourName: "Numele Dvs. Complet", friendInfo: "Informații Prieten", friendName: "Numele Prietenului", email: "Email", phone: "Telefon", extraInfo: "Informații Extra", extraPlaceholder: "Disponibilitate sau experiență...", submit: "Trimite Recomandarea", successTitle: "Recomandare Trimisă", successDesc: "Mulțumim pentru recomandare!", missingFields: "Completați câmpurile obligatorii." },
     status: { title: "Panou Stare", description: "Urmăriți progresul solicitărilor.", loading: "Sincronizare...", noTasks: "Fără sarcini active", noTasksDesc: "Nu există trimiteri în sistem.", underReview: "În revizuire", processing: "În procesare", reviewIn: "Revizuire în:", managerUpdate: "Update Manager" },
-    guide: { title: "Ghid CleanLink", description: "Aflați cum să gestionați comenzile și rapoartele ușor.", workflow: "Pași Simpli", capabilities: "Ce Puteți Face", benefits: "Beneficii", emergencyTitle: "Ajutor Urgent?", emergencyDesc: "În urgențe, sunați supervizorul imediat.", developer: "Creat de Smart Harley Technology" }
+    guide: { title: "Ghid CleanLink", description: "Aflați cum să gestionați comenzile și rapoartele ușor.", workflow: "Pasos Simples", capabilities: "Ce Puteți Face", benefits: "Beneficii", emergencyTitle: "Ajutor Urgent?", emergencyDesc: "În urgențe, sunați supervizorul imediat.", developer: "Creat de Smart Harley Technology" }
   },
   hu: {
     nav: { stores: "Raktári Rendelés", faulty: "Hibás Felszerelés", incomplete: "Befejezetlen Feladat", hours: "Órák Igénylése", referral: "Barát Ajánlása", cover: "Helyettesítés", status: "Állapotjelző Tábla", info: "Információk", guide: "Útmutató", language: "Nyelv" },
     footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Infrastruktúra Kezelő Rendszer" },
     language: { title: "Nyelv", description: "Válassza ki a kívánt nyelvet.", select: "Választás", back: "Vissza" },
-    common: { submit: "Küldés", loading: "Feldolgozás...", site: "Helyszín", name: "Név", date: "Dátum", back: "Vissza", error: "Hiba", success: "Siker", wait: "Pillanat", auth: "Hitelesítés...", missingInfo: "Hiányzó adatok", emergency: "A beküldött űrlapokat holnap bíráljuk el." },
-    stores: { title: "Rendelés", description: "Töltse ki a rendeléshez.", nameLabel: "Név", namePlaceholder: "Neved", dateLabel: "Dátum", siteLabel: "Helyszín", sitePlaceholder: "Helyszín", deliveredLabel: "Kiszállítást kérek", deliveredSub: "3 munkanap", clinicalLabel: "Klinikai raktárból", itemsTitle: "Tételek", addItem: "Hozzáadás", itemNamePlaceholder: "Tétel", qtyPlaceholder: "Menny", codePlaceholder: "Kód", submit: "Küldés", successTitle: "Siker", successDesc: "Holnap bíráljuk el.", missingFields: "Név, dátum és helyszín kell." },
+    common: { submit: "Küldés", loading: "Feldolgozás...", site: "Helyszín", name: "Név", date: "Dátum", back: "Vissza", error: "Hiba", success: "Siker", wait: "Pillanat", auth: "Hitelesítés...", missingInfo: "Hiányzó adatok", emergency: "A beküldött űrlapokat holnap bíráljuk el.", select: "Választás..." },
+    stores: { title: "Rendelés", description: "Töltse ki a rendeléshez.", nameLabel: "Név", namePlaceholder: "Neved", dateLabel: "Dátum", siteLabel: "Helyszín", sitePlaceholder: "Írd be a helyszínt", deliveredLabel: "Kiszállítást kérek", deliveredSub: "3 munkanap", clinicalLabel: "Klinikai raktárból", itemsTitle: "Tételek", addItem: "Hozzáadás", itemNamePlaceholder: "Tétel", qtyPlaceholder: "Menny", codePlaceholder: "Kód", submit: "Küldés", successTitle: "Siker", successDesc: "Holnap bíráljuk el.", missingFields: "Név, dátum és helyszín kell." },
     faulty: { title: "Hiba", description: "Hibás felszerelés cseréje.", cleanerName: "Név", site: "Helyszín", equipment: "Eszköz", equipmentPlaceholder: "pl. Porszívó", faultDescription: "Hiba", faultPlaceholder: "Mi a hiba?", submit: "Küldés", successTitle: "Siker", successDesc: "Holnap bíráljuk.", missingFields: "Mindent tölts ki." },
     incomplete: { title: "Befejezetlen", description: "Miért maradt el?", reason: "Indok", details: "Részletek", detailsPlaceholder: "Infó...", submit: "Küldés", successTitle: "Siker", successDesc: "Holnap bíráljuk.", missingFields: "Töltsd ki a mezőket.", reasons: ["Zárva", "Foglalt", "Karbantartás", "Biztonság", "Egyéb"] },
     hours: { title: "Plusz Órák", description: "Plusz műszak kérése.", requestType: "Típus", permanent: "Állandó", temporary: "Ideiglenes", datesFree: "Dátumok", datesPlaceholder: "Mikor?", timesAvailable: "Idősáv", timesPlaceholder: "pl. 16:00-20:00", submit: "Küldés", successTitle: "Siker", successDesc: "Bíráljuk.", missingFields: "Mindent tölts ki." },
@@ -584,34 +587,34 @@ export const translations = {
     nav: { stores: "Objednávka", faulty: "Závada", incomplete: "Nedokončeno", hours: "Hodiny", referral: "Doporučit", cover: "Záskok", status: "Stav", info: "Info", guide: "Návod", language: "Jazyk" },
     footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Systém Správy" },
     language: { title: "Jazyk", description: "Vyberte jazyk.", select: "Vybrat", back: "Zpět" },
-    common: { submit: "Odeslat", loading: "Čekejte...", site: "Lokalita", name: "Jméno", date: "Datum", back: "Zpět", error: "Chyba", success: "Úspěch", wait: "Moment", auth: "Ověřování...", missingInfo: "Chybějící info", emergency: "Zkontrolujeme zítra." },
-    stores: { title: "Objednávka", description: "Vyplňte pro objednání.", nameLabel: "Jméno", namePlaceholder: "Vaše jméno", dateLabel: "Datum", siteLabel: "Lokalita", sitePlaceholder: "Vyberte lokalitu", deliveredLabel: "Doručení", deliveredSub: "Do 3 dnů", clinicalLabel: "Z klinické školy", itemsTitle: "Položky", addItem: "Přidat", itemNamePlaceholder: "Položka", qtyPlaceholder: "Mn", codePlaceholder: "Kód", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme zítra.", missingFields: "Jméno, datum a lokalita." },
+    common: { submit: "Odeslat", loading: "Čekejte...", site: "Lokalita", name: "Jméno", date: "Datum", back: "Zpět", error: "Chyba", success: "Úspěch", wait: "Moment", auth: "Ověřování...", missingInfo: "Chybějící info", emergency: "Zkontrolujeme zítra.", select: "Vybrat..." },
+    stores: { title: "Objednávka", description: "Vyplňte pro objednání.", nameLabel: "Jméno", namePlaceholder: "Vaše jméno", dateLabel: "Datum", siteLabel: "Lokalita", sitePlaceholder: "Zadejte lokalitu", deliveredLabel: "Doručení", deliveredSub: "Do 3 dnů", clinicalLabel: "Z klinické školy", itemsTitle: "Položky", addItem: "Přidat", itemNamePlaceholder: "Položka", qtyPlaceholder: "Mn", codePlaceholder: "Kód", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme zítra.", missingFields: "Jméno, datum a lokalita." },
     faulty: { title: "Závada", description: "Výměna vybavení.", cleanerName: "Jméno", site: "Lokalita", equipment: "Vybavení", equipmentPlaceholder: "např. Vysavač", faultDescription: "Závada", faultPlaceholder: "Co nefunguje?", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zítra zkontrolujeme.", missingFields: "Vyplňte vše." },
     incomplete: { title: "Nedokončeno", description: "Proč nebylo hotovo?", reason: "Důvod", details: "Podrobnosti", detailsPlaceholder: "Více info...", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zítra zkontrolujeme.", missingFields: "Vyplňte pole.", reasons: ["Zavřeno", "Obsazeno", "Údržba", "BHP", "Jiné"] },
     hours: { title: "Hodiny Navíc", description: "Žádost o směny.", requestType: "Typ", permanent: "Stálé", temporary: "Záskok", datesFree: "Data", datesPlaceholder: "Kdy?", timesAvailable: "Čas", timesPlaceholder: "např. 16-20", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme.", missingFields: "Vyplňte vše." },
     referral: { title: "Doporučit", description: "Doporučte někoho.", yourName: "Vaše Jméno", friendInfo: "Přítel", friendName: "Jméno přítele", email: "Email", phone: "Telefon", extraInfo: "Extra", extraPlaceholder: "Zkušenosti...", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Díky!", missingFields: "Vyplňte vše." },
-    status: { title: "Stav", description: "Sledujte své požadavky.", loading: "Synchronizace...", noTasks: "Bez úkolů", noTasksDesc: "Nic v systému.", underReview: "Kontrola", processing: "Zpracování", reviewIn: "Kontrola:", managerUpdate: "Poznámka Manažera" },
+    status: { title: "Stav", description: "Sledujte své požadavky.", loading: "Synchronizace...", noTasks: "Bez úkolů", noTasksDesc: "Nic v systému.", underReview: "Kontrola", processing: "Zpracování", reviewIn: "Kontrola za:", managerUpdate: "Poznámka Manažera" },
     guide: { title: "Návod", description: "Naučte se ovládat své objednávky a hlášení.", workflow: "Snadné Kroky", capabilities: "Co Lze Dělat", benefits: "Výhody", emergencyTitle: "Nutná Pomoc?", emergencyDesc: "V nouzi volejte šéfa.", developer: "Vytvořeno Smart Harley Technology" }
   },
   bg: {
     nav: { stores: "Поръчка", faulty: "Повреда", incomplete: "Незавършено", hours: "Часове", referral: "Препоръка", cover: "Смяна", status: "Статус", info: "Инфо", guide: "Ръководство", language: "Език" },
     footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Система за Управление" },
     language: { title: "Език", description: "Изберете език.", select: "Избор", back: "Назад" },
-    common: { submit: "Изпрати", loading: "Чакайте...", site: "Обект", name: "Име", date: "Дата", back: "Назад", error: "Грешка", success: "Успех", wait: "Момент", auth: "Проверка...", missingInfo: "Липси", emergency: "Преглед утре." },
-    stores: { title: "Поръчка", description: "Попълнете детайли.", nameLabel: "Име", namePlaceholder: "Вашето име", dateLabel: "Дата", siteLabel: "Обект", sitePlaceholder: "Избор на обект", deliveredLabel: "Доставка", deliveredSub: "До 3 дни", clinicalLabel: "От клиничното училище", itemsTitle: "Артикули", addItem: "Добави", itemNamePlaceholder: "Артикул", qtyPlaceholder: "К-во", codePlaceholder: "Код", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Преглед утре.", missingFields: "Име, дата и обект." },
+    common: { submit: "Изпрати", loading: "Чакайте...", site: "Обект", name: "Име", date: "Дата", back: "Назад", error: "Грешка", success: "Успех", wait: "Момент", auth: "Проверка...", missingInfo: "Липси", emergency: "Преглед утре.", select: "Избор..." },
+    stores: { title: "Поръчка", description: "Попълнете детайли.", nameLabel: "Име", namePlaceholder: "Вашето име", dateLabel: "Дата", siteLabel: "Обект", sitePlaceholder: "Въведете обект", deliveredLabel: "Доставка", deliveredSub: "До 3 дни", clinicalLabel: "От клиничното училище", itemsTitle: "Артикули", addItem: "Добави", itemNamePlaceholder: "Артикул", qtyPlaceholder: "К-во", codePlaceholder: "Код", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Преглед утре.", missingFields: "Име, дата и обект." },
     faulty: { title: "Повреда", description: "Замяна на техника.", cleanerName: "Име", site: "Обект", equipment: "Техника", equipmentPlaceholder: "напр. Прахосмукачка", faultDescription: "Повреда", faultPlaceholder: "Какво не работи?", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Преглед утре.", missingFields: "Попълнете всичко." },
     incomplete: { title: "Незавършено", description: "Защо не е готово?", reason: "Причина", details: "Детайли", detailsPlaceholder: "Още инфо...", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Преглед утре.", missingFields: "Попълнете полетата.", reasons: ["Заключено", "Заето", "Поддръжка", "Здраве", "Друго"] },
     hours: { title: "Още Часове", description: "Заявка за работа.", requestType: "Тип", permanent: "Постоянно", temporary: "Временно", datesFree: "Дати", datesPlaceholder: "Кога?", timesAvailable: "Време", timesPlaceholder: "напр. 16-20", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Ще прегледаме.", missingFields: "Попълнете всичко." },
     referral: { title: "Препоръка", description: "Някой за екипа?", yourName: "Ваше Име", friendInfo: "Приятел", friendName: "Име на приятел", email: "Имейл", phone: "Телефон", extraInfo: "Екстра", extraPlaceholder: "Опит...", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Благодарим!", missingFields: "Попълнете всичко." },
     status: { title: "Статус", description: "Следете заявките си.", loading: "Синхрон...", noTasks: "Няма задачи", noTasksDesc: "Празно в системата.", underReview: "Проверява се", processing: "Обработка", reviewIn: "Преглед след:", managerUpdate: "Мениджър инфо" },
-    guide: { title: "Ръководство", description: "Научете се да ползвате поръчки и доклади.", workflow: "Лесни Стъпки", capabilities: "Какво Можете", benefits: "Предимства", emergencyTitle: "Спешна Помощ?", emergencyDesc: "При спешност звъннете на шефа.", developer: "Създадено от Smart Harley Technology" }
+    guide: { title: "Ръководство", description: "Научете се да ползвате поръчки и доклади.", workflow: "Прости стъпки", capabilities: "Какво Можете", benefits: "Предимства", emergencyTitle: "Спешна Помощ?", emergencyDesc: "При спешност звъннете на шефа.", developer: "Създадено от Smart Harley Technology" }
   },
   tr: {
     nav: { stores: "Sipariş", faulty: "Arıza", incomplete: "Yarım Kalan", hours: "Saatler", referral: "Öneri", cover: "Vardiya", status: "Durum", info: "Bilgi", guide: "Rehber", language: "Dil" },
     footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Yönetim Sistemi" },
     language: { title: "Dil", description: "Dil seçin.", select: "Seç", back: "Geri" },
-    common: { submit: "Gönder", loading: "Bekleyin...", site: "Saha", name: "İsim", date: "Tarih", back: "Geri", error: "Hata", success: "Başarılı", wait: "An", auth: "Doğrulama...", missingInfo: "Eksik", emergency: "Yarın incelenir." },
-    stores: { title: "Sipariş", description: "Sipariş için doldurun.", nameLabel: "İsim", namePlaceholder: "İsminiz", dateLabel: "Tarih", siteLabel: "Saha", sitePlaceholder: "Saha seç", deliveredLabel: "Teslimat", deliveredSub: "3 iş günü", clinicalLabel: "Klinik okuldan", itemsTitle: "Ürünler", addItem: "Ekle", itemNamePlaceholder: "Ürün", qtyPlaceholder: "Adet", codePlaceholder: "Kod", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "İsim, tarih ve saha seçin." },
+    common: { submit: "Gönder", loading: "Bekleyin...", site: "Saha", name: "İsim", date: "Tarih", back: "Geri", error: "Hata", success: "Başarılı", wait: "An", auth: "Doğrulama...", missingInfo: "Eksik", emergency: "Yarın incelenir.", select: "Seç..." },
+    stores: { title: "Sipariş", description: "Sipariş için doldurun.", nameLabel: "İsim", namePlaceholder: "İsminiz", dateLabel: "Tarih", siteLabel: "Saha", sitePlaceholder: "Saha adını girin", deliveredLabel: "Teslimat", deliveredSub: "3 iş günü", clinicalLabel: "Klinik okuldan", itemsTitle: "Ürünler", addItem: "Ekle", itemNamePlaceholder: "Ürün", qtyPlaceholder: "Adet", codePlaceholder: "Kod", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "İsim, tarih ve saha girin." },
     faulty: { title: "Arıza", description: "Ekipman değişimi.", cleanerName: "İsim", site: "Saha", equipment: "Ekipman", equipmentPlaceholder: "örn. Süpürge", faultDescription: "Arıza", faultPlaceholder: "Sorun nedir?", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "Hepsini doldur." },
     incomplete: { title: "Yarım Kalan", description: "Neden bitmedi?", reason: "Neden", details: "Detaylar", detailsPlaceholder: "Daha fazla...", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın bakılır.", missingFields: "Alanları doldur.", reasons: ["Kilitli", "Dolu", "Bakım", "Güvenlik", "Diğer"] },
     hours: { title: "Ek Saat", description: "Vardiya talebi.", requestType: "Tür", permanent: "Kalıcı", temporary: "Geçici", datesFree: "Tarihler", datesPlaceholder: "Ne zaman?", timesAvailable: "Saatler", timesPlaceholder: "örn. 16-20", submit: "Gönder", successTitle: "Gönderildi", successDesc: "İncelenecek.", missingFields: "Hepsini doldur." },
@@ -655,7 +658,8 @@ export const translations = {
       wait: "انتظر لحظة",
       auth: "جاري التحقق...",
       missingInfo: "معلومات ناقصة",
-      emergency: "تتم مراجعة الطلبات في يوم العمل التالي. في حالات الطوارئ، اتصل بمديرك."
+      emergency: "تتم مراجعة الطلبات في يوم العمل التالي. في حالات الطوارئ، اتصل بمديرك.",
+      select: "اختر...",
     },
     stores: {
       title: "نموذج طلب المخزن",
@@ -664,7 +668,7 @@ export const translations = {
       namePlaceholder: "أدخل اسمك",
       dateLabel: "التاريخ",
       siteLabel: "الموقع",
-      sitePlaceholder: "اختر موقعاً",
+      sitePlaceholder: "أدخل اسم الموقع",
       deliveredLabel: "بحاجة لتوصيل المخازن",
       deliveredSub: "يرجى ملاحظة أن التوصيل قد يستغرق 3 أيام عمل",
       clinicalLabel: "تم أخذه من مخازن المدرسة السريرية",
