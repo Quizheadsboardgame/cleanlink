@@ -1,6 +1,6 @@
 "use client"
 
-import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown } from "lucide-react"
+import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -21,6 +21,7 @@ export function Navbar() {
     { href: "/incomplete-task", label: "Incomplete Task", icon: AlertTriangle },
     { href: "/status", label: "Status Board", icon: LayoutList },
     { href: "/important-info", label: "Information", icon: Info },
+    { href: "/how-to-use", label: "How to Use", icon: BookOpen },
   ]
 
   const activeItem = navItems.find(item => item.href === pathname) || navItems[0]
