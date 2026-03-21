@@ -1,6 +1,7 @@
 
 "use client"
 
+import { useState, useEffect } from "react"
 import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -15,6 +16,11 @@ import { Button } from "@/components/ui/button"
 
 export function Navbar() {
   const pathname = usePathname()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const navItems = [
     { href: "/", label: "Stores Order", icon: PlusCircle, color: "text-[#6E76F5]" },
@@ -35,34 +41,44 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-24 flex items-center relative">
         {/* Menu far left */}
         <div className="z-10">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl shadow-lg hover:bg-white/5 transition-all active:scale-95">
-                <Menu className={cn("w-5 h-5", activeItem.color)} />
-                <span className={cn("font-headline font-bold text-base hidden xs:inline-block", activeItem.color)}>
-                  {activeItem.label}
-                </span>
-                <ChevronDown className="w-4 h-4 text-muted-foreground" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-xl">
-              {navItems.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  <DropdownMenuItem className={cn(
-                    "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-colors mb-1 last:mb-0",
-                    pathname === item.href 
-                      ? "bg-white/5 font-bold" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                  )}>
-                    <item.icon className={cn("w-5 h-5", item.color)} />
-                    <span className={cn("text-sm font-medium", pathname === item.href ? item.color : "")}>
-                      {item.label}
-                    </span>
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {mounted ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl shadow-lg hover:bg-white/5 transition-all active:scale-95">
+                  <Menu className={cn("w-5 h-5", activeItem.color)} />
+                  <span className={cn("font-headline font-bold text-base hidden xs:inline-block", activeItem.color)}>
+                    {activeItem.label}
+                  </span>
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-xl">
+                {navItems.map((item) => (
+                  <Link key={item.href} href={item.href}>
+                    <DropdownMenuItem className={cn(
+                      "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-colors mb-1 last:mb-0",
+                      pathname === item.href 
+                        ? "bg-white/5 font-bold" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                    )}>
+                      <item.icon className={cn("w-5 h-5", item.color)} />
+                      <span className={cn("text-sm font-medium", pathname === item.href ? item.color : "")}>
+                        {item.label}
+                      </span>
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-xl opacity-50 cursor-default">
+              <Menu className="w-5 h-5 text-muted-foreground" />
+              <span className="font-headline font-bold text-base hidden xs:inline-block text-muted-foreground">
+                Menu
+              </span>
+              <ChevronDown className="w-4 h-4 text-muted-foreground" />
+            </Button>
+          )}
         </div>
 
         {/* PortalFlow in the middle */}
