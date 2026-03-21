@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
+import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
@@ -62,6 +63,8 @@ export function StockOrderForm() {
   const [name, setName] = useState("")
   const [site, setSite] = useState("")
   const [date, setDate] = useState<Date>()
+  const [needStoresDelivered, setNeedStoresDelivered] = useState(false)
+  const [takenFromClinicalSchool, setTakenFromClinicalSchool] = useState(false)
   const [items, setItems] = useState<OrderItem[]>([
     { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1 }
   ])
@@ -93,7 +96,13 @@ export function StockOrderForm() {
     const dateStr = format(date, "yyyy-MM-dd")
     const phone = "447000000000"
     
-    let message = `Stock Order\nName: ${name}\nDate: ${dateStr}\nSite: ${site}\n\nItems:\n`
+    let message = `Stock Order\nName: ${name}\nDate: ${dateStr}\nSite: ${site}\n\n`
+    
+    message += `Delivery Details:\n`
+    message += `- Need stores delivered: ${needStoresDelivered ? "Yes" : "No"}\n`
+    message += `- Taken from Clinical school stores: ${takenFromClinicalSchool ? "Yes" : "No"}\n\n`
+    
+    message += `Items:\n`
     
     items.forEach((item) => {
       if (item.name && item.quantity) {
@@ -165,20 +174,58 @@ export function StockOrderForm() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label className="text-muted-foreground flex items-center gap-2">
-              <Building2 className="w-4 h-4" /> Site
-            </Label>
-            <Select onValueChange={setSite} value={site}>
-              <SelectTrigger className="bg-secondary/50 border-white/5">
-                <SelectValue placeholder="Select a site" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-white/10 max-h-[300px]">
-                {SITES.map(s => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="text-muted-foreground flex items-center gap-2">
+                <Building2 className="w-4 h-4" /> Site
+              </Label>
+              <Select onValueChange={setSite} value={site}>
+                <SelectTrigger className="bg-secondary/50 border-white/5">
+                  <SelectValue placeholder="Select a site" />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-white/10 max-h-[300px]">
+                  {SITES.map(s => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-4 pt-2">
+              <div className="flex items-start space-x-3 bg-secondary/20 p-3 rounded-lg border border-white/5 transition-colors hover:bg-secondary/30">
+                <Checkbox 
+                  id="delivered" 
+                  checked={needStoresDelivered}
+                  onCheckedChange={(checked) => setNeedStoresDelivered(!!checked)}
+                  className="mt-1"
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <Label
+                    htmlFor="delivered"
+                    className="text-sm font-medium cursor-pointer leading-tight"
+                  >
+                    Need stores delivered
+                  </Label>
+                  <p className="text-xs text-muted-foreground italic">
+                    Please note stores can take 3 working days to be delivered
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 bg-secondary/20 p-3 rounded-lg border border-white/5 transition-colors hover:bg-secondary/30">
+                <Checkbox 
+                  id="clinical" 
+                  checked={takenFromClinicalSchool}
+                  onCheckedChange={(checked) => setTakenFromClinicalSchool(!!checked)}
+                />
+                <Label
+                  htmlFor="clinical"
+                  className="text-sm font-medium cursor-pointer"
+                >
+                  Taken from Clinical school stores
+                </Label>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-4 pt-4">
