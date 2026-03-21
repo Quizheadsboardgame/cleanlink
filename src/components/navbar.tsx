@@ -14,15 +14,15 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="container mx-auto px-4 h-32 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           {bannerLogo && (
-            <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-white/10">
+            <div className="relative w-[120px] h-[120px] overflow-hidden">
               <Image
                 src={bannerLogo.imageUrl}
                 alt={bannerLogo.description}
                 fill
-                className="object-cover"
+                className="object-contain"
                 data-ai-hint={bannerLogo.imageHint}
               />
             </div>
