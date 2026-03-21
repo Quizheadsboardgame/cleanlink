@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -83,12 +82,17 @@ export function Navbar() {
 
         {/* PortalFlow in the middle */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="flex items-center gap-2 pointer-events-auto">
-            <div className="portal-gradient p-1.5 rounded-lg">
-              <Boxes className="w-5 h-5 text-white" />
+          <Link href="/" className="flex flex-col items-center pointer-events-auto">
+            <div className="flex items-center gap-2">
+              <div className="portal-gradient p-1.5 rounded-lg">
+                <Boxes className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl sm:text-2xl font-bold font-headline tracking-tight portal-text-gradient">
+                PortalFlow
+              </span>
             </div>
-            <span className="text-xl sm:text-2xl font-bold font-headline tracking-tight portal-text-gradient">
-              PortalFlow
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mt-0.5">
+              Powered by HARLEY
             </span>
           </Link>
         </div>

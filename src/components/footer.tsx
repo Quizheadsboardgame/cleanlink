@@ -25,11 +25,12 @@ export function Footer() {
 
         {/* Brand info on the right */}
         <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 flex-col">
             <span className="text-sm font-bold font-headline portal-text-gradient">PortalFlow</span>
+            <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Powered by HARLEY</span>
           </div>
-          <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium">
-            © 2024 Stock Management
+          <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-1">
+            © 2024 SMART HARLEY
           </span>
         </div>
       </div>
