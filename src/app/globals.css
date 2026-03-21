@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -71,6 +72,16 @@
 }
 .incomplete-text-gradient {
   background: linear-gradient(135deg, #EF4444 0%, #BE123C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Additional Hours - Fuchsia/Pink */
+.hours-gradient {
+  background: linear-gradient(135deg, #D946EF 0%, #C026D3 100%);
+}
+.hours-text-gradient {
+  background: linear-gradient(135deg, #D946EF 0%, #C026D3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

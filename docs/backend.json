@@ -90,7 +90,7 @@
         },
         "stockOrderId": {
           "type": "string",
-          "description": "Reference to the associated report (StockOrder, FaultyEquipment, or IncompleteTask)."
+          "description": "Reference to the associated report (StockOrder, FaultyEquipment, etc.)."
         },
         "title": {
           "type": "string",
@@ -125,7 +125,7 @@
         "type": {
           "type": "string",
           "description": "The category of task.",
-          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task"]
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours"]
         }
       },
       "required": [
@@ -171,6 +171,24 @@
       },
       "required": ["id", "cleanerName", "site", "reason", "status", "ownerId", "createdAt"]
     },
+    "AdditionalHoursRequest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AdditionalHoursRequest",
+      "type": "object",
+      "description": "A request submitted by a cleaner for permanent or temporary extra working hours.",
+      "properties": {
+        "id": { "type": "string" },
+        "cleanerName": { "type": "string" },
+        "site": { "type": "string" },
+        "requestType": { "type": "string", "enum": ["Permanent", "Temporary"] },
+        "datesFree": { "type": "string" },
+        "timesAvailable": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "cleanerName", "site", "requestType", "timesAvailable", "status", "ownerId", "createdAt"]
+    },
     "ImportantInfo": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "ImportantInfo",
@@ -205,6 +223,20 @@
           "params": [
             { "name": "userId", "description": "Owner UID" },
             { "name": "stockOrderId", "description": "Order UID" }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/additionalHoursRequests/{requestId}",
+        "definition": {
+          "entityName": "AdditionalHoursRequest",
+          "schema": {
+            "$ref": "#/backend/entities/AdditionalHoursRequest"
+          },
+          "description": "Stores requests for additional working hours.",
+          "params": [
+            { "name": "userId", "description": "Owner UID" },
+            { "name": "requestId", "description": "Request UID" }
           ]
         }
       },

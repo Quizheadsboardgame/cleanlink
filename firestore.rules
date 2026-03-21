@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -36,6 +37,13 @@ service cloud.firestore {
         allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
         allow delete: if isExistingOwner(userId);
       }
+    }
+
+    match /users/{userId}/additionalHoursRequests/{requestId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
+      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
+      allow delete: if isExistingOwner(userId);
     }
 
     match /users/{userId}/faultyEquipmentReports/{reportId} {

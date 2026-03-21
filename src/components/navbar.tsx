@@ -1,6 +1,7 @@
+
 "use client"
 
-import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen } from "lucide-react"
+import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -19,6 +20,7 @@ export function Navbar() {
     { href: "/", label: "Stores Order", icon: PlusCircle, color: "text-[#6E76F5]" },
     { href: "/faulty-equipment", label: "Faulty Equipment", icon: Hammer, color: "text-[#F59E0B]" },
     { href: "/incomplete-task", label: "Incomplete Task", icon: AlertTriangle, color: "text-[#EF4444]" },
+    { href: "/additional-hours", label: "Request Hours", icon: Clock, color: "text-[#D946EF]" },
     { href: "/status", label: "Status Board", icon: LayoutList, color: "text-[#14ADFF]" },
     { href: "/important-info", label: "Information", icon: Info, color: "text-[#10B981]" },
     { href: "/how-to-use", label: "How to Use", icon: BookOpen, color: "text-[#10B981]" },
