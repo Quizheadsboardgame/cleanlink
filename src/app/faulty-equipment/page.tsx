@@ -1,18 +1,18 @@
 
 import { Navbar } from "@/components/navbar"
-import { StockOrderForm } from "@/components/stock-order-form"
+import { FaultyEquipmentForm } from "@/components/faulty-equipment-form"
 
-export default function Home() {
+export default function FaultyEquipmentPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="mb-8 text-center space-y-2">
-          <h1 className="text-3xl font-bold font-headline portal-text-gradient">Stores Order</h1>
-          <p className="text-muted-foreground">Submit a new stock request for your site.</p>
+          <h1 className="text-3xl font-bold font-headline portal-text-gradient">Equipment Replacement</h1>
+          <p className="text-muted-foreground">Report faulty equipment to request a replacement.</p>
         </div>
-        <StockOrderForm />
+        <FaultyEquipmentForm />
       </main>
 
       <footer className="border-t border-white/5 py-8 mt-auto">

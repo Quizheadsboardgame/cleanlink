@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
-import { doc, collection, serverTimestamp } from "firebase/firestore"
+import { doc, collection } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
@@ -28,7 +28,7 @@ interface OrderItem {
   code?: string
 }
 
-const SITES = [
+export const SITES = [
   "ANNE MCLAREN", "CEDAR", "MRC EPIDEMIOLOGY LEVEL 3", "WBIC RPU BASEMENT",
   "JOHN VAN GEEST - JVG", "HERSCHEL SMITH BUILDING - HSB", "BARTON HOUSE",
   "COTON HOUSE", "CLINICAL SCHOOLS", "GRANTCHESTER HOUSE", "BAY 13",
@@ -112,10 +112,8 @@ export function StockOrderForm() {
       updatedAt: new Date().toISOString()
     }
 
-    // Save main order
     setDocumentNonBlocking(orderRef, orderData, { merge: true })
 
-    // Save individual items
     items.forEach(item => {
       if (item.name && item.quantity) {
         const itemRef = doc(db, 'users', user.uid, 'stockOrders', stockOrderId, 'orderItems', item.id)
@@ -127,14 +125,14 @@ export function StockOrderForm() {
       }
     })
 
-    // Create a review task
     const taskData = {
       id: stockOrderId,
       stockOrderId: stockOrderId,
-      title: `Process Stock Order for ${name}`,
+      title: `Stock Order: ${name}`,
       description: `Site: ${site}. Delivered: ${needStoresDelivered ? "Yes" : "No"}. Stores: ${takenFromClinicalSchool ? "Yes" : "No"}.`,
       status: 'Pending Review',
       ownerId: user.uid,
+      type: 'Stock Order',
       createdAt: new Date().toISOString()
     }
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
@@ -155,9 +153,9 @@ export function StockOrderForm() {
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Package className="w-6 h-6 text-primary" />
-            Stock Order Form
+            Stores Order Form
           </CardTitle>
-          <CardDescription>Fill out the details below to submit your order.</CardDescription>
+          <CardDescription>Fill out the details below to submit your stock order.</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-8">
           <div className="grid sm:grid-cols-2 gap-6">

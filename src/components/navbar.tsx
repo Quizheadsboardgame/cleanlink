@@ -1,7 +1,7 @@
 
 "use client"
 
-import { Boxes, ClipboardList, PlusCircle } from "lucide-react"
+import { Boxes, ClipboardList, PlusCircle, Hammer } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -45,7 +45,16 @@ export function Navbar() {
               pathname === "/" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
             )}>
               <PlusCircle className="w-4 h-4" />
-              <span>New Order</span>
+              <span>Stores Order</span>
+            </button>
+          </Link>
+          <Link href="/faulty-equipment">
+            <button className={cn(
+              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+              pathname === "/faulty-equipment" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+            )}>
+              <Hammer className="w-4 h-4" />
+              <span>Faulty Equipment</span>
             </button>
           </Link>
           <Link href="/tasks">

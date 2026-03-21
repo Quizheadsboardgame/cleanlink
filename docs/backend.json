@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "StockOrder": {
@@ -81,7 +82,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "OrderTask",
       "type": "object",
-      "description": "Represents a task generated upon submission of a stock order, used to manage its review and completion in a separate tab.",
+      "description": "Represents a task generated upon submission of a stock order or faulty equipment report, used to manage its review and completion in a separate tab.",
       "properties": {
         "id": {
           "type": "string",
@@ -89,23 +90,23 @@
         },
         "stockOrderId": {
           "type": "string",
-          "description": "Reference to the StockOrder associated with this task. (Relationship: StockOrder 1:1 OrderTask)"
+          "description": "Reference to the StockOrder or FaultyEquipmentReport associated with this task."
         },
         "title": {
           "type": "string",
-          "description": "A concise title for the order processing task, often derived from the stock order details (e.g., 'Process Stock Order for [Customer Name]')."
+          "description": "A concise title for the processing task (e.g., 'Process Stock Order for [Customer Name]' or 'Faulty Equipment: [Item]')."
         },
         "description": {
           "type": "string",
-          "description": "A detailed description of the task, potentially including summary order details or specific instructions for processing."
+          "description": "A detailed description of the task, potentially including summary details or specific instructions."
         },
         "status": {
           "type": "string",
-          "description": "The current workflow status of the task (e.g., 'Pending Review', 'In Progress', 'Completed', 'Cancelled')."
+          "description": "The current workflow status of the task (e.g., 'Pending Review', 'Completed')."
         },
         "assignedToUserId": {
           "type": "string",
-          "description": "Optional reference to the unique identifier of the user (e.g., from an external UserProfile entity) assigned to complete this task. (Relationship: UserProfile 1:N OrderTask)"
+          "description": "Optional reference to the user assigned to complete this task."
         },
         "createdAt": {
           "type": "string",
@@ -114,8 +115,13 @@
         },
         "completedAt": {
           "type": "string",
-          "description": "Timestamp indicating when the task was marked as completed. This property will be null or omitted until completion.",
+          "description": "Timestamp indicating when the task was marked as completed.",
           "format": "date-time"
+        },
+        "type": {
+          "type": "string",
+          "description": "The category of task (e.g., 'Stock Order', 'Faulty Equipment').",
+          "enum": ["Stock Order", "Faulty Equipment"]
         }
       },
       "required": [
@@ -126,6 +132,23 @@
         "status",
         "createdAt"
       ]
+    },
+    "FaultyEquipmentReport": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "FaultyEquipmentReport",
+      "type": "object",
+      "description": "A report submitted by a cleaner to request replacement of faulty equipment.",
+      "properties": {
+        "id": { "type": "string" },
+        "cleanerName": { "type": "string" },
+        "site": { "type": "string" },
+        "equipmentName": { "type": "string" },
+        "faultDescription": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "cleanerName", "site", "equipmentName", "faultDescription", "status", "ownerId", "createdAt"]
     }
   },
   "auth": {
@@ -143,40 +166,24 @@
           "schema": {
             "$ref": "#/backend/entities/StockOrder"
           },
-          "description": "Stores individual stock orders created by a user. Includes denormalized 'ownerId' field matching '{userId}' for robust authorization independence and simple ownership rules. The 'status' field ('Draft', 'Submitted', 'Archived') explicitly tracks the order's lifecycle.",
+          "description": "Stores individual stock orders created by a user.",
           "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the user who owns this stock order."
-            },
-            {
-              "name": "stockOrderId",
-              "description": "The unique identifier for the specific stock order."
-            }
+            { "name": "userId", "description": "Owner UID" },
+            { "name": "stockOrderId", "description": "Order UID" }
           ]
         }
       },
       {
-        "path": "/users/{userId}/stockOrders/{stockOrderId}/orderItems/{orderItemId}",
+        "path": "/users/{userId}/faultyEquipmentReports/{reportId}",
         "definition": {
-          "entityName": "OrderItem",
+          "entityName": "FaultyEquipmentReport",
           "schema": {
-            "$ref": "#/backend/entities/OrderItem"
+            "$ref": "#/backend/entities/FaultyEquipmentReport"
           },
-          "description": "Stores individual items within a specific stock order. Includes denormalized 'ownerId' field, inheriting and matching '{userId}' from its parent StockOrder for authorization independence, simplifying security rules.",
+          "description": "Stores faulty equipment reports submitted by cleaners.",
           "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the user who owns the parent stock order."
-            },
-            {
-              "name": "stockOrderId",
-              "description": "The unique identifier for the parent stock order."
-            },
-            {
-              "name": "orderItemId",
-              "description": "The unique identifier for the specific item within the stock order."
-            }
+            { "name": "userId", "description": "Owner UID" },
+            { "name": "reportId", "description": "Report UID" }
           ]
         }
       },
@@ -187,32 +194,12 @@
           "schema": {
             "$ref": "#/backend/entities/OrderTask"
           },
-          "description": "Stores tasks generated upon stock order submission. Accessible to the original StockOrder owner (read-only for status) and designated processors (read/write). Includes denormalized 'ownerId' (the creator of the StockOrder) for authorization independence, and 'assignedToUserId' for granular task assignment.",
+          "description": "Unified tasks for reviewing orders and faulty equipment.",
           "params": [
-            {
-              "name": "orderTaskId",
-              "description": "The unique identifier for the order processing task."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/roles_processor/{processorId}",
-        "definition": {
-          "entityName": "RoleProcessor",
-          "schema": {
-            "$ref": "#/backend/entities/RoleProcessor"
-          },
-          "description": "A sentinel collection to designate users with the 'processor' role. The document ID ('processorId') is the user's UID. The existence of a document grants the role, enabling Database Access Control (DBAC) for managing OrderTasks. This allows efficient role checks in security rules using 'exists()'.",
-          "params": [
-            {
-              "name": "processorId",
-              "description": "The unique identifier of the user who has the 'processor' role."
-            }
+            { "name": "orderTaskId", "description": "Task UID" }
           ]
         }
       }
-    ],
-    "reasoning": "The proposed Firestore structure for PortalFlow prioritizes security, scalability, and debuggability by adhering to the core design principles. User-specific data, such as StockOrders and their associated OrderItems, are organized using path-based ownership within `/users/{userId}/stockOrders/{stockOrderId}` and `/users/{userId}/stockOrders/{stockOrderId}/orderItems/{orderItemId}` respectively. This ensures that only the authenticated user (identified by `request.auth.uid`) can access their own orders and items, making `list` operations inherently secure (QAPs). \n\nAuthorization Independence is achieved through strategic denormalization. Each `StockOrder` document will explicitly contain an `ownerId` field that matches the `{userId}` in its path. Similarly, every `OrderItem` document will also denormalize the `ownerId` from its parent `StockOrder`. This eliminates the need for expensive and complex `get()` calls to parent documents in security rules, allowing atomic operations and simplifying rule logic. \n\nOrder processing tasks are segregated into a top-level collection, `/orderTasks/{orderTaskId}`, because they have a different security posture. While the original StockOrder creator needs read access to their associated OrderTask (to check status), these tasks are primarily managed and updated by designated 'processor' users. To maintain Authorization Independence for this hybrid access, each `OrderTask` document denormalizes the `ownerId` (the UID of the StockOrder creator). This allows the creator to query and read their tasks securely using `where('ownerId', '==', request.auth.uid)` without any `get()` calls. Processor roles are implemented using the Database Access Control (DBAC) pattern with a dedicated sentinel collection, `/roles_processor/{processorId}`. A user is considered a 'processor' if their UID exists as a document ID in this collection. This allows security rules to check for processor privileges using `exists()` without relying on custom claims or complex data lookups within the task itself, further simplifying rules and enabling secure `list` access for processors (e.g., listing all tasks, or tasks assigned to them via `assignedToUserId`).\n\nThe use of a dedicated `status` field in both `StockOrder` and `OrderTask` documents ensures Explicit State Modeling, making the workflow predictable and easier to debug. Radical Consistency is applied through semantic naming (e.g., `userId`, `stockOrderId`, `orderItemId`) and standardized authorization fields like `ownerId` and `assignedToUserId`."
+    ]
   }
 }
