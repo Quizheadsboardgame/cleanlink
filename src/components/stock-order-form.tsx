@@ -15,6 +15,7 @@ import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/context/language-context"
 
 interface OrderItem {
   id: string
@@ -42,6 +43,7 @@ export function StockOrderForm() {
   const db = useFirestore()
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
+  const { t } = useLanguage()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -75,15 +77,15 @@ export function StockOrderForm() {
 
   const handleSubmit = () => {
     if (!user) {
-      toast({ variant: "destructive", title: "Wait a moment", description: "Authenticating..." })
+      toast({ variant: "destructive", title: t.common.wait, description: t.common.auth })
       return
     }
 
     if (!name || !site || !dateStr) {
       toast({
         variant: "destructive",
-        title: "Missing Information",
-        description: "Please fill in your name, select a date, and choose a site."
+        title: t.common.missingInfo,
+        description: t.stores.missingFields
       })
       return
     }
@@ -133,8 +135,8 @@ export function StockOrderForm() {
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
 
     toast({
-      title: "Order Submitted",
-      description: "Thank you for submitting the form, this will be reviewed the next working day by 12pm."
+      title: t.stores.successTitle,
+      description: t.stores.successDesc
     })
 
     setTimeout(() => {
@@ -148,18 +150,18 @@ export function StockOrderForm() {
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Package className="w-6 h-6 text-primary" />
-            Stores Order Form
+            {t.stores.title}
           </CardTitle>
-          <CardDescription>Fill out the details below to submit your stock order.</CardDescription>
+          <CardDescription>{t.stores.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-8">
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <User className="w-4 h-4" /> Name
+                <User className="w-4 h-4" /> {t.stores.nameLabel}
               </Label>
               <Input 
-                placeholder="Enter your name" 
+                placeholder={t.stores.namePlaceholder} 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
                 className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full"
@@ -167,7 +169,7 @@ export function StockOrderForm() {
             </div>
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <CalendarIcon className="w-4 h-4" /> Date
+                <CalendarIcon className="w-4 h-4" /> {t.stores.dateLabel}
               </Label>
               <Input 
                 type="date"
@@ -181,11 +183,11 @@ export function StockOrderForm() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> Site
+                <Building2 className="w-4 h-4" /> {t.stores.siteLabel}
               </Label>
               <Select onValueChange={setSite} value={site}>
                 <SelectTrigger className="h-12 bg-secondary/50 border-white/5 text-white">
-                  <SelectValue placeholder="Select a site" />
+                  <SelectValue placeholder={t.stores.sitePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
                   {SITES.map(s => (
@@ -208,10 +210,10 @@ export function StockOrderForm() {
                     htmlFor="delivered"
                     className="text-sm font-medium cursor-pointer leading-tight text-white"
                   >
-                    Need stores delivered
+                    {t.stores.deliveredLabel}
                   </Label>
                   <p className="text-xs text-muted-foreground italic">
-                    Please note stores can take 3 working days to be delivered
+                    {t.stores.deliveredSub}
                   </p>
                 </div>
               </div>
@@ -226,7 +228,7 @@ export function StockOrderForm() {
                   htmlFor="clinical"
                   className="text-sm font-medium cursor-pointer text-white"
                 >
-                  Taken from Clinical school stores
+                  {t.stores.clinicalLabel}
                 </Label>
               </div>
             </div>
@@ -234,14 +236,14 @@ export function StockOrderForm() {
 
           <div className="space-y-4 pt-4">
             <div className="flex items-center justify-between">
-              <Label className="text-lg font-headline text-white">Items</Label>
+              <Label className="text-lg font-headline text-white">{t.stores.itemsTitle}</Label>
               <Button 
                 onClick={addItem} 
                 variant="outline" 
                 size="sm" 
                 className="gap-2 border-primary/20 hover:bg-primary/10 text-primary"
               >
-                <Plus className="w-4 h-4" /> Add Item
+                <Plus className="w-4 h-4" /> {t.stores.addItem}
               </Button>
             </div>
 
@@ -251,7 +253,7 @@ export function StockOrderForm() {
                   <div className="flex-1 flex gap-3">
                     <div className="flex-1">
                       <Input 
-                        placeholder="Item Name" 
+                        placeholder={t.stores.itemNamePlaceholder} 
                         value={item.name}
                         onChange={(e) => updateItem(item.id, "name", e.target.value)}
                         className="bg-secondary/30 border-white/5 text-white"
@@ -261,7 +263,7 @@ export function StockOrderForm() {
                       <Input 
                         type="number" 
                         min="1" 
-                        placeholder="Qty"
+                        placeholder={t.stores.qtyPlaceholder}
                         value={item.quantity || ""}
                         onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
                         className="bg-secondary/30 border-white/5 text-white"
@@ -271,7 +273,7 @@ export function StockOrderForm() {
                   <div className="flex gap-3">
                     <div className="flex-1">
                       <Input 
-                        placeholder="Code (optional)" 
+                        placeholder={t.stores.codePlaceholder} 
                         value={item.code}
                         onChange={(e) => updateItem(item.id, "code", e.target.value)}
                         className="bg-secondary/30 border-white/5 text-white"
@@ -299,7 +301,7 @@ export function StockOrderForm() {
             className="stores-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(110,118,245,0.3)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-            Submit Order
+            {t.stores.submit}
           </Button>
         </CardFooter>
       </Card>

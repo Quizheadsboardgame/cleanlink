@@ -9,9 +9,10 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, AlertCircle, Package, Hammer, AlertTriangle, UserPlus } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/context/language-context"
 
 /**
  * Calculates the next working day (Mon-Fri) at 12:00 PM
@@ -34,6 +35,7 @@ const getNextWorkingDay12pm = (createdAt: string) => {
 
 function CountdownTimer({ createdAt, status, colorClass }: { createdAt: string, status?: string, colorClass: string }) {
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const { t } = useLanguage();
   const targetDate = React.useMemo(() => getNextWorkingDay12pm(createdAt), [createdAt]);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ function CountdownTimer({ createdAt, status, colorClass }: { createdAt: string, 
       const diff = targetDate.getTime() - now.getTime();
 
       if (diff <= 0) {
-        setTimeLeft("Under review");
+        setTimeLeft(t.status.underReview);
         return;
       }
 
@@ -56,11 +58,11 @@ function CountdownTimer({ createdAt, status, colorClass }: { createdAt: string, 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
-  }, [targetDate]);
+  }, [targetDate, t.status.underReview]);
 
   if (!timeLeft) return <span className="opacity-20">---</span>;
 
-  const isUnderReview = timeLeft === "Under review";
+  const isUnderReview = timeLeft === t.status.underReview;
   const isInProgress = status === 'In Progress';
 
   return (
@@ -71,7 +73,7 @@ function CountdownTimer({ createdAt, status, colorClass }: { createdAt: string, 
       cn("bg-white/5 border-white/10", colorClass)
     )}>
       <Timer className={cn("w-3 h-3", isInProgress && "animate-spin")} />
-      <span>{isInProgress ? "Currently Processing" : `Review in: ${timeLeft}`}</span>
+      <span>{isInProgress ? t.status.processing : `${t.status.reviewIn} ${timeLeft}`}</span>
     </div>
   );
 }
@@ -97,6 +99,7 @@ export default function StatusBoardPage() {
   const { user, isUserLoading } = useUser()
   const db = useFirestore()
   const auth = useAuth()
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -118,14 +121,14 @@ export default function StatusBoardPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold font-headline status-text-gradient">Public Status Board</h1>
-            <p className="text-muted-foreground">Track the progress of all submitted orders and reports.</p>
+            <h1 className="text-3xl font-bold font-headline status-text-gradient">{t.status.title}</h1>
+            <p className="text-muted-foreground">{t.status.description}</p>
           </div>
 
           {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <Loader2 className="w-10 h-10 text-white animate-spin" />
-              <p className="text-muted-foreground">Syncing status board...</p>
+              <p className="text-muted-foreground">{t.status.loading}</p>
             </div>
           ) : !tasks || tasks.length === 0 ? (
             <Card className="glass-panel border-dashed py-20 text-center">
@@ -134,9 +137,9 @@ export default function StatusBoardPage() {
                   <ListTodo className="w-12 h-12 text-muted-foreground" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold">No active tasks</h3>
+                  <h3 className="text-xl font-semibold">{t.status.noTasks}</h3>
                   <p className="text-muted-foreground max-w-xs mx-auto">
-                    There are no submissions currently in the system.
+                    {t.status.noTasksDesc}
                   </p>
                 </div>
               </CardContent>
@@ -206,7 +209,7 @@ export default function StatusBoardPage() {
                         <div className="mt-2 p-3 bg-white/5 rounded-lg border border-white/5 flex items-start gap-3">
                           <MessageSquare className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                           <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-primary uppercase tracking-wider">Manager Update</p>
+                            <p className="text-[10px] font-bold text-primary uppercase tracking-wider">{t.status.managerUpdate}</p>
                             <p className="text-sm text-muted-foreground italic leading-relaxed">
                               "{task.managerNote}"
                             </p>

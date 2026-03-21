@@ -22,8 +22,11 @@ import {
   Sparkles
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { useLanguage } from "@/context/language-context"
 
 export default function HowToUsePage() {
+  const { t } = useLanguage()
+
   const steps = [
     {
       title: "Select Your Interface",
@@ -47,56 +50,56 @@ export default function HowToUsePage() {
 
   const features = [
     {
-      title: "Stores Protocol",
+      title: t.nav.stores,
       description: "Request cleaning supplies and consumables. Neural-log processing ensures delivery within 3 cycles.",
       icon: PlusCircle,
       color: "text-[#6E76F5]",
       bg: "bg-[#6E76F5]/10"
     },
     {
-      title: "Equipment Recovery",
+      title: t.nav.faulty,
       description: "Report localized hardware failures. The system prioritizes replacements for next-cycle deployment.",
       icon: Hammer,
       color: "text-[#F59E0B]",
       bg: "bg-[#F59E0B]/10"
     },
     {
-      title: "Anomaly Report",
+      title: t.nav.incomplete,
       description: "Report access hazards or locked zones. Critical for maintaining operational site integrity.",
       icon: AlertTriangle,
       color: "text-[#EF4444]",
       bg: "bg-[#EF4444]/10"
     },
     {
-      title: "Shift Expansion",
+      title: t.nav.hours,
       description: "Apply for additional working hours. Temporary or permanent requests are processed via management neural-net.",
       icon: Clock,
       color: "text-[#D946EF]",
       bg: "bg-[#D946EF]/10"
     },
     {
-      title: "Personnel Referral",
+      title: t.nav.referral,
       description: "Recommend new operatives. Provide their communication keys and the AI will initiate contact.",
       icon: UserPlus,
       color: "text-[#FACC15]",
       bg: "bg-[#FACC15]/10"
     },
     {
-      title: "Cover Operations",
+      title: t.nav.cover,
       description: "Access active shift opportunities. Monitor expiry countdowns for high-priority cover assignments.",
       icon: CalendarDays,
       color: "text-[#0EA5E9]",
       bg: "bg-[#0EA5E9]/10"
     },
     {
-      title: "Status Matrix",
+      title: t.status.title,
       description: "Real-time holographic monitoring of all system inputs. High-transparency task tracking.",
       icon: LayoutList,
       color: "text-white",
       bg: "bg-white/10"
     },
     {
-      title: "Knowledge Base",
+      title: t.nav.info,
       description: "Access management communication keys and standard operating neural-protocols.",
       icon: MessageSquare,
       color: "text-orange-500",
@@ -137,11 +140,11 @@ export default function HowToUsePage() {
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-2 text-lime-400 mb-2">
               <Sparkles className="w-5 h-5 animate-pulse" />
-              <span className="text-xs font-bold uppercase tracking-[0.3em]">AI-Enhanced Guide</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em]">AI-Optimization</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold font-headline guide-text-gradient tracking-tighter">Guide to CleanLink</h1>
+            <h1 className="text-5xl md:text-6xl font-bold font-headline guide-text-gradient tracking-tighter">{t.guide.title}</h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto opacity-80">
-              Master the advanced infrastructure management and reporting matrix powered by AI.
+              {t.guide.description}
             </p>
           </div>
 
@@ -149,7 +152,7 @@ export default function HowToUsePage() {
           <section className="space-y-8">
             <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-lime-500/30 text-lime-400 px-3 py-1 font-mono tracking-widest text-[10px]">SYSTEM_INITIALIZATION</Badge>
-              <h2 className="text-2xl font-bold font-headline">Operational Workflow</h2>
+              <h2 className="text-2xl font-bold font-headline">{t.guide.workflow}</h2>
             </div>
             <div className="grid gap-6 sm:grid-cols-3">
               {steps.map((step, idx) => (
@@ -172,7 +175,7 @@ export default function HowToUsePage() {
           <section className="space-y-8">
             <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1 font-mono tracking-widest text-[10px]">MODULE_DIRECTORY</Badge>
-              <h2 className="text-2xl font-bold font-headline">System Capabilities</h2>
+              <h2 className="text-2xl font-bold font-headline">{t.guide.capabilities}</h2>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature, idx) => (
@@ -195,7 +198,7 @@ export default function HowToUsePage() {
           <section className="space-y-8">
             <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-lime-500/30 text-lime-400 px-3 py-1 font-mono tracking-widest text-[10px]">PLATFORM_ADVANTAGES</Badge>
-              <h2 className="text-2xl font-bold font-headline">Operational Benefits</h2>
+              <h2 className="text-2xl font-bold font-headline">{t.guide.benefits}</h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {benefits.map((benefit, idx) => (
@@ -219,9 +222,9 @@ export default function HowToUsePage() {
             </div>
             <div className="relative z-10 space-y-8">
               <div className="space-y-3">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline tracking-tighter">Neural Link Offline?</h2>
+                <h2 className="text-3xl md:text-4xl font-bold font-headline tracking-tighter">{t.guide.emergencyTitle}</h2>
                 <p className="max-w-xl text-lg opacity-90 leading-relaxed font-medium">
-                  While CleanLink is the primary AI interface for stock and operational reports, always call your supervisor immediately for site emergencies or health and safety risks.
+                  {t.guide.emergencyDesc}
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -238,7 +241,7 @@ export default function HowToUsePage() {
           <div className="text-center pt-12 border-t border-white/5">
             <div className="inline-flex items-center gap-2 text-xs text-muted-foreground/60 font-bold uppercase tracking-[0.4em]">
               <Sparkles className="w-3 h-3" />
-              <span>Developed by Smart Harley Technology</span>
+              <span>{t.guide.developer}</span>
             </div>
           </div>
         </div>

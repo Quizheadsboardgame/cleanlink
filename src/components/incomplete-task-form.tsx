@@ -16,14 +16,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { SITES } from "@/components/stock-order-form"
-
-const REASONS = [
-  "Door was locked / No access",
-  "Area occupied",
-  "Maintenance in progress",
-  "Health & Safety concern",
-  "Other (please specify below)"
-]
+import { useLanguage } from "@/context/language-context"
 
 export function IncompleteTaskForm() {
   const { toast } = useToast()
@@ -31,6 +24,7 @@ export function IncompleteTaskForm() {
   const db = useFirestore()
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
+  const { t } = useLanguage()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -46,15 +40,15 @@ export function IncompleteTaskForm() {
 
   const handleSubmit = () => {
     if (!user) {
-      toast({ variant: "destructive", title: "Wait a moment", description: "Authenticating..." })
+      toast({ variant: "destructive", title: t.common.wait, description: t.common.auth })
       return
     }
 
     if (!name || !site || !reason) {
       toast({
         variant: "destructive",
-        title: "Missing Information",
-        description: "Please fill in all mandatory fields to report the incomplete task."
+        title: t.common.missingInfo,
+        description: t.incomplete.missingFields
       })
       return
     }
@@ -91,8 +85,8 @@ export function IncompleteTaskForm() {
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
 
     toast({
-      title: "Report Submitted",
-      description: "Thank you for submitting the form, this will be reviewed the next working day by 12pm."
+      title: t.incomplete.successTitle,
+      description: t.incomplete.successDesc
     })
 
     setTimeout(() => {
@@ -106,18 +100,18 @@ export function IncompleteTaskForm() {
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <AlertTriangle className="w-6 h-6 text-[#EF4444]" />
-            Incomplete Task Report
+            {t.incomplete.title}
           </CardTitle>
-          <CardDescription>Report why a cleaning task could not be completed at your site.</CardDescription>
+          <CardDescription>{t.incomplete.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <User className="w-4 h-4" /> Cleaner Name
+                <User className="w-4 h-4" /> {t.faulty.cleanerName}
               </Label>
               <Input 
-                placeholder="Enter your name" 
+                placeholder={t.stores.namePlaceholder} 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -125,11 +119,11 @@ export function IncompleteTaskForm() {
             </div>
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> Site
+                <Building2 className="w-4 h-4" /> {t.incomplete.site || t.faulty.site}
               </Label>
               <Select onValueChange={setSite} value={site}>
                 <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
-                  <SelectValue placeholder="Select a site" />
+                  <SelectValue placeholder={t.stores.sitePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
                   {SITES.map(s => (
@@ -142,14 +136,14 @@ export function IncompleteTaskForm() {
 
           <div className="space-y-2">
             <Label className="text-muted-foreground flex items-center gap-2">
-              <Info className="w-4 h-4" /> Reason for Incomplete Task
+              <Info className="w-4 h-4" /> {t.incomplete.reason}
             </Label>
             <Select onValueChange={setReason} value={reason}>
               <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
-                <SelectValue placeholder="Select a reason" />
+                <SelectValue placeholder={t.stores.sitePlaceholder} />
               </SelectTrigger>
               <SelectContent className="bg-card border-white/10 text-white">
-                {REASONS.map(r => (
+                {t.incomplete.reasons.map(r => (
                   <SelectItem key={r} value={r}>{r}</SelectItem>
                 ))}
               </SelectContent>
@@ -157,9 +151,9 @@ export function IncompleteTaskForm() {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-muted-foreground">Additional Details (Optional)</Label>
+            <Label className="text-muted-foreground">{t.incomplete.details}</Label>
             <Textarea 
-              placeholder="Provide more context (e.g. room number, specific staff member)..." 
+              placeholder={t.incomplete.detailsPlaceholder} 
               value={details} 
               onChange={(e) => setDetails(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px] text-white"
@@ -173,7 +167,7 @@ export function IncompleteTaskForm() {
             className="incomplete-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(239,68,68,0.2)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-            Submit Report
+            {t.incomplete.submit}
           </Button>
         </CardFooter>
       </Card>

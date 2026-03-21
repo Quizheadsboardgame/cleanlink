@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -15,6 +14,7 @@ import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/context/language-context"
 
 export function ReferralForm() {
   const { toast } = useToast()
@@ -22,6 +22,7 @@ export function ReferralForm() {
   const db = useFirestore()
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
+  const { t } = useLanguage()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [referrerName, setReferrerName] = useState("")
@@ -38,15 +39,15 @@ export function ReferralForm() {
 
   const handleSubmit = () => {
     if (!user) {
-      toast({ variant: "destructive", title: "Wait a moment", description: "Authenticating..." })
+      toast({ variant: "destructive", title: t.common.wait, description: t.common.auth })
       return
     }
 
     if (!referrerName || !friendName || !friendEmail || !friendPhone) {
       toast({
         variant: "destructive",
-        title: "Missing Information",
-        description: "Please fill in all mandatory fields (Your Name, Friend's Name, Email, and Phone)."
+        title: t.common.missingInfo,
+        description: t.referral.missingFields
       })
       return
     }
@@ -84,8 +85,8 @@ export function ReferralForm() {
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
 
     toast({
-      title: "Referral Submitted",
-      description: "Thank you for the referral! This will be reviewed by management soon."
+      title: t.referral.successTitle,
+      description: t.referral.successDesc
     })
 
     setTimeout(() => {
@@ -99,17 +100,17 @@ export function ReferralForm() {
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <UserPlus className="w-6 h-6 text-[#FACC15]" />
-            Refer a Friend
+            {t.referral.title}
           </CardTitle>
-          <CardDescription>Recommend someone to join the cleaning team at Addenbrooke's.</CardDescription>
+          <CardDescription>{t.referral.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="space-y-2">
             <Label className="text-muted-foreground flex items-center gap-2">
-              <User className="w-4 h-4" /> Your Full Name
+              <User className="w-4 h-4" /> {t.referral.yourName}
             </Label>
             <Input 
-              placeholder="Enter your name" 
+              placeholder={t.stores.namePlaceholder} 
               value={referrerName} 
               onChange={(e) => setReferrerName(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -119,14 +120,14 @@ export function ReferralForm() {
           <div className="h-px bg-white/5 my-4" />
 
           <div className="space-y-4">
-            <Label className="text-sm font-bold uppercase tracking-wider text-[#FACC15]">Friend's Information</Label>
+            <Label className="text-sm font-bold uppercase tracking-wider text-[#FACC15]">{t.referral.friendInfo}</Label>
             
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <User className="w-4 h-4" /> Friend's Full Name
+                <User className="w-4 h-4" /> {t.referral.friendName}
               </Label>
               <Input 
-                placeholder="Enter friend's name" 
+                placeholder={t.stores.namePlaceholder} 
                 value={friendName} 
                 onChange={(e) => setFriendName(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -136,7 +137,7 @@ export function ReferralForm() {
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label className="text-muted-foreground flex items-center gap-2">
-                  <Mail className="w-4 h-4" /> Email Address
+                  <Mail className="w-4 h-4" /> {t.referral.email}
                 </Label>
                 <Input 
                   type="email"
@@ -148,7 +149,7 @@ export function ReferralForm() {
               </div>
               <div className="space-y-2">
                 <Label className="text-muted-foreground flex items-center gap-2">
-                  <Phone className="w-4 h-4" /> Phone Number
+                  <Phone className="w-4 h-4" /> {t.referral.phone}
                 </Label>
                 <Input 
                   placeholder="07xxx xxxxxx" 
@@ -162,10 +163,10 @@ export function ReferralForm() {
 
           <div className="space-y-2">
             <Label className="text-muted-foreground flex items-center gap-2">
-              <Info className="w-4 h-4" /> Additional Extra (e.g. Availability)
+              <Info className="w-4 h-4" /> {t.referral.extraInfo}
             </Label>
             <Textarea 
-              placeholder="Tell us about their availability or previous experience..." 
+              placeholder={t.referral.extraPlaceholder} 
               value={extraInfo} 
               onChange={(e) => setExtraInfo(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[100px] text-white"
@@ -179,7 +180,7 @@ export function ReferralForm() {
             className="referral-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(250,204,21,0.2)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-            Submit Referral
+            {t.referral.submit}
           </Button>
         </CardFooter>
       </Card>

@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -16,6 +15,7 @@ import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/context/language-context"
 
 export function AdditionalHoursForm() {
   const { toast } = useToast()
@@ -23,6 +23,7 @@ export function AdditionalHoursForm() {
   const db = useFirestore()
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
+  const { t } = useLanguage()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -38,15 +39,15 @@ export function AdditionalHoursForm() {
 
   const handleSubmit = () => {
     if (!user) {
-      toast({ variant: "destructive", title: "Wait a moment", description: "Authenticating..." })
+      toast({ variant: "destructive", title: t.common.wait, description: t.common.auth })
       return
     }
 
     if (!name || !timesAvailable || (requestType === "Temporary" && !datesFree)) {
       toast({
         variant: "destructive",
-        title: "Missing Information",
-        description: "Please fill in all mandatory fields to request additional hours."
+        title: t.common.missingInfo,
+        description: t.hours.missingFields
       })
       return
     }
@@ -83,8 +84,8 @@ export function AdditionalHoursForm() {
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
 
     toast({
-      title: "Request Submitted",
-      description: "Thank you for submitting your request, this will be reviewed the next working day by 12pm."
+      title: t.hours.successTitle,
+      description: t.hours.successDesc
     })
 
     setTimeout(() => {
@@ -98,17 +99,17 @@ export function AdditionalHoursForm() {
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Clock className="w-6 h-6 text-[#D946EF]" />
-            Additional Hours Request
+            {t.hours.title}
           </CardTitle>
-          <CardDescription>Submit a request for extra hours (permanent or temporary).</CardDescription>
+          <CardDescription>{t.hours.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="space-y-2">
             <Label className="text-muted-foreground flex items-center gap-2">
-              <User className="w-4 h-4" /> Cleaner Name
+              <User className="w-4 h-4" /> {t.faulty.cleanerName}
             </Label>
             <Input 
-              placeholder="Enter your name" 
+              placeholder={t.stores.namePlaceholder} 
               value={name} 
               onChange={(e) => setName(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -116,7 +117,7 @@ export function AdditionalHoursForm() {
           </div>
 
           <div className="space-y-3">
-            <Label className="text-muted-foreground">Request Type</Label>
+            <Label className="text-muted-foreground">{t.hours.requestType}</Label>
             <RadioGroup 
               defaultValue="Permanent" 
               value={requestType} 
@@ -125,11 +126,11 @@ export function AdditionalHoursForm() {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="Permanent" id="permanent" className="border-primary text-primary" />
-                <Label htmlFor="permanent" className="cursor-pointer text-white">Permanent Hours</Label>
+                <Label htmlFor="permanent" className="cursor-pointer text-white">{t.hours.permanent}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="Temporary" id="temporary" className="border-primary text-primary" />
-                <Label htmlFor="temporary" className="cursor-pointer text-white">Temporary Hours</Label>
+                <Label htmlFor="temporary" className="cursor-pointer text-white">{t.hours.temporary}</Label>
               </div>
             </RadioGroup>
           </div>
@@ -137,10 +138,10 @@ export function AdditionalHoursForm() {
           {requestType === "Temporary" && (
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Calendar className="w-4 h-4" /> Specific Dates
+                <Calendar className="w-4 h-4" /> {t.hours.datesFree}
               </Label>
               <Input 
-                placeholder="e.g. Next Monday to Wednesday, July 15th-20th" 
+                placeholder={t.hours.datesPlaceholder} 
                 value={datesFree} 
                 onChange={(e) => setDatesFree(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -149,9 +150,9 @@ export function AdditionalHoursForm() {
           )}
 
           <div className="space-y-2">
-            <Label className="text-muted-foreground">Times You Are Free to Work</Label>
+            <Label className="text-muted-foreground">{t.hours.timesAvailable}</Label>
             <Textarea 
-              placeholder="e.g. Monday to Friday 4 PM - 8 PM, Saturdays all day" 
+              placeholder={t.hours.timesPlaceholder} 
               value={timesAvailable} 
               onChange={(e) => setTimesAvailable(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[100px] text-white"
@@ -165,7 +166,7 @@ export function AdditionalHoursForm() {
             className="hours-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(217,70,239,0.2)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-            Submit Request
+            {t.hours.submit}
           </Button>
         </CardFooter>
       </Card>

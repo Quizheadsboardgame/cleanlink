@@ -16,6 +16,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { SITES } from "@/components/stock-order-form"
+import { useLanguage } from "@/context/language-context"
 
 export function FaultyEquipmentForm() {
   const { toast } = useToast()
@@ -23,6 +24,7 @@ export function FaultyEquipmentForm() {
   const db = useFirestore()
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
+  const { t } = useLanguage()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -38,15 +40,15 @@ export function FaultyEquipmentForm() {
 
   const handleSubmit = () => {
     if (!user) {
-      toast({ variant: "destructive", title: "Wait a moment", description: "Authenticating..." })
+      toast({ variant: "destructive", title: t.common.wait, description: t.common.auth })
       return
     }
 
     if (!name || !site || !equipment || !description) {
       toast({
         variant: "destructive",
-        title: "Missing Information",
-        description: "Please fill in all fields to report the faulty equipment."
+        title: t.common.missingInfo,
+        description: t.faulty.missingFields
       })
       return
     }
@@ -83,8 +85,8 @@ export function FaultyEquipmentForm() {
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
 
     toast({
-      title: "Report Submitted",
-      description: "Thank you for submitting the form, this will be reviewed the next working day by 12pm."
+      title: t.faulty.successTitle,
+      description: t.faulty.successDesc
     })
 
     setTimeout(() => {
@@ -98,18 +100,18 @@ export function FaultyEquipmentForm() {
         <CardHeader className="border-b border-white/5 bg-white/[0.02]">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Hammer className="w-6 h-6 text-[#F59E0B]" />
-            Faulty Equipment Report
+            {t.faulty.title}
           </CardTitle>
-          <CardDescription>Request a replacement for faulty or broken equipment.</CardDescription>
+          <CardDescription>{t.faulty.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <User className="w-4 h-4" /> Cleaner Name
+                <User className="w-4 h-4" /> {t.faulty.cleanerName}
               </Label>
               <Input 
-                placeholder="Enter your name" 
+                placeholder={t.stores.namePlaceholder} 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -117,11 +119,11 @@ export function FaultyEquipmentForm() {
             </div>
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> Site
+                <Building2 className="w-4 h-4" /> {t.faulty.site}
               </Label>
               <Select onValueChange={setSite} value={site}>
                 <SelectTrigger className="bg-secondary/50 border-white/5 text-white">
-                  <SelectValue placeholder="Select a site" />
+                  <SelectValue placeholder={t.stores.sitePlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-white/10 max-h-[300px] text-white">
                   {SITES.map(s => (
@@ -134,10 +136,10 @@ export function FaultyEquipmentForm() {
 
           <div className="space-y-2">
             <Label className="text-muted-foreground flex items-center gap-2">
-              <AlertCircle className="w-4 h-4" /> Equipment Name
+              <AlertCircle className="w-4 h-4" /> {t.faulty.equipment}
             </Label>
             <Input 
-              placeholder="e.g. Vacuum Cleaner, Mop, Floor Buffer" 
+              placeholder={t.faulty.equipmentPlaceholder} 
               value={equipment} 
               onChange={(e) => setEquipment(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
@@ -145,9 +147,9 @@ export function FaultyEquipmentForm() {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-muted-foreground">Description of Fault</Label>
+            <Label className="text-muted-foreground">{t.faulty.faultDescription}</Label>
             <Textarea 
-              placeholder="Please describe what is wrong with the equipment..." 
+              placeholder={t.faulty.faultPlaceholder} 
               value={description} 
               onChange={(e) => setDescription(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px] text-white"
@@ -161,7 +163,7 @@ export function FaultyEquipmentForm() {
             className="faulty-gradient text-white font-semibold gap-2 px-12 py-6 rounded-xl hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(245,158,11,0.2)] w-full sm:w-auto"
           >
             {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-            Submit Report
+            {t.faulty.submit}
           </Button>
         </CardFooter>
       </Card>

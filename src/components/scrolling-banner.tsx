@@ -1,11 +1,12 @@
-
 "use client"
 
 import React from "react"
 import { AlertCircle } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 
 export function ScrollingBanner() {
-  const message = "Submitted forms will be reviewed the next working day, if an emergency please call your manager."
+  const { t } = useLanguage()
+  const message = t.common.emergency
 
   return (
     <div className="w-full bg-white border-b border-black/10 py-2 overflow-hidden whitespace-nowrap sticky top-0 z-[60] backdrop-blur-sm">
