@@ -1,4 +1,3 @@
-
 export const translations = {
   en: {
     nav: {
@@ -14,7 +13,7 @@ export const translations = {
       language: "Change Language",
     },
     footer: {
-      tagline: "Powered by Harley:Ai technology",
+      tagline: "Powered by Harley:work smarter",
       copyright: "© 2024 SMART HARLEY TECHNOLOGIES",
       subtext: "Smart Management for Cleaning Teams",
     },
@@ -147,20 +146,20 @@ export const translations = {
   },
   es: {
     nav: { stores: "Pedir Suministros", faulty: "Equipo Roto", incomplete: "Tarea sin Terminar", hours: "Más Horas", referral: "Traer a un Amigo", cover: "Turnos Extras", status: "Ver Progreso", info: "Ayuda y Contactos", guide: "Cómo Funciona", language: "Cambiar Idioma" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 TECNOLOGÍAS SMART HARLEY", subtext: "Gestión Inteligente para Limpieza" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 TECNOLOGÍAS SMART HARLEY", subtext: "Gestión Inteligente para Limpieza" },
     language: { title: "Elegir Idioma", description: "Seleccione el idioma que prefiere usar.", select: "Elegir un Idioma", back: "Volver al Inicio" },
     common: { submit: "Enviar Ahora", loading: "Enviando...", site: "Tu Sitio", name: "Tu Nombre", date: "Fecha", back: "Atrás", error: "Algo salió mal", success: "¡Listo!", wait: "Un momento...", auth: "Conectando...", missingInfo: "Faltan detalles", emergency: "Si es una emergencia, llame a su jefe de inmediato.", select: "Seleccione..." },
     stores: { title: "Pedir Suministros", description: "¿Necesitas materiales? Cuéntanos qué te hace falta.", nameLabel: "Tu Nombre", namePlaceholder: "Tu nombre completo", dateLabel: "Fecha de Hoy", siteLabel: "¿Dónde trabajas?", sitePlaceholder: "Nombre del sitio", deliveredLabel: "¿Necesitas entrega?", deliveredSub: "Nota: La entrega suele tardar unos 3 días hábiles.", pickedUpLabel: "¿Lo recogiste tú mismo?", pickedUpLocationLabel: "¿De dónde lo recogiste?", itemsTitle: "¿Qué necesitas?", addItem: "Añadir otro", itemNamePlaceholder: "Artículo", qtyPlaceholder: "Cantidad", codePlaceholder: "Código", submit: "Enviar Pedido", successTitle: "¡Pedido Enviado!", successDesc: "Recibido. Lo revisaremos mañana antes de las 12h.", missingFields: "Por favor pon tu nombre, fecha y sitio." },
     faulty: { title: "Equipo Roto", description: "¿Algo no funciona? Pide uno nuevo aquí.", cleanerName: "Tu Nombre", site: "¿Dónde está el equipo?", equipment: "¿Qué está roto?", equipmentPlaceholder: "ej. Aspiradora, Fregona", faultDescription: "¿Cuál es el problema?", faultPlaceholder: "Cuéntanos qué pasó...", submit: "Enviar Reporte", successTitle: "¡Reporte Enviado!", successDesc: "¡Gracias! Lo miraremos mañana.", missingFields: "Por favor rellena todos los cuadros." },
     incomplete: { title: "Tarea sin Terminar", description: "¿No pudiste acabar un trabajo? Cuéntanos por qué.", reason: "¿Por qué no se terminó?", details: "Más detalles (Opcional)", detailsPlaceholder: "¿Algo más?", submit: "Enviar Info", successTitle: "¡Información Enviada!", successDesc: "Gracias. Lo revisaremos mañana.", missingFields: "Por favor elige una razón.", reasons: ["Puerta cerrada / Sin llave", "Había gente", "Estaban en mantenimiento", "No era seguro", "Otro"] },
-    hours: { title: "Más Horas", description: "¿Quieres más turnos o más horas en tu sitio?", requestType: "¿Qué buscas?", permanent: "Fijo (Cada semana)", temporary: "Temporal (Solo unos días)", datesFree: "¿Qué días puedes?", datesPlaceholder: "ej. Lunes a miércoles", timesAvailable: "¿A qué horas?", timesPlaceholder: "ej. 4 PM a 8 PM", submit: "Enviar Solicitud", successTitle: "¡Solicitud Enviada!", successDesc: "Gracias. Miraremos el horario.", missingFields: "Dinos qué horas buscas." },
+    hours: { title: "Más Horas", description: "¿Quieres más turnos o más horas en tu sitio?", requestType: "¿Qué buscas?", permanent: "Fijo (Cada semana)", temporary: "Temporal (Solo unos días)", datesFree: "¿Qué días puedes?", datesPlaceholder: "ej. Lunes a viernes", timesAvailable: "¿A qué horas?", timesPlaceholder: "ej. 4 PM a 8 PM", submit: "Enviar Solicitud", successTitle: "¡Solicitud Enviada!", successDesc: "Gracias. Miraremos el horario.", missingFields: "Dinos qué horas buscas." },
     referral: { title: "Traer a un Amigo", description: "¿Conoces a alguien? ¡Cuéntanos!", yourName: "Tu Nombre", friendInfo: "Datos del Amigo", friendName: "Nombre del Amigo", email: "Su Email", phone: "Su Teléfono", extraInfo: "¿Algo más?", extraPlaceholder: "Experiencia o disponibilidad...", submit: "Enviar Datos", successTitle: "¡Amigo Recomendado!", successDesc: "¡Gracias! Le llamaremos pronto.", missingFields: "Pon el nombre y contacto de tu amigo." },
     status: { title: "Ver Progreso", description: "Mira cómo van tus pedidos aquí.", loading: "Actualizando...", noTasks: "Sin pedidos", noTasksDesc: "No has enviado nada últimamente.", underReview: "Revisando", processing: "En proceso", reviewIn: "Revisión en:", managerUpdate: "Mensaje del Jefe" },
     guide: { title: "Cómo usar CleanLink", description: "Una guía fácil para usar esta app.", workflow: "3 Pasos Fáciles", capabilities: "¿Qué puedo hacer?", benefits: "Cómo te ayuda", emergencyTitle: "¿Necesitas ayuda urgente?", emergencyDesc: "Si hay una emergencia real, llama a tu jefe ya.", developer: "Hecho por Smart Harley Technology" }
   },
   pt: {
     nav: { stores: "Pedir Material", faulty: "Equipamento Estragado", incomplete: "Tarefa Incompleta", hours: "Mais Horas", referral: "Trazer um Amigo", cover: "Turnos Extras", status: "Ver Progresso", info: "Ajuda e Contatos", guide: "Como Funciona", language: "Mudar Idioma" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 TECNOLOGIAS SMART HARLEY", subtext: "Gestão Inteligente para Limpeza" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 TECNOLOGIAS SMART HARLEY", subtext: "Gestão Inteligente para Limpeza" },
     language: { title: "Escolher Idioma", description: "Escolha o idioma que quer usar.", select: "Escolha um Idioma", back: "Voltar ao Início" },
     common: { submit: "Enviar Agora", loading: "Enviando...", site: "O seu Local", name: "O seu Nome", date: "Data", back: "Voltar", error: "Algo correu mal", success: "Pronto!", wait: "Um momento...", auth: "Ligando...", missingInfo: "Faltam detalhes", emergency: "Em emergência, ligue para o chefe já.", select: "Selecione..." },
     stores: { title: "Pedir Material", description: "Precisa de materiais? Diga-nos o que precisa.", nameLabel: "O seu Nome", namePlaceholder: "Nome completo", dateLabel: "Data de Hoje", siteLabel: "Onde trabalha?", sitePlaceholder: "Nome do local", deliveredLabel: "Precisa de entrega?", deliveredSub: "Nota: A entrega demora uns 3 dias úteis.", pickedUpLabel: "Levantou você mesmo?", pickedUpLocationLabel: "Onde levantou?", itemsTitle: "O que precisa?", addItem: "Adicionar outro", itemNamePlaceholder: "Artigo", qtyPlaceholder: "Quant.", codePlaceholder: "Código", submit: "Enviar Pedido", successTitle: "Pedido Enviado!", successDesc: "Recebido. Vamos ver amanhã até às 12h.", missingFields: "Ponha o nome, data e local." },
@@ -169,24 +168,24 @@ export const translations = {
     hours: { title: "Mais Horas", description: "Quer mais turnos ou mais horas no seu local?", requestType: "O que procura?", permanent: "Fixo (Todas as semanas)", temporary: "Temporário (Só uns dias)", datesFree: "Que dias pode?", datesPlaceholder: "ex. Segunda a quarta", timesAvailable: "A que horas?", timesPlaceholder: "ex. 16:00 às 20:00", submit: "Enviar Pedido", successTitle: "Pedido Enviado!", successDesc: "Obrigado. Vamos ver o horário.", missingFields: "Diga que horas procura." },
     referral: { title: "Trazer um Amigo", description: "Conhece alguém? Diga-nos!", yourName: "O seu Nome", friendInfo: "Dados do Amigo", friendName: "Nome do Amigo", email: "Email", phone: "Telemóvel", extraInfo: "Mais info?", extraPlaceholder: "Experiência ou disponibilidade...", submit: "Enviar Dados", successTitle: "Amigo Recomendado!", successDesc: "Obrigado! Vamos ligar em breve.", missingFields: "Ponha o nome e contacto do amigo." },
     status: { title: "Ver Progresso", description: "Veja como estão os seus pedidos.", loading: "Atualizando...", noTasks: "Sem pedidos", noTasksDesc: "Não enviou nada ultimamente.", underReview: "Revisando", processing: "Em processo", reviewIn: "Revisão em:", managerUpdate: "Mensagem do Chefe" },
-    guide: { title: "Como usar CleanLink", description: "Um guia fácil para usar esta app.", workflow: "3 Passos Fáceis", capabilities: "O que posso fazer?", benefits: "Como ajuda você", emergencyTitle: "Precisa de ajuda urgente?", emergencyDesc: "Em emergência real, ligue já para o chefe.", developer: "Feito por Smart Harley Technology" }
+    guide: { title: "Como usar CleanLink", description: "Um guia fácil para usar esta app.", workflow: "3 Passos Fécis", capabilities: "O que posso fazer?", benefits: "Como ajuda você", emergencyTitle: "Precisa de ajuda urgente?", emergencyDesc: "Em emergência real, ligue já para o chefe.", developer: "Feito por Smart Harley Technology" }
   },
   pl: {
     nav: { stores: "Zamów Środki", faulty: "Zepsuty Sprzęt", incomplete: "Nieskończone Zadanie", hours: "Dodatkowe Godziny", referral: "Poleć Znajomego", cover: "Dodatkowe Zmiany", status: "Sprawdź Postęp", info: "Pomoc i Kontakty", guide: "Jak to Działa", language: "Zmień Język" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Inteligentne Zarządzanie Sprzątaniem" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Inteligentne Zarządzanie Sprzątaniem" },
     language: { title: "Wybierz Język", description: "Wybierz język, w którym chcesz używać aplikacji.", select: "Wybierz Język", back: "Wróć do Menu" },
     common: { submit: "Wyślij Teraz", loading: "Wysyłanie...", site: "Twoje Miejsce Pracy", name: "Twoje Imię", date: "Data", back: "Wstecz", error: "Coś poszło nie tak", success: "Gotowe!", wait: "Chwileczkę...", auth: "Łączenie...", missingInfo: "Uzupełnij szczegóły", emergency: "W nagłych wypadkach zadzwoń natychmiast do przełożonego.", select: "Wybierz..." },
     stores: { title: "Zamów Środki", description: "Potrzebujesz materiałów do sprzątania? Daj nam znać.", nameLabel: "Twoje Imię", namePlaceholder: "Wpisz imię i nazwisko", dateLabel: "Dzisiejsza Data", siteLabel: "Gdzie pracujesz?", sitePlaceholder: "Nazwa obiektu", deliveredLabel: "Czy potrzebujesz dostawy?", deliveredSub: "Uwaga: Dostawa trwa zwykle około 3 dni robocze.", pickedUpLabel: "Czy odebrałeś sam?", pickedUpLocationLabel: "Skąd odebrałeś?", itemsTitle: "Czego potrzebujesz?", addItem: "Dodaj kolejny przedmiot", itemNamePlaceholder: "Przedmiot (np. Niebieska Rolka)", qtyPlaceholder: "Ile sztuk?", codePlaceholder: "Kod (jeśli znasz)", submit: "Wyślij Zamówienie", successTitle: "Zamówienie Wysłane!", successDesc: "Mamy Twoje zamówienie. Sprawdzimy je do 12:00 jutro.", missingFields: "Wpisz imię, datę i nazwę obiektu." },
     faulty: { title: "Zepsuty Sprzęt", description: "Zepsuło się narzędzie? Poproś o nowe.", cleanerName: "Twoje Imię", site: "Gdzie jest ten sprzęt?", equipment: "Co jest zepsute?", equipmentPlaceholder: "np. Odkurzacz, Mop", faultDescription: "Co się stało?", faultPlaceholder: "Opisz, co nie działa...", submit: "Wyślij Zgłoszenie", successTitle: "Zgłoszenie Wysłane!", successDesc: "Dzięki! Sprawdzimy to jutro do 12:00.", missingFields: "Uzupełnij wszystkie pola." },
     incomplete: { title: "Nieskończone Zadanie", description: "Nie skończyłeś pracy? Daj nam znać dlaczego.", reason: "Dlaczego zadanie nie zostało skończone?", details: "Więcej szczegółów (opcjonalnie)", detailsPlaceholder: "Coś jeszcze powinniśmy wiedzieć?", submit: "Wyślij Info", successTitle: "Informacja Wysłana!", successDesc: "Dzięki. Sprawdzimy to jutro.", missingFields: "Wybierz powód z listy.", reasons: ["Drzwi zamknięte / Brak klucza", "Ludzie przeszkadzali", "Trwała konserwacja", "Nie było bezpiecznie", "Inne"] },
-    hours: { title: "Dodatkowe Godziny", description: "Chcesz więcej zmian lub godzin w swojej lokalizacji?", requestType: "Czego szukasz?", permanent: "Stałe (co tydzień)", temporary: "Tymczasowe (tylko na kilka dni)", datesFree: "W jakie dni możesz pracować?", datesPlaceholder: "np. Poniedziałek - środa w przyszłym tygodniu", timesAvailable: "W jakich godzinach?", timesPlaceholder: "np. 16:00 - 20:00", submit: "Wyślij Prośbę", successTitle: "Prośba Wysłana!", successDesc: "Dzięki! Sprawdzimy grafik i damy znać.", missingFields: "Powiedz nam, jakich godzin szukasz." },
+    hours: { title: "Dodatkowe Godziny", description: "Chcesz więcej zmian lub godzin w swojej lokalizacji?", requestType: "Czego szukasz?", permanent: "Stałe (co tydzień)", temporary: "Tymczasowe (tylko na kilka dni)", datesFree: "W jakie dni możesz pracować?", datesPlaceholder: "np. Poniedziałek - piątek w przyszłym tygodniu", timesAvailable: "W jakich godzinach?", timesPlaceholder: "np. 16:00 - 20:00", submit: "Wyślij Prośbę", successTitle: "Prośba Wysłana!", successDesc: "Dzięki! Sprawdzimy grafik i damy znać.", missingFields: "Powiedz nam, jakich godzin szukasz." },
     referral: { title: "Poleć Znajomego", description: "Znasz kogoś do pracy? Daj nam znać!", yourName: "Twoje Imię", friendInfo: "Dane Znajomego", friendName: "Imię i Nazwisko Znajomego", email: "E-mail", phone: "Numer Telefonu", extraInfo: "Coś jeszcze?", extraPlaceholder: "Napisz o jego doświadczeniu lub kiedy może zacząć...", submit: "Wyślij Dane", successTitle: "Znajomy Polecony!", successDesc: "Dzięki! Skontaktujemy się z nim wkrótce.", missingFields: "Wpisz imię i dane kontaktowe znajomego." },
     status: { title: "Sprawdź Postęp", description: "Tu sprawdzisz, co dzieje się z Twoimi prośbami.", loading: "Aktualizacja...", noTasks: "Brak aktywnych próśb", noTasksDesc: "Ostatnio nic nie wysyłałeś.", underReview: "Sprawdzamy teraz", processing: "W trakcie realizacji", reviewIn: "Sprawdzenie za:", managerUpdate: "Wiadomość od Managera" },
     guide: { title: "Jak używać CleanLink", description: "Prosta instrukcja używania aplikacji w pracy.", workflow: "3 Proste Kroki", capabilities: "Co mogę zrobić?", benefits: "Jak to pomaga?", emergencyTitle: "Potrzebujesz pomocy teraz?", emergencyDesc: "W nagłych wypadkach dzwoń natychmiast do szefa.", developer: "Stworzone przez Smart Harley Technology" }
   },
   ro: {
     nav: { stores: "Comandă Stoc", faulty: "Echipament Defect", incomplete: "Sarcină Incompletă", hours: "Solicitare Ore", referral: "Recomandă un Prieten", cover: "Acoperire Schimburi", status: "Panou Stare", info: "Informații", guide: "Ghid Utilizare", language: "Limbă" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Sistem Avansat de Management al Infrastructurii" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Sistem Avansat de Management al Infrastructurii" },
     language: { title: "Limba Interfeței", description: "Selectați limba preferată pentru matricea CleanLink.", select: "Selectați Limba", back: "Revenire la Consolă" },
     common: { submit: "Trimite", loading: "Se procesează...", site: "Locație", name: "Nume", date: "Dată", back: "Înapoi", error: "Eroare", success: "Succes", wait: "Așteptați o clipă", auth: "Autentificare...", missingInfo: "Informații lipsă", emergency: "Formularele vor fi revizuite în următoarea zi lucrătoare.", select: "Selectați..." },
     stores: { title: "Comandă Stoc", description: "Completați detaliile pentru a trimite comanda.", nameLabel: "Nume", namePlaceholder: "Introduceți numele", dateLabel: "Data", siteLabel: "Locație", sitePlaceholder: "Introduceți locația", deliveredLabel: "Necesită livrare", deliveredSub: "Livrarea poate dura 3 zile lucrătoare", pickedUpLabel: "Ridicat din locație", pickedUpLocationLabel: "De unde a fost ridicat?", itemsTitle: "Articole", addItem: "Adăugare Articol", itemNamePlaceholder: "Nume articol", qtyPlaceholder: "Cant", codePlaceholder: "Cod (opțional)", submit: "Trimite Comanda", successTitle: "Comandă Trimisă", successDesc: "Mulțumim, va fi revizuită în următoarea zi lucrătoare.", missingFields: "Vă rugăm să completați numele, data și locația." },
@@ -199,7 +198,7 @@ export const translations = {
   },
   hu: {
     nav: { stores: "Raktári Rendelés", faulty: "Hibás Felszerelés", incomplete: "Befejezetlen Feladat", hours: "Órák Igénylése", referral: "Barát Ajánlása", cover: "Helyettesítés", status: "Állapotjelző Tábla", info: "Információk", guide: "Útmutató", language: "Nyelv" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Infrastruktúra Kezelő Rendszer" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Infrastruktúra Kezelő Rendszer" },
     language: { title: "Nyelv", description: "Válassza ki a kívánt nyelvet.", select: "Választás", back: "Vissza" },
     common: { submit: "Küldés", loading: "Feldolgozás...", site: "Helyszín", name: "Név", date: "Dátum", back: "Vissza", error: "Hiba", success: "Siker", wait: "Pillanat", auth: "Hitelesítés...", missingInfo: "Hiányzó adatok", emergency: "A beküldött űrlapokat holnap bíráljuk el.", select: "Választás..." },
     stores: { title: "Rendelés", description: "Töltse ki a rendeléshez.", nameLabel: "Név", namePlaceholder: "Neved", dateLabel: "Dátum", siteLabel: "Helyszín", sitePlaceholder: "Írd be a helyszínt", deliveredLabel: "Kiszállítást kérek", deliveredSub: "3 munkanap", pickedUpLabel: "Helyszínen átvéve", pickedUpLocationLabel: "Honnan lett átvéve?", itemsTitle: "Tételek", addItem: "Hozzáadás", itemNamePlaceholder: "Tétel", qtyPlaceholder: "Menny", codePlaceholder: "Kód", submit: "Küldés", successTitle: "Siker", successDesc: "Holnap bíráljuk el.", missingFields: "Név, dátum és helyszín kell." },
@@ -212,7 +211,7 @@ export const translations = {
   },
   cs: {
     nav: { stores: "Objednávka", faulty: "Závada", incomplete: "Nedokončeno", hours: "Hodiny", referral: "Doporučit", cover: "Záskok", status: "Stav", info: "Info", guide: "Návod", language: "Jazyk" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Systém Správy" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Systém Správy" },
     language: { title: "Jazyk", description: "Vyberte jazyk.", select: "Vybrat", back: "Zpět" },
     common: { submit: "Odeslat", loading: "Čekejte...", site: "Lokalita", name: "Jméno", date: "Datum", back: "Zpět", error: "Chyba", success: "Úspěch", wait: "Moment", auth: "Ověřování...", missingInfo: "Chybějící info", emergency: "Zkontrolujeme zítra.", select: "Vybrat..." },
     stores: { title: "Objednávka", description: "Vyplňte pro objednání.", nameLabel: "Jméno", namePlaceholder: "Vaše jméno", dateLabel: "Datum", siteLabel: "Lokalita", sitePlaceholder: "Zadejte lokalitu", deliveredLabel: "Doručení", deliveredSub: "Do 3 dnů", pickedUpLabel: "Vyzvednuto na místě", pickedUpLocationLabel: "Odkud bylo vyzvednuto?", itemsTitle: "Položky", addItem: "Přidat", itemNamePlaceholder: "Položka", qtyPlaceholder: "Mn", codePlaceholder: "Kód", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme zítra.", missingFields: "Jméno, datum a lokalita." },
@@ -225,7 +224,7 @@ export const translations = {
   },
   bg: {
     nav: { stores: "Поръчка", faulty: "Повреда", incomplete: "Незавършено", hours: "Часове", referral: "Препоръка", cover: "Смяна", status: "Статус", info: "Инфо", guide: "Ръководство", language: "Език" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Система за Управление" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Система за Управление" },
     language: { title: "Език", description: "Изберете език.", select: "Избор", back: "Назад" },
     common: { submit: "Изпрати", loading: "Чакайте...", site: "Обект", name: "Име", date: "Дата", back: "Назад", error: "Грешка", success: "Успех", wait: "Момент", auth: "Проверка...", missingInfo: "Липси", emergency: "Преглед утре.", select: "Избор..." },
     stores: { title: "Поръчка", description: "Попълнете детайли.", nameLabel: "Име", namePlaceholder: "Вашето име", dateLabel: "Дата", siteLabel: "Обект", sitePlaceholder: "Въведете обект", deliveredLabel: "Доставка", deliveredSub: "До 3 дни", pickedUpLabel: "Взето от локация", pickedUpLocationLabel: "Откъде е взето?", itemsTitle: "Артикули", addItem: "Добави", itemNamePlaceholder: "Артикул", qtyPlaceholder: "К-во", codePlaceholder: "Код", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Преглед утре.", missingFields: "Име, дата и обект." },
@@ -238,7 +237,7 @@ export const translations = {
   },
   tr: {
     nav: { stores: "Sipariş", faulty: "Arıza", incomplete: "Yarım Kalan", hours: "Saatler", referral: "Öneri", cover: "Vardiya", status: "Durum", info: "Bilgi", guide: "Rehber", language: "Dil" },
-    footer: { tagline: "Powered by Harley:Ai technology", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Yönetim Sistemi" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Yönetim Sistemi" },
     language: { title: "Dil", description: "Dil seçin.", select: "Seç", back: "Geri" },
     common: { submit: "Gönder", loading: "Bekleyin...", site: "Saha", name: "İsim", date: "Tarih", back: "Geri", error: "Hata", success: "Başarılı", wait: "An", auth: "Doğrulama...", missingInfo: "Eksik", emergency: "Yarın incelenir.", select: "Seç..." },
     stores: { title: "Sipariş", description: "Sipariş için doldurun.", nameLabel: "İsim", namePlaceholder: "İsminiz", dateLabel: "Tarih", siteLabel: "Saha", sitePlaceholder: "Saha adını girin", deliveredLabel: "Teslimat", deliveredSub: "3 iş günü", pickedUpLabel: "Konumdan alındı", pickedUpLocationLabel: "Nereden alındı?", itemsTitle: "Ürünler", addItem: "Ekle", itemNamePlaceholder: "Ürün", qtyPlaceholder: "Adet", codePlaceholder: "Kod", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Yarın incelenir.", missingFields: "İsim, tarih ve saha girin." },
@@ -263,7 +262,7 @@ export const translations = {
       language: "تغيير اللغة",
     },
     footer: {
-      tagline: "Powered by Harley:Ai technology",
+      tagline: "Powered by Harley:work smarter",
       copyright: "© 2024 سمارت هارلي تكنولوجيز",
       subtext: "إدارة ذكية لفرق التنظيف",
     },
@@ -312,7 +311,7 @@ export const translations = {
     },
     faulty: {
       title: "معدات معطلة",
-      description: "هل هناك أداة مكسورة؟ اطلب واحدة جديدة هنا.",
+      description: "هل هناك أداة مكسورة? اطلب واحدة جديدة هنا.",
       cleanerName: "اسمك",
       site: "أين توجد المعدات؟",
       equipment: "ما هو الشيء المعطل؟",

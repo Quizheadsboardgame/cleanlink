@@ -7,8 +7,8 @@ import { ReviewTasksFab } from "@/components/review-tasks-fab";
 import { LanguageProvider } from "@/context/language-context";
 
 export const metadata: Metadata = {
-  title: 'CleanLink | Professional AI-Powered Management',
-  description: 'A professional AI-driven web application for infrastructure and stock management, powered by Harley:Ai technology.',
+  title: 'CleanLink | Professional Management',
+  description: 'A professional web application for infrastructure and stock management, powered by Harley:work smarter.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
