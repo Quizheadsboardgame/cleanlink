@@ -3,14 +3,12 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
 import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Loader2 } from "lucide-react"
-import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
 import { doc } from "firebase/firestore"
@@ -175,7 +173,7 @@ export function StockOrderForm() {
                 type="date"
                 value={dateStr}
                 onChange={(e) => setDateStr(e.target.value)}
-                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white h-10 block"
+                className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
               />
             </div>
           </div>
