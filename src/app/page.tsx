@@ -49,13 +49,13 @@ export default function HomeHub() {
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-2 text-primary mb-2">
               <Sparkles className="w-5 h-5 animate-pulse" />
-              <span className="text-xs font-bold uppercase tracking-[0.3em]">Neural Interface Active</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em]">System Online</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold font-headline portal-text-gradient tracking-tighter">
-              CleanLink Matrix
+              CleanLink Hub
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto opacity-80">
-              Welcome to the AI-driven infrastructure management portal. Select a module below to begin your transmission.
+              Welcome to your digital workspace. Select a task below to begin.
             </p>
           </div>
 
@@ -92,7 +92,7 @@ export default function HomeHub() {
           {/* Quick Info Bar */}
           <div className="pt-12 text-center">
             <p className="text-[10px] text-muted-foreground uppercase tracking-[0.5em] font-bold opacity-40">
-              Secure Cloud Processing Connection: ESTABLISHED
+              Secure Connection: ESTABLISHED
             </p>
           </div>
         </div>
