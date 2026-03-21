@@ -10,7 +10,7 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, doc, setDoc } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
-import { format } from "date-fns"
+import { format, subDays, isBefore } from "date-fns"
 import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -113,6 +113,23 @@ export default function TasksPage() {
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
 
+  // Auto-delete logic: 14 days after completion
+  useEffect(() => {
+    if (isAuthorized && tasks && tasks.length > 0) {
+      const fourteenDaysAgo = subDays(new Date(), 14);
+      
+      tasks.forEach(task => {
+        if (task.status === 'Completed' && task.completedAt) {
+          const completionDate = new Date(task.completedAt);
+          if (isBefore(completionDate, fourteenDaysAgo)) {
+            const taskRef = doc(db, 'orderTasks', task.id);
+            deleteDocumentNonBlocking(taskRef);
+          }
+        }
+      });
+    }
+  }, [isAuthorized, tasks, db]);
+
   const handleUpdateStatus = (taskId: string, status: string) => {
     const taskRef = doc(db, 'orderTasks', taskId)
     const updateData: any = { status }
@@ -120,6 +137,12 @@ export default function TasksPage() {
     if (managerNotes[taskId]) updateData.managerNote = managerNotes[taskId]
     updateDocumentNonBlocking(taskRef, updateData)
     toast({ title: "Task Updated", description: `Status changed to ${status}` })
+  }
+
+  const handleDeleteTask = (taskId: string) => {
+    const taskRef = doc(db, 'orderTasks', taskId)
+    deleteDocumentNonBlocking(taskRef)
+    toast({ title: "Task Deleted", description: "The task has been removed from the system." })
   }
 
   const handleCreateCover = (e: React.FormEvent) => {
@@ -218,11 +241,14 @@ export default function TasksPage() {
                           <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(task.createdAt), "PPp")}</span>
                             <Badge variant="outline" className="border-white/10 uppercase tracking-tighter">{task.type}</Badge>
-                            <Badge className={cn("text-[10px] h-5", task.status === 'Completed' ? "bg-green-500/20 text-green-400" : task.status === 'In Progress' ? "bg-amber-500/20 text-amber-400" : "bg-primary/20 text-primary")}>
+                            <Badge className={cn("text-[10px] h-5", task.status === 'Completed' ? "bg-green-500/20 text-green-400" : task.status === 'In Progress' ? "bg-amber-500/20 text-amber-400" : task.status === 'Rejected' ? "bg-red-500/20 text-red-400" : "bg-primary/20 text-primary")}>
                               {task.status}
                             </Badge>
                           </div>
                         </div>
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteTask(task.id)} className="text-muted-foreground hover:text-red-500">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                       <p className="text-sm text-muted-foreground bg-white/5 p-3 rounded-lg border border-white/5">{task.description}</p>
                       <div className="space-y-2">
@@ -230,12 +256,17 @@ export default function TasksPage() {
                         <Input placeholder="Status update for staff board..." value={managerNotes[task.id] ?? task.managerNote ?? ""} onChange={(e) => setManagerNotes({...managerNotes, [task.id]: e.target.value})} className="bg-secondary/30 border-white/5 h-9 text-sm" />
                       </div>
                       <div className="flex gap-2 pt-2">
-                        {task.status !== 'Completed' && (
+                        {task.status !== 'Completed' && task.status !== 'Rejected' && (
                           <>
                             <Button onClick={() => handleUpdateStatus(task.id, 'In Progress')} variant="outline" className="flex-1 h-9 border-amber-500/20 text-amber-400 hover:bg-amber-500/10"><PlayCircle className="w-4 h-4 mr-2" /> Progress</Button>
                             <Button onClick={() => handleUpdateStatus(task.id, 'Completed')} className="flex-1 h-9 bg-green-500/10 text-green-500 hover:bg-green-600 hover:text-white border border-green-500/20"><CheckCircle2 className="w-4 h-4 mr-2" /> Finish</Button>
                             <Button onClick={() => handleUpdateStatus(task.id, 'Rejected')} variant="outline" className="flex-1 h-9 border-red-500/20 text-red-400 hover:bg-red-500/10"><XCircle className="w-4 h-4 mr-2" /> Reject</Button>
                           </>
+                        )}
+                        {(task.status === 'Completed' || task.status === 'Rejected') && (
+                          <p className="text-[10px] text-muted-foreground italic w-full text-center">
+                            {task.status === 'Completed' ? "Completed on " + format(new Date(task.completedAt), "PPp") : "Task was rejected."} (Auto-deletes in 14 days)
+                          </p>
                         )}
                       </div>
                     </div>
