@@ -4,9 +4,10 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { useCollection, useFirestore, useUser, useMemoFirebase } from "@/firebase"
+import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, doc, orderBy } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,8 +19,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function ImportantInfoPage() {
-  const { user } = useUser()
+  const { user, isUserLoading } = useUser()
   const db = useFirestore()
+  const auth = useAuth()
   const { toast } = useToast()
   
   const [isAuthorized, setIsAuthorized] = useState(false)
@@ -31,16 +33,22 @@ export default function ImportantInfoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    const auth = sessionStorage.getItem("portalflow_auth")
-    if (auth === "true") {
+    if (!isUserLoading && !user) {
+      initiateAnonymousSignIn(auth)
+    }
+  }, [user, isUserLoading, auth])
+
+  useEffect(() => {
+    const savedAuth = sessionStorage.getItem("portalflow_auth")
+    if (savedAuth === "true") {
       setIsAuthorized(true)
     }
   }, [])
 
   const infoQuery = useMemoFirebase(() => {
-    if (!db) return null
+    if (!db || !user) return null
     return query(collection(db, 'importantInfo'), orderBy('category', 'asc'))
-  }, [db])
+  }, [db, user])
 
   const { data: infoItems, isLoading } = useCollection(infoQuery)
 
@@ -137,7 +145,7 @@ export default function ImportantInfoPage() {
             )}
           </div>
 
-          {isLoading ? (
+          {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <Loader2 className="w-10 h-10 text-primary animate-spin" />
               <p className="text-muted-foreground">Retrieving information...</p>

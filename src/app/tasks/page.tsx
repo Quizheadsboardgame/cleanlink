@@ -4,9 +4,10 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { useCollection, useFirestore, useUser, useMemoFirebase } from "@/firebase"
+import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, doc } from "firebase/firestore"
 import { updateDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
 import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -15,8 +16,9 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 
 export default function TasksPage() {
-  const { user } = useUser()
+  const { user, isUserLoading } = useUser()
   const db = useFirestore()
+  const auth = useAuth()
   const { toast } = useToast()
   
   const [password, setPassword] = useState("")
@@ -24,8 +26,14 @@ export default function TasksPage() {
   const [isChecking, setIsChecking] = useState(false)
 
   useEffect(() => {
-    const auth = sessionStorage.getItem("portalflow_auth")
-    if (auth === "true") {
+    if (!isUserLoading && !user) {
+      initiateAnonymousSignIn(auth)
+    }
+  }, [user, isUserLoading, auth])
+
+  useEffect(() => {
+    const savedAuth = sessionStorage.getItem("portalflow_auth")
+    if (savedAuth === "true") {
       setIsAuthorized(true)
     }
   }, [])
@@ -53,11 +61,10 @@ export default function TasksPage() {
     }, 600)
   }
 
-  // Changed to query ALL tasks in the collection for management overview
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized) return null
+    if (!db || !isAuthorized || !user) return null
     return query(collection(db, 'orderTasks'))
-  }, [db, isAuthorized])
+  }, [db, isAuthorized, user])
 
   const { data: tasks, isLoading } = useCollection(tasksQuery)
 
@@ -121,7 +128,7 @@ export default function TasksPage() {
             <p className="text-muted-foreground">Manage and track all stock orders submitted across the organization.</p>
           </div>
 
-          {isLoading ? (
+          {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
               <p className="text-muted-foreground animate-pulse">Loading all tasks...</p>
