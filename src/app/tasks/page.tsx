@@ -11,7 +11,7 @@ import { collection, query, doc, setDoc } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -211,7 +211,10 @@ export default function TasksPage() {
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
-                          <CardTitle className="text-lg font-headline">{task.title}</CardTitle>
+                          <CardTitle className="text-lg font-headline flex items-center gap-2">
+                            {task.type === 'Staff Referral' && <UserPlus className="w-4 h-4 text-[#FACC15]" />}
+                            {task.title}
+                          </CardTitle>
                           <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(task.createdAt), "PPp")}</span>
                             <Badge variant="outline" className="border-white/10 uppercase tracking-tighter">{task.type}</Badge>

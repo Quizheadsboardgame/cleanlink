@@ -125,7 +125,7 @@
         "type": {
           "type": "string",
           "description": "The category of task.",
-          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours"]
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral"]
         }
       },
       "required": [
@@ -188,6 +188,24 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "cleanerName", "site", "requestType", "timesAvailable", "status", "ownerId", "createdAt"]
+    },
+    "StaffReferral": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "StaffReferral",
+      "type": "object",
+      "description": "A referral for a friend or family member to join the cleaning team.",
+      "properties": {
+        "id": { "type": "string" },
+        "referrerName": { "type": "string" },
+        "friendName": { "type": "string" },
+        "friendEmail": { "type": "string", "format": "email" },
+        "friendPhone": { "type": "string" },
+        "extraInfo": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "referrerName", "friendName", "friendEmail", "friendPhone", "status", "ownerId", "createdAt"]
     },
     "ImportantInfo": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -271,6 +289,20 @@
         }
       },
       {
+        "path": "/users/{userId}/referrals/{referralId}",
+        "definition": {
+          "entityName": "StaffReferral",
+          "schema": {
+            "$ref": "#/backend/entities/StaffReferral"
+          },
+          "description": "Stores friend referrals submitted by staff.",
+          "params": [
+            { "name": "userId", "description": "Owner UID" },
+            { "name": "referralId", "description": "Referral UID" }
+          ]
+        }
+      },
+      {
         "path": "/users/{userId}/faultyEquipmentReports/{reportId}",
         "definition": {
           "entityName": "FaultyEquipmentReport",
@@ -305,7 +337,7 @@
           "schema": {
             "$ref": "#/backend/entities/OrderTask"
           },
-          "description": "Unified tasks for reviewing orders and faulty equipment.",
+          "description": "Unified tasks for reviewing orders, equipment, and referrals.",
           "params": [
             { "name": "orderTaskId", "description": "Task UID" }
           ]

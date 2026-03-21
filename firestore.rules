@@ -46,6 +46,13 @@ service cloud.firestore {
       allow delete: if isExistingOwner(userId);
     }
 
+    match /users/{userId}/referrals/{referralId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
+      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
+      allow delete: if isExistingOwner(userId);
+    }
+
     match /users/{userId}/faultyEquipmentReports/{reportId} {
       allow get, list: if isOwner(userId);
       allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
@@ -75,9 +82,8 @@ service cloud.firestore {
       allow create, update, delete: if isSignedIn();
 
       match /responses/{responseId} {
-        // Cleaners can create responses. Managers can see them.
         allow create: if isSignedIn() && isSettingCorrectOwner(request.resource.data);
-        allow get, list: if isSignedIn(); // In a real app, this would be restricted to managers.
+        allow get, list: if isSignedIn();
       }
     }
   }

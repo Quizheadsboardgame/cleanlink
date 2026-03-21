@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -17,7 +18,8 @@ import {
   AlertTriangle,
   CalendarDays,
   Send,
-  LayoutList
+  LayoutList,
+  UserPlus
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
@@ -71,6 +73,13 @@ export default function HowToUsePage() {
       icon: Clock,
       color: "text-[#D946EF]",
       bg: "bg-[#D946EF]/10"
+    },
+    {
+      title: "Refer a Friend",
+      description: "Recommend potential new team members. Provide their contact info and management will reach out.",
+      icon: UserPlus,
+      color: "text-[#FACC15]",
+      bg: "bg-[#FACC15]/10"
     },
     {
       title: "Cover Work",

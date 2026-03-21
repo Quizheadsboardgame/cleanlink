@@ -86,6 +86,16 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Refer a Friend - Yellow/Gold */
+.referral-gradient {
+  background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+}
+.referral-text-gradient {
+  background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Important Info & Guide - Emerald/Teal */
 .info-gradient {
   background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);

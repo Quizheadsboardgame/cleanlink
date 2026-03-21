@@ -1,7 +1,7 @@
 
 "use client"
 
-import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays } from "lucide-react"
+import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -21,6 +21,7 @@ export function Navbar() {
     { href: "/faulty-equipment", label: "Faulty Equipment", icon: Hammer, color: "text-[#F59E0B]" },
     { href: "/incomplete-task", label: "Incomplete Task", icon: AlertTriangle, color: "text-[#EF4444]" },
     { href: "/additional-hours", label: "Request Hours", icon: Clock, color: "text-[#D946EF]" },
+    { href: "/referral", label: "Refer a Friend", icon: UserPlus, color: "text-[#FACC15]" },
     { href: "/cover-work", label: "Cover Work", icon: CalendarDays, color: "text-[#0EA5E9]" },
     { href: "/status", label: "Status Board", icon: LayoutList, color: "text-[#14ADFF]" },
     { href: "/important-info", label: "Information", icon: Info, color: "text-[#10B981]" },
