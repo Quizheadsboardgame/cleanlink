@@ -1,10 +1,13 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
 import { Boxes, PlusCircle, Hammer, AlertTriangle, Info, LayoutList, Menu, ChevronDown, BookOpen, Clock, CalendarDays, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
+import placeholderData from "@/app/lib/placeholder-images.json"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +37,7 @@ export function Navbar() {
   ]
 
   const activeItem = navItems.find(item => item.href === pathname) || navItems[0]
+  const headerLogo = placeholderData.placeholderImages.find(img => img.id === "header-secondary-logo")
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
@@ -97,14 +101,19 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Lot info on the right */}
-        <div className="ml-auto flex flex-col items-end gap-0.5">
-          <span className="text-xs sm:text-sm font-bold font-headline text-primary uppercase tracking-wider">
-            Lot 4
-          </span>
-          <span className="text-[10px] sm:text-xs font-medium text-muted-foreground/80 whitespace-nowrap">
-            Addenbrooke's
-          </span>
+        {/* Secondary Logo on the right */}
+        <div className="ml-auto flex items-center">
+          {headerLogo && (
+            <div className="relative w-24 h-16 sm:w-32 sm:h-20">
+              <Image
+                src={headerLogo.imageUrl}
+                alt={headerLogo.description}
+                fill
+                className="object-contain"
+                data-ai-hint={headerLogo.imageHint}
+              />
+            </div>
+          )}
         </div>
       </div>
     </nav>

@@ -12,6 +12,12 @@
       "description": "SMART HARLEY Corporate Logo",
       "imageUrl": "https://i.ibb.co/RG9zRtRS/IMG-3055.jpg",
       "imageHint": "corporate logo"
+    },
+    {
+      "id": "header-secondary-logo",
+      "description": "Lot 4 Secondary Logo",
+      "imageUrl": "https://i.ibb.co/LWHWb1d/Untitled-2.png",
+      "imageHint": "secondary logo"
     }
   ]
 }
