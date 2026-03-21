@@ -82,7 +82,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "OrderTask",
       "type": "object",
-      "description": "Represents a task generated upon submission of a stock order or faulty equipment report, used to manage its review and completion in a separate tab.",
+      "description": "Represents a task generated upon submission of a stock order, faulty equipment report, or incomplete task report.",
       "properties": {
         "id": {
           "type": "string",
@@ -90,15 +90,15 @@
         },
         "stockOrderId": {
           "type": "string",
-          "description": "Reference to the StockOrder or FaultyEquipmentReport associated with this task."
+          "description": "Reference to the associated report (StockOrder, FaultyEquipment, or IncompleteTask)."
         },
         "title": {
           "type": "string",
-          "description": "A concise title for the processing task (e.g., 'Process Stock Order for [Customer Name]' or 'Faulty Equipment: [Item]')."
+          "description": "A concise title for the processing task."
         },
         "description": {
           "type": "string",
-          "description": "A detailed description of the task, potentially including summary details or specific instructions."
+          "description": "A detailed description of the task."
         },
         "status": {
           "type": "string",
@@ -120,8 +120,8 @@
         },
         "type": {
           "type": "string",
-          "description": "The category of task (e.g., 'Stock Order', 'Faulty Equipment').",
-          "enum": ["Stock Order", "Faulty Equipment"]
+          "description": "The category of task.",
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task"]
         }
       },
       "required": [
@@ -149,6 +149,23 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "cleanerName", "site", "equipmentName", "faultDescription", "status", "ownerId", "createdAt"]
+    },
+    "IncompleteTaskReport": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "IncompleteTaskReport",
+      "type": "object",
+      "description": "A report explaining why a cleaning task could not be completed.",
+      "properties": {
+        "id": { "type": "string" },
+        "cleanerName": { "type": "string" },
+        "site": { "type": "string" },
+        "reason": { "type": "string" },
+        "details": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "cleanerName", "site", "reason", "status", "ownerId", "createdAt"]
     }
   },
   "auth": {
@@ -181,6 +198,20 @@
             "$ref": "#/backend/entities/FaultyEquipmentReport"
           },
           "description": "Stores faulty equipment reports submitted by cleaners.",
+          "params": [
+            { "name": "userId", "description": "Owner UID" },
+            { "name": "reportId", "description": "Report UID" }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/incompleteTaskReports/{reportId}",
+        "definition": {
+          "entityName": "IncompleteTaskReport",
+          "schema": {
+            "$ref": "#/backend/entities/IncompleteTaskReport"
+          },
+          "description": "Stores reports regarding incomplete cleaning tasks.",
           "params": [
             { "name": "userId", "description": "Owner UID" },
             { "name": "reportId", "description": "Report UID" }

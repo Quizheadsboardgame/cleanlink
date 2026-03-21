@@ -1,7 +1,7 @@
 
 "use client"
 
-import { Boxes, ClipboardList, PlusCircle, Hammer } from "lucide-react"
+import { Boxes, ClipboardList, PlusCircle, Hammer, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -38,10 +38,10 @@ export function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-4">
+        <div className="flex items-center gap-1 sm:gap-4 overflow-x-auto no-scrollbar">
           <Link href="/">
             <button className={cn(
-              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
               pathname === "/" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
             )}>
               <PlusCircle className="w-4 h-4" />
@@ -50,16 +50,25 @@ export function Navbar() {
           </Link>
           <Link href="/faulty-equipment">
             <button className={cn(
-              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
               pathname === "/faulty-equipment" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
             )}>
               <Hammer className="w-4 h-4" />
               <span>Faulty Equipment</span>
             </button>
           </Link>
+          <Link href="/incomplete-task">
+            <button className={cn(
+              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
+              pathname === "/incomplete-task" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+            )}>
+              <AlertTriangle className="w-4 h-4" />
+              <span>Incomplete Task</span>
+            </button>
+          </Link>
           <Link href="/tasks">
             <button className={cn(
-              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+              "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
               pathname === "/tasks" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
             )}>
               <ClipboardList className="w-4 h-4" />
