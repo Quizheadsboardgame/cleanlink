@@ -102,7 +102,11 @@
         },
         "status": {
           "type": "string",
-          "description": "The current workflow status of the task (e.g., 'Pending Review', 'Completed')."
+          "description": "The current workflow status of the task (e.g., 'Pending Review', 'In Progress', 'Completed', 'Rejected')."
+        },
+        "managerNote": {
+          "type": "string",
+          "description": "A public note added by a manager to provide updates on task progress."
         },
         "assignedToUserId": {
           "type": "string",

@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,11 +11,13 @@ import { collection, query, doc } from "firebase/firestore"
 import { updateDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2 } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 
 export default function TasksPage() {
   const { user, isUserLoading } = useUser()
@@ -25,6 +28,7 @@ export default function TasksPage() {
   const [password, setPassword] = useState("")
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
+  const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -69,12 +73,28 @@ export default function TasksPage() {
 
   const { data: tasks, isLoading } = useCollection(tasksQuery)
 
-  const handleComplete = (taskId: string) => {
+  const handleUpdateStatus = (taskId: string, status: string) => {
     const taskRef = doc(db, 'orderTasks', taskId)
-    updateDocumentNonBlocking(taskRef, {
-      status: 'Completed',
-      completedAt: new Date().toISOString()
+    const updateData: any = { status }
+    
+    if (status === 'Completed') {
+      updateData.completedAt = new Date().toISOString()
+    }
+    
+    if (managerNotes[taskId]) {
+      updateData.managerNote = managerNotes[taskId]
+    }
+
+    updateDocumentNonBlocking(taskRef, updateData)
+    
+    toast({
+      title: "Task Updated",
+      description: `Status changed to ${status}`,
     })
+  }
+
+  const handleNoteChange = (taskId: string, note: string) => {
+    setManagerNotes(prev => ({ ...prev, [taskId]: note }))
   }
 
   if (!isAuthorized) {
@@ -153,7 +173,7 @@ export default function TasksPage() {
             <div className="grid gap-4">
               {tasks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((task) => (
                 <Card key={task.id} className="glass-panel overflow-hidden transition-all hover:border-primary/30">
-                  <div className="flex flex-col sm:flex-row">
+                  <div className="flex flex-col">
                     <div className="flex-1 p-6 space-y-4">
                       <div className="flex items-start justify-between gap-4">
                         <div className="space-y-1">
@@ -165,7 +185,12 @@ export default function TasksPage() {
                               <Clock className="w-3 h-3" />
                               {format(new Date(task.createdAt), "PPP")}
                             </span>
-                            <Badge variant={task.status === 'Completed' ? "secondary" : "default"} className="text-[10px] h-5">
+                            <Badge className={cn(
+                              "text-[10px] h-5",
+                              task.status === 'Completed' ? "bg-green-500/20 text-green-400" : 
+                              task.status === 'In Progress' ? "bg-amber-500/20 text-amber-400" :
+                              task.status === 'Rejected' ? "bg-red-500/20 text-red-400" : "bg-primary/20 text-primary"
+                            )}>
                               {task.status}
                             </Badge>
                           </CardDescription>
@@ -182,21 +207,55 @@ export default function TasksPage() {
                           <span className="truncate">Type: {task.type}</span>
                         </div>
                       </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                          <MessageSquare className="w-3 h-3" /> Public Manager Note (Visible on Status Board)
+                        </Label>
+                        <Input 
+                          placeholder="e.g. Processing order, will be ready by 4 PM"
+                          value={managerNotes[task.id] ?? task.managerNote ?? ""}
+                          onChange={(e) => handleNoteChange(task.id, e.target.value)}
+                          className="bg-secondary/30 border-white/5 text-white text-sm"
+                        />
+                      </div>
                     </div>
                     
-                    <div className="bg-white/[0.02] border-t sm:border-t-0 sm:border-l border-white/5 p-6 flex items-center justify-center">
-                      {task.status !== 'Completed' ? (
-                        <Button 
-                          onClick={() => handleComplete(task.id)}
-                          className="w-full sm:w-auto gap-2 bg-primary/10 hover:bg-primary text-primary hover:text-white border border-primary/20 transition-all"
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                          Mark Completed
-                        </Button>
-                      ) : (
-                        <div className="flex items-center gap-2 text-green-500 font-medium">
-                          <CheckCircle2 className="w-5 h-5" />
-                          Finished
+                    <div className="bg-white/[0.02] border-t border-white/5 p-4 flex flex-wrap items-center justify-center gap-3">
+                      {task.status !== 'Completed' && task.status !== 'Rejected' && (
+                        <>
+                          <Button 
+                            onClick={() => handleUpdateStatus(task.id, 'In Progress')}
+                            variant="outline"
+                            className="flex-1 min-w-[140px] gap-2 border-amber-500/20 text-amber-400 hover:bg-amber-500/10"
+                          >
+                            <PlayCircle className="w-4 h-4" />
+                            In Progress
+                          </Button>
+                          <Button 
+                            onClick={() => handleUpdateStatus(task.id, 'Completed')}
+                            className="flex-1 min-w-[140px] gap-2 bg-green-500/10 hover:bg-green-600 text-green-500 hover:text-white border border-green-500/20 transition-all"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            Complete
+                          </Button>
+                          <Button 
+                            onClick={() => handleUpdateStatus(task.id, 'Rejected')}
+                            variant="outline"
+                            className="flex-1 min-w-[140px] gap-2 border-red-500/20 text-red-400 hover:bg-red-500/10"
+                          >
+                            <XCircle className="w-4 h-4" />
+                            Reject
+                          </Button>
+                        </>
+                      )}
+                      {(task.status === 'Completed' || task.status === 'Rejected') && (
+                        <div className={cn(
+                          "flex items-center gap-2 font-medium",
+                          task.status === 'Completed' ? "text-green-500" : "text-red-500"
+                        )}>
+                          {task.status === 'Completed' ? <CheckCircle2 className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+                          {task.status}
                         </div>
                       )}
                     </div>

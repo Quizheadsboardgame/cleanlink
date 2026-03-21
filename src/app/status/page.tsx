@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,7 +10,7 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, AlertCircle } from "lucide-center"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
@@ -32,7 +33,7 @@ const getNextWorkingDay12pm = (createdAt: string) => {
   return target;
 };
 
-function CountdownTimer({ createdAt }: { createdAt: string }) {
+function CountdownTimer({ createdAt, status }: { createdAt: string, status?: string }) {
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
   const targetDate = React.useMemo(() => getNextWorkingDay12pm(createdAt), [createdAt]);
 
@@ -60,10 +61,18 @@ function CountdownTimer({ createdAt }: { createdAt: string }) {
 
   if (!timeLeft) return <span className="opacity-20">---</span>;
 
+  const isUnderReview = timeLeft === "Under review";
+  const isInProgress = status === 'In Progress';
+
   return (
-    <div className="flex items-center gap-1.5 text-xs font-mono bg-cyan-500/5 text-cyan-400 px-2 py-1 rounded border border-cyan-500/10">
-      <Timer className="w-3 h-3" />
-      <span>Review in: {timeLeft}</span>
+    <div className={cn(
+      "flex items-center gap-1.5 text-xs font-mono px-2 py-1 rounded border",
+      isInProgress ? "bg-amber-500/10 text-amber-400 border-amber-500/20" : 
+      isUnderReview ? "bg-green-500/10 text-green-400 border-green-500/20" :
+      "bg-cyan-500/5 text-cyan-400 border-cyan-500/10"
+    )}>
+      <Timer className={cn("w-3 h-3", isInProgress && "animate-spin")} />
+      <span>{isInProgress ? "Currently Processing" : `Review in: ${timeLeft}`}</span>
     </div>
   );
 }
@@ -120,49 +129,72 @@ export default function StatusBoardPage() {
             <div className="grid gap-4">
               {tasks.map((task) => (
                 <Card key={task.id} className="glass-panel overflow-hidden transition-all hover:border-cyan-500/20">
-                  <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className={cn(
-                        "p-3 rounded-xl",
-                        task.status === 'Completed' ? "bg-green-500/10" : "bg-cyan-500/10"
-                      )}>
-                        {task.status === 'Completed' ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        ) : (
-                          <Clock className="w-5 h-5 text-cyan-400 animate-pulse" />
-                        )}
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-lg">{task.title.split(':')[0]}</span>
-                          <Badge variant="outline" className="text-[10px] uppercase tracking-tighter h-5 border-white/10">
-                            {task.type}
-                          </Badge>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1 italic">
-                            <Building2 className="w-3 h-3" />
-                            {task.description.split('.')[0].replace('Site: ', '').replace('Reported by: ', '')}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {format(new Date(task.createdAt), "HH:mm")}
-                          </span>
-                          {task.status !== 'Completed' && (
-                            <CountdownTimer createdAt={task.createdAt} />
+                  <div className="p-5 flex flex-col gap-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className={cn(
+                          "p-3 rounded-xl",
+                          task.status === 'Completed' ? "bg-green-500/10" : 
+                          task.status === 'In Progress' ? "bg-amber-500/10" :
+                          task.status === 'Rejected' ? "bg-red-500/10" : "bg-cyan-500/10"
+                        )}>
+                          {task.status === 'Completed' ? (
+                            <CheckCircle2 className="w-5 h-5 text-green-500" />
+                          ) : task.status === 'Rejected' ? (
+                            <XCircle className="w-5 h-5 text-red-500" />
+                          ) : task.status === 'In Progress' ? (
+                            <AlertCircle className="w-5 h-5 text-amber-400 animate-pulse" />
+                          ) : (
+                            <Clock className="w-5 h-5 text-cyan-400 animate-pulse" />
                           )}
                         </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-lg">{task.title.split(':')[0]}</span>
+                            <Badge variant="outline" className="text-[10px] uppercase tracking-tighter h-5 border-white/10">
+                              {task.type}
+                            </Badge>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1 italic">
+                              <Building2 className="w-3 h-3" />
+                              {task.description.split('.')[0].replace('Site: ', '').replace('Reported by: ', '')}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {format(new Date(task.createdAt), "HH:mm")}
+                            </span>
+                            {task.status !== 'Completed' && task.status !== 'Rejected' && (
+                              <CountdownTimer createdAt={task.createdAt} status={task.status} />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                        <Badge className={cn(
+                          "rounded-lg px-3 py-1 text-xs font-bold",
+                          task.status === 'Completed' ? "bg-green-500/20 text-green-400 border-green-500/20" : 
+                          task.status === 'In Progress' ? "bg-amber-500/20 text-amber-400 border-amber-500/20" :
+                          task.status === 'Rejected' ? "bg-red-500/20 text-red-400 border-red-500/20" :
+                          "bg-cyan-500/20 text-cyan-400 border-cyan-500/20"
+                        )}>
+                          {task.status}
+                        </Badge>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-                      <Badge className={cn(
-                        "rounded-lg px-3 py-1 text-xs font-bold",
-                        task.status === 'Completed' ? "bg-green-500/20 text-green-400 border-green-500/20" : "bg-cyan-500/20 text-cyan-400 border-cyan-500/20"
-                      )}>
-                        {task.status}
-                      </Badge>
-                    </div>
+                    {task.managerNote && (
+                      <div className="mt-2 p-3 bg-primary/5 rounded-lg border border-primary/10 flex items-start gap-3">
+                        <MessageSquare className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-bold text-primary uppercase tracking-wider">Manager Update</p>
+                          <p className="text-sm text-muted-foreground italic leading-relaxed">
+                            "{task.managerNote}"
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </Card>
               ))}
