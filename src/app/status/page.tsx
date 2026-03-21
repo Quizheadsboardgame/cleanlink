@@ -2,16 +2,71 @@
 "use client"
 
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Navbar } from "@/components/navbar"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Building2, Loader2, ListTodo } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+
+/**
+ * Calculates the next working day (Mon-Fri) at 12:00 PM
+ */
+const getNextWorkingDay12pm = (createdAt: string) => {
+  const date = new Date(createdAt);
+  const target = new Date(date);
+  
+  // Move to at least the next day
+  target.setDate(target.getDate() + 1);
+  
+  // Skip weekends (0 = Sunday, 6 = Saturday)
+  while (target.getDay() === 0 || target.getDay() === 6) {
+    target.setDate(target.getDate() + 1);
+  }
+  
+  target.setHours(12, 0, 0, 0);
+  return target;
+};
+
+function CountdownTimer({ createdAt }: { createdAt: string }) {
+  const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const targetDate = React.useMemo(() => getNextWorkingDay12pm(createdAt), [createdAt]);
+
+  useEffect(() => {
+    const updateTimer = () => {
+      const now = new Date();
+      const diff = targetDate.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        setTimeLeft("Under review");
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  if (!timeLeft) return <span className="opacity-20">---</span>;
+
+  return (
+    <div className="flex items-center gap-1.5 text-xs font-mono bg-primary/5 text-primary px-2 py-1 rounded border border-primary/10">
+      <Timer className="w-3 h-3" />
+      <span>Review in: {timeLeft}</span>
+    </div>
+  );
+}
 
 export default function StatusBoardPage() {
   const { user, isUserLoading } = useUser()
@@ -26,7 +81,6 @@ export default function StatusBoardPage() {
 
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !user) return null
-    // Show all tasks ordered by newest first, limited to 50 for performance
     return query(collection(db, 'orderTasks'), orderBy('createdAt', 'desc'), limit(50))
   }, [db, user])
 
@@ -85,7 +139,7 @@ export default function StatusBoardPage() {
                             {task.type}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1 italic">
                             <Building2 className="w-3 h-3" />
                             {task.description.split('.')[0].replace('Site: ', '').replace('Reported by: ', '')}
@@ -94,6 +148,9 @@ export default function StatusBoardPage() {
                             <Clock className="w-3 h-3" />
                             {format(new Date(task.createdAt), "HH:mm")}
                           </span>
+                          {task.status !== 'Completed' && (
+                            <CountdownTimer createdAt={task.createdAt} />
+                          )}
                         </div>
                       </div>
                     </div>
