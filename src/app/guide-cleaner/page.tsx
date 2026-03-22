@@ -1,17 +1,17 @@
 "use client"
 
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Sparkles, CheckCircle2, Zap, LayoutList, UserPlus, ShieldCheck, Download, Printer } from "lucide-react"
+import { ArrowLeft, Sparkles, CheckCircle2, Zap, LayoutList, UserPlus, ShieldCheck, Download } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { useSearchParams } from "next/navigation"
 
-export default function GuideCleanerPage() {
+function GuideCleanerContent() {
   const { t, isRTL } = useLanguage()
   const searchParams = useSearchParams()
   const autoDownload = searchParams.get('download') === 'true'
@@ -113,5 +113,13 @@ export default function GuideCleanerPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function GuideCleanerPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <GuideCleanerContent />
+    </Suspense>
   )
 }

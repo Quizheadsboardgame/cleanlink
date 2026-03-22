@@ -20,7 +20,6 @@ export default function LanguagePage() {
     { id: 'pt', label: "Português", sub: "Brasil / Portugal" },
     { id: 'pl', label: "Polski", sub: "Polska" },
     { id: 'ro', label: "Română", sub: "România" },
-    { id: 'hu', label: "Magyar", sub: "Magyarország" },
     { id: 'cs', label: "Čeština", sub: "Česko" },
     { id: 'bg', label: "Български", sub: "България" },
     { id: 'tr', label: "Türkçe", sub: "Türkiye" },

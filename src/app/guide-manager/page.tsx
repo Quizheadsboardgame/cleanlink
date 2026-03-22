@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useLanguage } from "@/context/language-context"
@@ -11,7 +11,7 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { useSearchParams } from "next/navigation"
 
-export default function GuideManagerPage() {
+function GuideManagerContent() {
   const { t, isRTL } = useLanguage()
   const searchParams = useSearchParams()
   const autoDownload = searchParams.get('download') === 'true'
@@ -110,5 +110,13 @@ export default function GuideManagerPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function GuideManagerPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <GuideManagerContent />
+    </Suspense>
   )
 }
