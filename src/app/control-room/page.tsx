@@ -23,6 +23,7 @@ export default function ControlRoomPage() {
   const auth = useAuth()
   const { toast } = useToast()
   
+  const [mounted, setMounted] = useState(false)
   const [password, setPassword] = useState("")
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
@@ -33,15 +34,16 @@ export default function ControlRoomPage() {
   const [formData, setFormData] = useState({ key: "", displayName: "" })
 
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      initiateAnonymousSignIn(auth)
-    }
-  }, [user, isUserLoading, auth])
-
-  useEffect(() => {
+    setMounted(true)
     const saved = sessionStorage.getItem("control_room_auth")
     if (saved === "true") setIsAuthorized(true)
   }, [])
+
+  useEffect(() => {
+    if (mounted && !isUserLoading && !user) {
+      initiateAnonymousSignIn(auth)
+    }
+  }, [user, isUserLoading, auth, mounted])
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,9 +68,9 @@ export default function ControlRoomPage() {
   }
 
   const keysQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized || !user) return null
+    if (!db || !isAuthorized || !user || !mounted) return null
     return query(collection(db, 'managerKeys'), orderBy('createdAt', 'desc'))
-  }, [db, isAuthorized, user])
+  }, [db, isAuthorized, user, mounted])
 
   const { data: keys, isLoading } = useCollection(keysQuery)
 
@@ -107,7 +109,7 @@ export default function ControlRoomPage() {
 
     setIsResetting(true)
     try {
-      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos']
+      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos', 'coverWorkPosts']
       for (const colName of collections) {
         const snap = await getDocs(collection(db, colName))
         const batch = writeBatch(db)
@@ -124,6 +126,11 @@ export default function ControlRoomPage() {
     }
   }
 
+  // Defer rendering until mounted to prevent hydration mismatch from sessionStorage or extension-injected attributes
+  if (!mounted) {
+    return <div className="min-h-screen bg-background" />
+  }
+
   if (!isAuthorized) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
@@ -138,7 +145,7 @@ export default function ControlRoomPage() {
               <CardDescription>Enter code to manage keys.</CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning>
                 <Input 
                   type="password" 
                   placeholder="Access Code" 
@@ -146,6 +153,7 @@ export default function ControlRoomPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-secondary/50 border-white/5 text-center text-lg tracking-widest"
                   autoFocus
+                  suppressHydrationWarning
                 />
                 <Button type="submit" disabled={isChecking} className="w-full tasks-gradient text-white">
                   {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : "Access System"}

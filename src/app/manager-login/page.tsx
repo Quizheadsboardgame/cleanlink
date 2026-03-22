@@ -24,14 +24,19 @@ export default function ManagerLoginPage() {
   const router = useRouter()
   const { t } = useLanguage()
   
+  const [mounted, setMounted] = useState(false)
   const [accessKey, setAccessKey] = useState("")
   const [isChecking, setIsChecking] = useState(false)
 
   useEffect(() => {
-    if (!isUserLoading && !user) {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (mounted && !isUserLoading && !user) {
       initiateAnonymousSignIn(auth)
     }
-  }, [user, isUserLoading, auth])
+  }, [user, isUserLoading, auth, mounted])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -73,6 +78,10 @@ export default function ManagerLoginPage() {
     }
   }
 
+  if (!mounted) {
+    return <div className="min-h-screen bg-background" />
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -86,7 +95,7 @@ export default function ManagerLoginPage() {
             <CardDescription>Enter your unique site access key to continue.</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning>
               <div className="space-y-2">
                 <Label>Security Access Key</Label>
                 <div className="relative">
@@ -98,6 +107,7 @@ export default function ManagerLoginPage() {
                     className="bg-secondary/50 border-white/5 pl-10 uppercase font-mono h-12"
                     disabled={isChecking}
                     autoFocus
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
