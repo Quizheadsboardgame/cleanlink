@@ -78,7 +78,7 @@ export default function HowToUsePage() {
     },
     {
       title: t.nav.hours,
-      description: "Apply for extra shifts or more permanent hours at your location.",
+      description: "Apply for extra shifts or more permanent hours across our network.",
       icon: Clock,
       color: "text-[#D946EF]",
       bg: "bg-[#D946EF]/10"
