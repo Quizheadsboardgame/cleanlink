@@ -111,6 +111,29 @@ export default function HowToUsePage() {
     }
   ]
 
+  const benefits = [
+    {
+      title: "Fast Responses",
+      description: "Your request is sent instantly to management so they can review it quickly.",
+      icon: Zap
+    },
+    {
+      title: "Live Updates",
+      description: "Track your request from 'Submitted' to 'Complete' in real-time.",
+      icon: LayoutList
+    },
+    {
+      title: "Works on Any Phone",
+      description: "Access CleanLink on your smartphone or tablet while you are at work.",
+      icon: Smartphone
+    },
+    {
+      title: "Earn More",
+      description: "Easily find and apply for extra cover shifts across our entire network.",
+      icon: ShieldCheck
+    }
+  ]
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -152,7 +175,51 @@ export default function HowToUsePage() {
             </div>
           </section>
 
-          {/* Downloadable Resources */}
+          {/* Feature Directory */}
+          <section className="space-y-8">
+            <div className="flex items-center gap-3 justify-center sm:justify-start">
+              <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1 font-mono tracking-widest text-[10px]">WHAT_YOU_CAN_DO</Badge>
+              <h2 className="text-2xl font-bold font-headline">{t.guide.capabilities}</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {features.map((feature, idx) => (
+                <Card key={idx} className="glass-panel hover:bg-white/[0.03] transition-all group">
+                  <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                    <div className={`${feature.bg} p-2.5 rounded-xl group-hover:rotate-6 transition-transform`}>
+                      <feature.icon className={`w-5 h-5 ${feature.color}`} />
+                    </div>
+                    <CardTitle className="text-base font-headline">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-xs text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Benefits Section */}
+          <section className="space-y-8">
+            <div className="flex items-center gap-3 justify-center sm:justify-start">
+              <Badge variant="outline" className="border-lime-500/30 text-lime-400 px-3 py-1 font-mono tracking-widest text-[10px]">KEY_BENEFITS</Badge>
+              <h2 className="text-2xl font-bold font-headline">{t.guide.benefits}</h2>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {benefits.map((benefit, idx) => (
+                <Card key={idx} className="glass-panel p-6 flex gap-4 hover:border-lime-500/20 transition-colors">
+                  <div className="bg-lime-500/10 p-4 rounded-full h-fit">
+                    <benefit.icon className="w-5 h-5 text-lime-400" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-bold font-headline text-lg">{benefit.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{benefit.description}</p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Downloadable Resources - MOVED TO BOTTOM */}
           <section className="space-y-8">
             <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1 font-mono tracking-widest text-[10px]">RESOURCE_CENTER</Badge>
@@ -209,50 +276,6 @@ export default function HowToUsePage() {
             </div>
           </section>
 
-          {/* Feature Directory */}
-          <section className="space-y-8">
-            <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1 font-mono tracking-widest text-[10px]">WHAT_YOU_CAN_DO</Badge>
-              <h2 className="text-2xl font-bold font-headline">{t.guide.capabilities}</h2>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {features.map((feature, idx) => (
-                <Card key={idx} className="glass-panel hover:bg-white/[0.03] transition-all group">
-                  <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                    <div className={`${feature.bg} p-2.5 rounded-xl group-hover:rotate-6 transition-transform`}>
-                      <feature.icon className={`w-5 h-5 ${feature.color}`} />
-                    </div>
-                    <CardTitle className="text-base font-headline">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-xs text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-
-          {/* Benefits Section */}
-          <section className="space-y-8">
-            <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <Badge variant="outline" className="border-lime-500/30 text-lime-400 px-3 py-1 font-mono tracking-widest text-[10px]">KEY_BENEFITS</Badge>
-              <h2 className="text-2xl font-bold font-headline">{t.guide.benefits}</h2>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {benefits.map((benefit, idx) => (
-                <Card key={idx} className="glass-panel p-6 flex gap-4 hover:border-lime-500/20 transition-colors">
-                  <div className="bg-lime-500/10 p-4 rounded-full h-fit">
-                    <benefit.icon className="w-5 h-5 text-lime-400" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-bold font-headline text-lg">{benefit.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{benefit.description}</p>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </section>
-
           {/* Emergency Info Box */}
           <Card className="guide-gradient border-none text-white p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-1000">
@@ -291,26 +314,3 @@ export default function HowToUsePage() {
     </div>
   )
 }
-
-const benefits = [
-  {
-    title: "Fast Responses",
-    description: "Your request is sent instantly to management so they can review it quickly.",
-    icon: Zap
-  },
-  {
-    title: "Live Updates",
-    description: "Track your request from 'Submitted' to 'Complete' in real-time.",
-    icon: LayoutList
-  },
-  {
-    title: "Works on Any Phone",
-    description: "Access CleanLink on your smartphone or tablet while you are at work.",
-    icon: Smartphone
-  },
-  {
-    title: "Earn More",
-    description: "Easily find and apply for extra cover shifts across our entire network.",
-    icon: ShieldCheck
-  }
-]
