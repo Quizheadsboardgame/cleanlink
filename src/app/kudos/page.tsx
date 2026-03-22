@@ -7,7 +7,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, doc, orderBy, limit } from "firebase/firestore"
+import { collection, query, doc, orderBy, limit, where } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Heart, Send, Loader2, Sparkles, User, Users } from "lucide-react"
+import { Heart, Send, Loader2, Sparkles, User, Users, ShieldCheck } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { useLanguage } from "@/context/language-context"
@@ -42,10 +42,26 @@ export default function KudosPage() {
 
   const kudosQuery = useMemoFirebase(() => {
     if (!db || !user) return null
-    return query(collection(db, 'kudos'), orderBy('createdAt', 'desc'), limit(20))
+    // Show only authorized kudos
+    return query(
+      collection(db, 'kudos'), 
+      where('status', '==', 'Authorized'),
+      orderBy('createdAt', 'desc'), 
+      limit(30)
+    )
   }, [db, user])
 
   const { data: kudosItems, isLoading } = useCollection(kudosQuery)
+
+  // Client side filter for 14-day expiry
+  const activeKudos = React.useMemo(() => {
+    if (!kudosItems) return []
+    const now = new Date().getTime()
+    return kudosItems.filter(k => {
+      if (!k.expiresAt) return true // Fallback for old records
+      return new Date(k.expiresAt).getTime() > now
+    })
+  }, [kudosItems])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,10 +79,14 @@ export default function KudosPage() {
       senderName,
       recipientName,
       message,
+      status: 'Pending Review',
       createdAt: new Date().toISOString()
     }, { merge: true })
 
-    toast({ title: t.kudos.successTitle, description: t.kudos.successDesc })
+    toast({ 
+      title: t.kudos.successTitle, 
+      description: "Submitted for moderation. It will appear on the board once approved by a manager." 
+    })
     setIsAdding(false)
     setRecipientName("")
     setMessage("")
@@ -90,7 +110,7 @@ export default function KudosPage() {
                 {t.kudos.title}
               </h1>
               <p className="text-muted-foreground text-lg max-w-md opacity-80">
-                {t.kudos.description}
+                Celebrate your coworkers! Notes are reviewed by management and stay on the board for 14 days.
               </p>
             </div>
 
@@ -142,10 +162,16 @@ export default function KudosPage() {
                       className="bg-secondary/50 border-white/5 min-h-[120px]"
                     />
                   </div>
+                  <div className="bg-primary/5 p-3 rounded-lg border border-primary/10 flex items-start gap-3">
+                    <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    <p className="text-[10px] text-muted-foreground italic leading-relaxed">
+                      To keep the board friendly, all messages are checked by a manager before they appear publicly.
+                    </p>
+                  </div>
                   <DialogFooter>
                     <Button type="submit" disabled={isSubmitting} className="w-full bg-rose-500 hover:bg-rose-600 text-white h-12 rounded-xl font-bold">
                       {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
-                      Publish Kudos
+                      Submit for Moderation
                     </Button>
                   </DialogFooter>
                 </form>
@@ -157,9 +183,9 @@ export default function KudosPage() {
           {(isLoading || isUserLoading) ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <Loader2 className="w-10 h-10 text-rose-400 animate-spin" />
-              <p className="text-muted-foreground">Loading appreciation...</p>
+              <p className="text-muted-foreground">Syncing Board...</p>
             </div>
-          ) : !kudosItems || kudosItems.length === 0 ? (
+          ) : !activeKudos || activeKudos.length === 0 ? (
             <Card className="glass-panel border-dashed py-20 text-center">
               <CardContent className="flex flex-col items-center gap-4">
                 <div className="bg-rose-500/10 p-6 rounded-full">
@@ -170,7 +196,7 @@ export default function KudosPage() {
             </Card>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {kudosItems.map((item) => (
+              {activeKudos.map((item) => (
                 <Card key={item.id} className="glass-panel border-rose-500/10 hover:border-rose-500/30 transition-all group overflow-hidden relative">
                   <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                     <Heart className="w-24 h-24 fill-rose-500" />
@@ -181,7 +207,7 @@ export default function KudosPage() {
                         <Heart className="w-5 h-5 text-rose-400 fill-rose-400" />
                       </div>
                       <span className="text-[10px] text-muted-foreground uppercase tracking-widest">
-                        {format(new Date(item.createdAt), "MMM d, HH:mm")}
+                        {item.authorizedAt ? format(new Date(item.authorizedAt), "MMM d") : format(new Date(item.createdAt), "MMM d")}
                       </span>
                     </div>
                     <CardTitle className="text-xl font-headline mt-4 flex items-center gap-2">
@@ -200,7 +226,7 @@ export default function KudosPage() {
                       </div>
                       <span className="text-xs font-bold text-white/60">From: {item.senderName}</span>
                     </div>
-                    <Badge variant="outline" className="border-rose-500/20 text-rose-400 text-[8px] uppercase">Staff Verified</Badge>
+                    <Badge variant="outline" className="border-rose-500/20 text-rose-400 text-[8px] uppercase">Manager Approved</Badge>
                   </CardFooter>
                 </Card>
               ))}

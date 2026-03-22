@@ -1,16 +1,17 @@
+
 "use client"
 
 import * as React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, doc, orderBy, where, limit } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
-import { format } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard } from "lucide-react"
+import { format, addDays } from "date-fns"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -271,8 +272,14 @@ export default function TasksPage() {
     return query(collection(db, 'coverWorkPosts'), where('managerId', '==', managerId))
   }, [db, managerId, user, isReady])
 
+  const kudosModerationQuery = useMemoFirebase(() => {
+    if (!db || !user || !isReady) return null
+    return query(collection(db, 'kudos'), where('status', '==', 'Pending Review'))
+  }, [db, user, isReady])
+
   const { data: allTasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
+  const { data: pendingKudos, isLoading: isKudosLoading } = useCollection(kudosModerationQuery)
 
   const sortedTasks = React.useMemo(() => {
     if (!allTasks) return []
@@ -311,6 +318,24 @@ export default function TasksPage() {
     toast({ title: "Cover Posted" })
     setIsCreatingCover(false)
     setNewCover({ title: "", location: "", description: "", deadline: "" })
+  }
+
+  const handleAuthorizeKudos = (id: string) => {
+    const kudosRef = doc(db, 'kudos', id)
+    const authorizedAt = new Date().toISOString()
+    const expiresAt = addDays(new Date(), 14).toISOString()
+    
+    updateDocumentNonBlocking(kudosRef, { 
+      status: 'Authorized',
+      authorizedAt,
+      expiresAt
+    })
+    toast({ title: "Kudos Approved", description: "Will be visible for 14 days." })
+  }
+
+  const handleRejectKudos = (id: string) => {
+    deleteDocumentNonBlocking(doc(db, 'kudos', id))
+    toast({ title: "Kudos Removed" })
   }
 
   const handleLogout = () => {
@@ -352,6 +377,9 @@ export default function TasksPage() {
           <TabsList className="bg-secondary/50 border border-white/5 p-1 w-full justify-start h-12 rounded-2xl overflow-x-auto no-scrollbar">
             <TabsTrigger value="tasks" className="rounded-xl flex-1 px-6">Live Tasks</TabsTrigger>
             <TabsTrigger value="broadcast" className="rounded-xl flex-1 px-6">Broadcast</TabsTrigger>
+            <TabsTrigger value="kudos" className="rounded-xl flex-1 px-6 flex items-center gap-2">
+              Kudos {pendingKudos && pendingKudos.length > 0 && <Badge className="bg-rose-500 h-4 w-4 p-0 flex items-center justify-center text-[8px]">{pendingKudos.length}</Badge>}
+            </TabsTrigger>
             <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Analytics</TabsTrigger>
             <TabsTrigger value="cover" className="rounded-xl flex-1 px-6">Cover Work</TabsTrigger>
             <TabsTrigger value="profile" className="rounded-xl flex-1 px-6">Connectivity</TabsTrigger>
@@ -360,6 +388,43 @@ export default function TasksPage() {
           <TabsContent value="profile"><ProfileTab displayName={displayName} /></TabsContent>
           <TabsContent value="broadcast"><BroadcastTab managerId={managerId!} /></TabsContent>
           <TabsContent value="analytics">{sortedTasks.length > 0 ? <AnalyticsTab tasks={sortedTasks} /> : <p className="text-center py-20 italic">Gathering data...</p>}</TabsContent>
+
+          <TabsContent value="kudos" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-headline flex items-center gap-2"><Heart className="w-5 h-5 text-rose-400" /> Kudos Moderation</h2>
+              <p className="text-xs text-muted-foreground">Approve notes for the staff wall.</p>
+            </div>
+            {isKudosLoading ? (
+              <div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-rose-400" /></div>
+            ) : !pendingKudos || pendingKudos.length === 0 ? (
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent className="text-muted-foreground italic">No pending kudos to review.</CardContent></Card>
+            ) : (
+              <div className="grid gap-4">
+                {pendingKudos.map((k) => (
+                  <Card key={k.id} className="glass-panel border-rose-500/10">
+                    <CardContent className="p-6 flex flex-col sm:flex-row justify-between items-start gap-6">
+                      <div className="space-y-3 flex-1">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="text-rose-400 border-rose-400/20">From: {k.senderName}</Badge>
+                          <Badge variant="outline" className="text-rose-400 border-rose-400/20">To: {k.recipientName}</Badge>
+                        </div>
+                        <p className="text-lg italic text-white/90 leading-relaxed">"{k.message}"</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Submitted {format(new Date(k.createdAt), "PPp")}</p>
+                      </div>
+                      <div className="flex sm:flex-col gap-2 shrink-0">
+                        <Button onClick={() => handleAuthorizeKudos(k.id)} className="bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 gap-2 h-10 px-6 font-bold uppercase text-xs">
+                          <CheckCircle2 className="w-4 h-4" /> Authorize
+                        </Button>
+                        <Button onClick={() => handleRejectKudos(k.id)} variant="outline" className="border-red-500/20 text-red-400 hover:bg-red-500/10 gap-2 h-10 px-6 font-bold uppercase text-xs">
+                          <XCircle className="w-4 h-4" /> Reject
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
 
           <TabsContent value="tasks" className="space-y-4">
             {(isTasksLoading || isUserLoading) ? (
