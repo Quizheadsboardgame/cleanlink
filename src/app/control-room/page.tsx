@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -65,9 +64,9 @@ export default function ControlRoomPage() {
   }
 
   const profilesQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized) return null
+    if (!db || !isAuthorized || !user) return null
     return query(collection(db, 'managerProfiles'), orderBy('createdAt', 'desc'))
-  }, [db, isAuthorized])
+  }, [db, isAuthorized, user])
 
   const { data: profiles, isLoading } = useCollection(profilesQuery)
 

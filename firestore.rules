@@ -10,12 +10,12 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Task Management - allow list and get for all authenticated users
+    // Core Collections - Allow authenticated users to interact with infrastructure
+    // These include list operations needed for the dashboards
     match /orderTasks/{taskId} {
       allow read, write: if isSignedIn();
     }
 
-    // Infrastructure & Profiles
     match /managerProfiles/{profileId} {
       allow read, write: if isSignedIn();
     }
@@ -43,7 +43,7 @@ service cloud.firestore {
       allow read, write: if isSignedIn();
     }
 
-    // User Private Data
+    // User Private Data - Strict ownership enforced
     match /users/{userId} {
       allow read, write: if isOwner(userId);
       match /{allSubcollections=**} {

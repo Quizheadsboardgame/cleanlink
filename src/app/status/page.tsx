@@ -96,7 +96,7 @@ export default function StatusBoardPage() {
   const db = useFirestore()
   const auth = useAuth()
   const { t } = useLanguage()
-  const { managerId, isManagerLinked } = useManagerContext()
+  const { managerId } = useManagerContext()
   const [authStatus, setAuthStatus] = useState<'loading' | 'authorized' | 'unauthorized'>('loading')
 
   useEffect(() => {
