@@ -10,7 +10,7 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus, ShieldAlert } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus, ShieldAlert, Lock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/context/language-context"
@@ -104,6 +104,7 @@ export default function StatusBoardPage() {
   const db = useFirestore()
   const auth = useAuth()
   const { t } = useLanguage()
+  const [isAuthorized, setIsAuthorized] = useState(false)
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -111,12 +112,30 @@ export default function StatusBoardPage() {
     }
   }, [user, isUserLoading, auth])
 
+  useEffect(() => {
+    const savedAuth = sessionStorage.getItem("portalflow_auth")
+    if (savedAuth === "true") {
+      setIsAuthorized(true)
+    }
+  }, [])
+
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !user) return null
     return query(collection(db, 'orderTasks'), orderBy('createdAt', 'desc'), limit(50))
   }, [db, user])
 
-  const { data: tasks, isLoading } = useCollection(tasksQuery)
+  const { data: allTasks, isLoading } = useCollection(tasksQuery)
+
+  // Filter out Staff Concerns for non-managers
+  const tasks = React.useMemo(() => {
+    if (!allTasks) return null;
+    return allTasks.filter(task => {
+      if (task.type === 'Staff Concern') {
+        return isAuthorized;
+      }
+      return true;
+    });
+  }, [allTasks, isAuthorized]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -127,6 +146,12 @@ export default function StatusBoardPage() {
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold font-headline status-text-gradient">{t.status.title}</h1>
             <p className="text-muted-foreground">{t.status.description}</p>
+            {isAuthorized && (
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-primary/20 mt-2">
+                <Lock className="w-3 h-3" />
+                Management View Active
+              </div>
+            )}
           </div>
 
           {(isLoading || isUserLoading) ? (
