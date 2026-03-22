@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -227,15 +226,16 @@ function BroadcastTab({ managerId }: { managerId: string }) {
   )
 }
 
-function ProfileTab({ managerId }: { managerId: string }) {
+function ProfileTab({ displayName }: { displayName: string }) {
   const [copied, setCopied] = useState(false)
   const [staffUrl, setStaffUrl] = useState("")
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setStaffUrl(`${window.location.origin}/?m=${managerId}`)
+      // Use display name instead of key to avoid exposing internal credentials in URL
+      setStaffUrl(`${window.location.origin}/?m=${encodeURIComponent(displayName)}`)
     }
-  }, [managerId])
+  }, [displayName])
 
   const copyLink = () => {
     navigator.clipboard.writeText(staffUrl)
@@ -250,7 +250,7 @@ function ProfileTab({ managerId }: { managerId: string }) {
           <CardTitle className="text-xl font-headline flex items-center gap-2">
             <Link2 className="w-5 h-5 text-primary" /> Your Exclusive Staff Link
           </CardTitle>
-          <CardDescription>Share this link with your staff. When they use it, their tasks will link directly to your dashboard.</CardDescription>
+          <CardDescription>Share this link with your staff. It uses your name to keep your access key private.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-2">
@@ -261,7 +261,7 @@ function ProfileTab({ managerId }: { managerId: string }) {
           </div>
           <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Tip:</strong> Send this link to your staff via text or messaging app. Once they open it, their browser will be automatically linked to your management profile via your unique key.
+              <strong>Security Protocol:</strong> This link now identifies your site profile by name ({displayName}) instead of exposing your alphanumeric key. This ensures your dashboard access remains secure.
             </p>
           </div>
         </CardContent>
@@ -305,8 +305,10 @@ export default function TasksPage() {
       // Small delay to allow session storage to be populated if just coming from login
       const timer = setTimeout(() => {
         const retryId = sessionStorage.getItem("manager_auth_token")
+        const retryName = sessionStorage.getItem("manager_display_name")
         if (retryId) {
           setManagerId(retryId)
+          setDisplayName(retryName || "Manager")
           setIsReady(true)
         } else {
           router.push('/manager-login')
@@ -459,7 +461,7 @@ export default function TasksPage() {
           </TabsList>
 
           <TabsContent value="profile">
-            <ProfileTab managerId={managerId!} />
+            <ProfileTab displayName={displayName} />
           </TabsContent>
 
           <TabsContent value="broadcast">
