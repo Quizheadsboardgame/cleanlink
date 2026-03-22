@@ -20,22 +20,6 @@ import { format } from "date-fns"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 
-// Helper to calculate distance between two GPS coordinates in metres
-function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371e3; // Earth's radius in metres
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δφ = (lat2 - lat1) * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
-}
-
 export default function ClockingPage() {
   const { user, isUserLoading } = useUser()
   const db = useFirestore()
@@ -146,21 +130,6 @@ export default function ClockingPage() {
       return
     }
 
-    const distance = getDistance(
-      activeLog.inLocation.lat, activeLog.inLocation.lng,
-      coords.lat, coords.lng
-    )
-
-    // Range checked in metres (UK Standard)
-    if (distance > 10) {
-      toast({ 
-        variant: "destructive", 
-        title: "Out of Range", 
-        description: `${t.clocking.outOfRange} (Current distance: ${Math.round(distance)} metres)` 
-      })
-      return
-    }
-
     setIsProcessing(true)
     const logRef = doc(db, 'clockLogs', activeLog.id)
     updateDocumentNonBlocking(logRef, {
@@ -264,11 +233,6 @@ export default function ClockingPage() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                  
-                  <p className="text-[10px] text-center text-muted-foreground italic">
-                    <AlertTriangle className="w-3 h-3 inline mr-1" />
-                    {t.clocking.outOfRange}
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -306,7 +270,7 @@ export default function ClockingPage() {
                   <div className="flex items-start gap-3">
                     <MapIcon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      <strong>Location Tracking:</strong> We record your GPS location when you clock in. You must be in this location to clock out later.
+                      <strong>Location Tracking:</strong> We record your coordinates when you clock in and out for verification.
                     </p>
                   </div>
                   {gpsError && (
