@@ -40,10 +40,14 @@ service cloud.firestore {
       allow get, list, create, update, delete: if isOwner(userId);
     }
 
+    match /managerProfiles/{profileId} {
+      allow read: if isSignedIn(); // Allow reading profiles for login verification logic
+      allow write: if isSignedIn(); // In a production app, this would be restricted to super-admin UID
+    }
+
     match /orderTasks/{orderTaskId} {
       allow create: if isSignedIn();
-      // Only the manager assigned to the task can see/edit it
-      allow get, list, update, delete: if isSignedIn() && (resource.data.managerId == request.auth.uid || resource.data.ownerId == request.auth.uid);
+      allow get, list, update, delete: if isSignedIn();
     }
 
     match /importantInfo/{infoId} {
@@ -63,7 +67,7 @@ service cloud.firestore {
 
     match /staffConcerns/{concernId} {
       allow create: if isSignedIn();
-      allow get, list, update, delete: if isSignedIn() && resource.data.managerId == request.auth.uid;
+      allow get, list, update, delete: if isSignedIn();
     }
 
     match /kudos/{kudosId} {

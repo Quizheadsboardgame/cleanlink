@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,7 +11,7 @@ import { collection, query, doc, setDoc, orderBy, limit, where } from "firebase/
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts'
+import { useRouter } from "next/navigation"
 
 function ResponseList({ postId }: { postId: string }) {
   const db = useFirestore()
@@ -262,15 +264,14 @@ export default function TasksPage() {
   const db = useFirestore()
   const auth = useAuth()
   const { toast } = useToast()
+  const router = useRouter()
   
-  const [password, setPassword] = useState("")
-  const [isAuthorized, setIsAuthorized] = useState(false)
-  const [isChecking, setIsChecking] = useState(false)
+  const [managerId, setManagerId] = useState<string | null>(null)
+  const [displayName, setDisplayName] = useState("")
   const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
   const [notificationsEnabled, setNotificationsEnabled] = useState(false)
   const lastTaskCountRef = useRef<number>(0)
 
-  // Cover Work Creation State
   const [isCreatingCover, setIsCreatingCover] = useState(false)
   const [newCover, setNewCover] = useState({ title: "", location: "", description: "", deadline: "" })
 
@@ -281,15 +282,19 @@ export default function TasksPage() {
   }, [user, isUserLoading, auth])
 
   useEffect(() => {
-    const savedAuth = sessionStorage.getItem("portalflow_auth")
-    if (savedAuth === "true") {
-      setIsAuthorized(true)
+    const savedId = sessionStorage.getItem("manager_auth_token")
+    const savedName = sessionStorage.getItem("manager_display_name")
+    if (savedId) {
+      setManagerId(savedId)
+      setDisplayName(savedName || "Manager")
+    } else {
+      router.push('/manager-login')
     }
     
     if ('Notification' in window) {
       setNotificationsEnabled(Notification.permission === 'granted')
     }
-  }, [])
+  }, [router])
 
   const requestNotificationPermission = () => {
     if (!('Notification' in window)) return
@@ -301,33 +306,15 @@ export default function TasksPage() {
     })
   }
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsChecking(true)
-    
-    setTimeout(() => {
-      // Logic: For this prototype, any user with the correct code is treated as a unique manager based on their UID
-      if (password === "Harley") {
-        setIsAuthorized(true)
-        sessionStorage.setItem("portalflow_auth", "true")
-        toast({ title: "Access Granted", description: "Welcome back." })
-      } else {
-        toast({ variant: "destructive", title: "Invalid Password", description: "Try again." })
-      }
-      setIsChecking(false)
-    }, 600)
-  }
-
-  // Data queries - FILTED BY MANAGER ID
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized || !user) return null
-    return query(collection(db, 'orderTasks'), where('managerId', '==', user.uid), orderBy('createdAt', 'desc'))
-  }, [db, isAuthorized, user])
+    if (!db || !managerId) return null
+    return query(collection(db, 'orderTasks'), where('managerId', '==', managerId), orderBy('createdAt', 'desc'))
+  }, [db, managerId])
 
   const coverPostsQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized || !user) return null
-    return query(collection(db, 'coverWorkPosts'), where('managerId', '==', user.uid))
-  }, [db, isAuthorized, user])
+    if (!db || !managerId) return null
+    return query(collection(db, 'coverWorkPosts'), where('managerId', '==', managerId))
+  }, [db, managerId])
 
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
@@ -372,7 +359,7 @@ export default function TasksPage() {
     
     setDoc(postRef, {
       id: postId,
-      managerId: user?.uid,
+      managerId: managerId,
       ...newCover,
       deadline: new Date(newCover.deadline).toISOString(),
       createdAt: new Date().toISOString()
@@ -383,40 +370,13 @@ export default function TasksPage() {
     setNewCover({ title: "", location: "", description: "", deadline: "" })
   }
 
-  if (!isAuthorized) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <Navbar />
-        <main className="flex-1 flex items-center justify-center p-4">
-          <Card className="glass-panel w-full max-w-md border-none shadow-2xl">
-            <CardHeader className="text-center space-y-1">
-              <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
-                <Lock className="w-6 h-6 text-primary" />
-              </div>
-              <CardTitle className="text-2xl font-headline tasks-text-gradient">Manager Area</CardTitle>
-              <CardDescription>Enter code to unlock your dashboard.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleLogin} className="space-y-4">
-                <Input 
-                  type="password" 
-                  placeholder="Enter Code" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-secondary/50 border-white/5 text-center text-lg tracking-widest text-white"
-                  autoFocus
-                />
-                <Button type="submit" disabled={isChecking} className="w-full tasks-gradient text-white h-12 rounded-xl">
-                  {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : "Unlock Dashboard"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
-    )
+  const handleLogout = () => {
+    sessionStorage.removeItem("manager_auth_token")
+    sessionStorage.removeItem("manager_display_name")
+    router.push('/')
   }
+
+  if (!managerId) return null
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -425,20 +385,25 @@ export default function TasksPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-5xl">
         <div className="mb-8 flex flex-col sm:flex-row justify-between items-end gap-4">
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Your Dashboard</h1>
-            <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Profile ID: {user?.uid.substring(0, 8)}</p>
+            <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Welcome, {displayName}</h1>
+            <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Manager ID: {managerId.substring(0, 8)}</p>
           </div>
-          <Button 
-            variant="outline" 
-            onClick={requestNotificationPermission}
-            className={cn(
-              "rounded-xl border-white/10 h-10 gap-2 font-bold uppercase text-[10px] tracking-widest",
-              notificationsEnabled ? "bg-green-500/10 text-green-400 border-green-500/20" : "bg-white/5 text-muted-foreground"
-            )}
-          >
-            {notificationsEnabled ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
-            {notificationsEnabled ? "Alerts: ON" : "Enable Alerts"}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={requestNotificationPermission}
+              className={cn(
+                "rounded-xl border-white/10 h-10 gap-2 font-bold uppercase text-[10px] tracking-widest",
+                notificationsEnabled ? "bg-green-500/10 text-green-400 border-green-500/20" : "bg-white/5 text-muted-foreground"
+              )}
+            >
+              {notificationsEnabled ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+              {notificationsEnabled ? "Alerts: ON" : "Enable Alerts"}
+            </Button>
+            <Button variant="ghost" onClick={handleLogout} className="rounded-xl h-10 text-muted-foreground hover:text-white">
+              <LogOut className="w-4 h-4 mr-2" /> Logout
+            </Button>
+          </div>
         </div>
 
         <Tabs defaultValue="tasks" className="space-y-6">
@@ -451,11 +416,11 @@ export default function TasksPage() {
           </TabsList>
 
           <TabsContent value="profile">
-            {user && <ProfileTab managerId={user.uid} />}
+            <ProfileTab managerId={managerId} />
           </TabsContent>
 
           <TabsContent value="broadcast">
-            {user && <BroadcastTab managerId={user.uid} />}
+            <BroadcastTab managerId={managerId} />
           </TabsContent>
 
           <TabsContent value="analytics">
