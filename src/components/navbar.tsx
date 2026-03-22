@@ -21,7 +21,12 @@ import {
   Heart, 
   Lock, 
   LayoutDashboard,
-  ChevronRight
+  ChevronRight,
+  ClipboardList,
+  Users,
+  Search,
+  HelpCircle,
+  ShieldCheck
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -32,13 +37,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuPortal
 } from "@/components/ui/dropdown-menu"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import placeholderData from "@/app/lib/placeholder-images.json"
@@ -96,115 +102,144 @@ export function Navbar() {
 
                   <DropdownMenuSeparator className="bg-white/5" />
 
-                  {/* Daily Tasks Group */}
-                  <DropdownMenuLabel className="px-4 py-2 text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/60">
-                    {t.nav.groupOps}
-                  </DropdownMenuLabel>
-                  <Link href="/stores">
-                    <DropdownMenuItem className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl mb-0.5",
-                      pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5"
-                    )}>
-                      <PlusCircle className="w-4 h-4 text-[#6E76F5]" />
-                      <span className="text-sm">{t.nav.stores}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/faulty-equipment">
-                    <DropdownMenuItem className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl mb-0.5",
-                      pathname === "/faulty-equipment" ? "bg-white/10" : "hover:bg-white/5"
-                    )}>
-                      <Hammer className="w-4 h-4 text-[#F59E0B]" />
-                      <span className="text-sm">{t.nav.faulty}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/incomplete-task">
-                    <DropdownMenuItem className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl",
-                      pathname === "/incomplete-task" ? "bg-white/10" : "hover:bg-white/5"
-                    )}>
-                      <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
-                      <span className="text-sm">{t.nav.incomplete}</span>
-                    </DropdownMenuItem>
-                  </Link>
+                  <Accordion type="single" collapsible className="w-full">
+                    {/* Daily Tasks Group */}
+                    <AccordionItem value="workplace" className="border-none">
+                      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
+                        <div className="flex items-center gap-3 text-muted-foreground group-data-[state=open]:text-white">
+                          <ClipboardList className="w-4 h-4 text-[#6E76F5]" />
+                          <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupOps}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                        <Link href="/stores">
+                          <DropdownMenuItem className={cn(
+                            "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg",
+                            pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5"
+                          )}>
+                            <PlusCircle className="w-4 h-4 text-[#6E76F5]" />
+                            <span className="text-sm">{t.nav.stores}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/faulty-equipment">
+                          <DropdownMenuItem className={cn(
+                            "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg",
+                            pathname === "/faulty-equipment" ? "bg-white/10" : "hover:bg-white/5"
+                          )}>
+                            <Hammer className="w-4 h-4 text-[#F59E0B]" />
+                            <span className="text-sm">{t.nav.faulty}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/incomplete-task">
+                          <DropdownMenuItem className={cn(
+                            "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg",
+                            pathname === "/incomplete-task" ? "bg-white/10" : "hover:bg-white/5"
+                          )}>
+                            <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
+                            <span className="text-sm">{t.nav.incomplete}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                  {/* Staff Services Group */}
-                  <DropdownMenuSeparator className="bg-white/5" />
-                  <DropdownMenuLabel className="px-4 py-2 text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/60">
-                    {t.nav.groupStaff}
-                  </DropdownMenuLabel>
-                  <Link href="/additional-hours">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5 mb-0.5">
-                      <Clock className="w-4 h-4 text-[#D946EF]" />
-                      <span className="text-sm">{t.nav.hours}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/cover-work">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5 mb-0.5">
-                      <CalendarDays className="w-4 h-4 text-[#0EA5E9]" />
-                      <span className="text-sm">{t.nav.cover}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/referral">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5 mb-0.5">
-                      <UserPlus className="w-4 h-4 text-[#FACC15]" />
-                      <span className="text-sm">{t.nav.referral}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/kudos">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5">
-                      <Heart className="w-4 h-4 text-rose-400" />
-                      <span className="text-sm">{t.nav.kudos}</span>
-                    </DropdownMenuItem>
-                  </Link>
+                    {/* Staff Services Group */}
+                    <AccordionItem value="staff" className="border-none">
+                      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
+                        <div className="flex items-center gap-3 text-muted-foreground">
+                          <Users className="w-4 h-4 text-[#D946EF]" />
+                          <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupStaff}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                        <Link href="/additional-hours">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <Clock className="w-4 h-4 text-[#D946EF]" />
+                            <span className="text-sm">{t.nav.hours}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/cover-work">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <CalendarDays className="w-4 h-4 text-[#0EA5E9]" />
+                            <span className="text-sm">{t.nav.cover}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/referral">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <UserPlus className="w-4 h-4 text-[#FACC15]" />
+                            <span className="text-sm">{t.nav.referral}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/kudos">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <Heart className="w-4 h-4 text-rose-400" />
+                            <span className="text-sm">{t.nav.kudos}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                  {/* Tracking & Privacy Group */}
-                  <DropdownMenuSeparator className="bg-white/5" />
-                  <DropdownMenuLabel className="px-4 py-2 text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/60">
-                    {t.nav.groupTrack}
-                  </DropdownMenuLabel>
-                  <Link href="/status">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5 mb-0.5">
-                      <LayoutList className="w-4 h-4 text-white" />
-                      <span className="text-sm">{t.nav.status}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/report-concern">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5">
-                      <ShieldAlert className="w-4 h-4 text-red-500" />
-                      <span className="text-sm">{t.nav.concern}</span>
-                    </DropdownMenuItem>
-                  </Link>
+                    {/* Tracking & Privacy Group */}
+                    <AccordionItem value="tracking" className="border-none">
+                      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
+                        <div className="flex items-center gap-3 text-muted-foreground">
+                          <Search className="w-4 h-4 text-white" />
+                          <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupTrack}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                        <Link href="/status">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <LayoutList className="w-4 h-4 text-white" />
+                            <span className="text-sm">{t.nav.status}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/report-concern">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <ShieldAlert className="w-4 h-4 text-red-500" />
+                            <span className="text-sm">{t.nav.concern}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                  {/* Info & Support Group */}
-                  <DropdownMenuSeparator className="bg-white/5" />
-                  <DropdownMenuLabel className="px-4 py-2 text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/60">
-                    {t.nav.groupInfo}
-                  </DropdownMenuLabel>
-                  <Link href="/important-info">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5 mb-0.5">
-                      <Info className="w-4 h-4 text-orange-500" />
-                      <span className="text-sm">{t.nav.info}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/how-to-use">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5 mb-0.5">
-                      <BookOpen className="w-4 h-4 text-[#84CC16]" />
-                      <span className="text-sm">{t.nav.guide}</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/language">
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl hover:bg-white/5">
-                      <Languages className="w-4 h-4 text-primary" />
-                      <span className="text-sm">{t.nav.language}</span>
-                    </DropdownMenuItem>
-                  </Link>
+                    {/* Info & Support Group */}
+                    <AccordionItem value="help" className="border-none">
+                      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
+                        <div className="flex items-center gap-3 text-muted-foreground">
+                          <HelpCircle className="w-4 h-4 text-orange-500" />
+                          <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupInfo}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                        <Link href="/important-info">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <Info className="w-4 h-4 text-orange-500" />
+                            <span className="text-sm">{t.nav.info}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/how-to-use">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <BookOpen className="w-4 h-4 text-[#84CC16]" />
+                            <span className="text-sm">{t.nav.guide}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/language">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <Languages className="w-4 h-4 text-primary" />
+                            <span className="text-sm">{t.nav.language}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
 
                   {/* Management at the very bottom */}
                   <DropdownMenuSeparator className="bg-white/10 h-px my-4" />
-                  <DropdownMenuLabel className="px-4 py-2 text-[10px] uppercase tracking-[0.2em] font-bold text-primary/60">
-                    {t.nav.groupAdmin}
-                  </DropdownMenuLabel>
+                  <div className="px-4 py-2">
+                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary/60">
+                      {t.nav.groupAdmin}
+                    </span>
+                  </div>
                   <Link href={isManagerAuthorized ? "/tasks" : "/manager-login"}>
                     <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-primary/5 transition-colors border border-primary/10">
                       {isManagerAuthorized ? <LayoutDashboard className="w-5 h-5 text-primary" /> : <Lock className="w-5 h-5 text-primary" />}
