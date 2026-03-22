@@ -10,22 +10,37 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Shared Infrastructure - Allow read to all authenticated users to prevent hydration/race crashes
-    // Siloing is enforced at the application query level via managerId
+    // Manager access keys - used for site linking and portal entry
     match /managerKeys/{keyId} {
       allow read: if true;
       allow write: if isSignedIn();
     }
 
+    // Tasks for management visibility (Orders, Reports, Inquiries)
+    // Siloing is enforced at the application query level via managerId
     match /orderTasks/{taskId} {
       allow read, write: if true;
     }
 
+    // Public staff appreciation board
+    // Filtered by 'Authorized' status in the UI
+    match /kudos/{kudosId} {
+      allow read, write: if true;
+    }
+
+    // Management announcements and site-specific protocols
     match /importantInfo/{infoId} {
       allow read: if true;
       allow write: if isSignedIn();
     }
 
+    // Global system alerts scrolling banner
+    match /systemAlerts/{alertId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Cover work opportunities and staff responses
     match /coverWorkPosts/{postId} {
       allow read: if true;
       allow write: if isSignedIn();
@@ -34,20 +49,12 @@ service cloud.firestore {
       }
     }
 
+    // Private staff concern reports
     match /staffConcerns/{concernId} {
       allow read, write: if true;
     }
 
-    match /kudos/{kudosId} {
-      allow read, write: if true;
-    }
-
-    match /systemAlerts/{alertId} {
-      allow read: if true;
-      allow write: if isSignedIn();
-    }
-
-    // User Private Data - Strict ownership enforced
+    // User Private Data - Strict ownership enforced for personal request copies
     match /users/{userId} {
       allow read, write: if isOwner(userId);
       match /{allSubcollections=**} {
