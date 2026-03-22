@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -6,8 +5,8 @@ import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, where, limit } from "firebase/firestore"
+import { useFirestore, useUser, useAuth } from "@/firebase"
+import { collection, query, where, limit, getDocs } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -39,13 +38,16 @@ export default function ManagerLoginPage() {
     e.preventDefault()
     if (!username || !password) return
     
+    // Ensure we have a user (anonymous session) before querying
+    if (!user) {
+      toast({ variant: "destructive", title: "Wait", description: "System is still connecting. Please try again in a second." })
+      return
+    }
+
     setIsChecking(true)
     
-    // In a prototype, we fetch the profiles matching the username
-    // and check password manually.
     try {
-      const { getDocs, query, collection, where, limit } = await import("firebase/firestore")
-      const q = query(collection(db, 'managerProfiles'), where('username', '==', username), limit(1))
+      const q = query(collection(db, 'managerProfiles'), where('username', '==', username.trim()), limit(1))
       const snap = await getDocs(q)
       
       if (!snap.empty) {
@@ -61,8 +63,9 @@ export default function ManagerLoginPage() {
       } else {
         toast({ variant: "destructive", title: "Error", description: "Manager profile not found." })
       }
-    } catch (err) {
-      toast({ variant: "destructive", title: "Connection Error", description: "Check your internet." })
+    } catch (err: any) {
+      console.error("Login Error:", err)
+      toast({ variant: "destructive", title: "Connection Error", description: err.message || "Failed to contact security server." })
     } finally {
       setIsChecking(false)
     }
@@ -91,6 +94,7 @@ export default function ManagerLoginPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="bg-secondary/50 border-white/5 pl-10"
+                    disabled={isChecking}
                   />
                 </div>
               </div>
@@ -104,12 +108,16 @@ export default function ManagerLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="bg-secondary/50 border-white/5 pl-10"
+                    disabled={isChecking}
                   />
                 </div>
               </div>
-              <Button type="submit" disabled={isChecking} className="w-full tasks-gradient text-white h-12 rounded-xl mt-4">
+              <Button type="submit" disabled={isChecking || !user} className="w-full tasks-gradient text-white h-12 rounded-xl mt-4">
                 {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
               </Button>
+              {!user && !isUserLoading && (
+                <p className="text-[10px] text-red-400 text-center mt-2 animate-pulse">Initializing Secure Connection...</p>
+              )}
             </form>
           </CardContent>
         </Card>

@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -7,11 +6,11 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, doc, setDoc, orderBy, limit, where } from "firebase/firestore"
+import { collection, query, doc, orderBy, where, limit } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut } from "lucide-react"
+import { CheckCircle2, Clock, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -70,7 +69,7 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
   const dataBySite = React.useMemo(() => {
     const counts: Record<string, number> = {}
     tasks.forEach(t => {
-      const siteMatch = t.description.match(/Site:\s*([^.]+)/)
+      const siteMatch = t.description?.match(/Site:\s*([^.]+)/) || t.description?.match(/at\s*([^.]+)/)
       const siteName = siteMatch ? siteMatch[1].trim() : 'Unknown'
       counts[siteName] = (counts[siteName] || 0) + 1
     })
@@ -287,14 +286,14 @@ export default function TasksPage() {
     if (savedId) {
       setManagerId(savedId)
       setDisplayName(savedName || "Manager")
-    } else {
+    } else if (!isUserLoading) {
       router.push('/manager-login')
     }
     
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setNotificationsEnabled(Notification.permission === 'granted')
     }
-  }, [router])
+  }, [router, isUserLoading])
 
   const requestNotificationPermission = () => {
     if (typeof window === 'undefined' || !('Notification' in window)) return
@@ -306,15 +305,16 @@ export default function TasksPage() {
     })
   }
 
+  // Ensure user is signed in before querying to avoid permission errors
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !managerId) return null
+    if (!db || !managerId || !user) return null
     return query(collection(db, 'orderTasks'), where('managerId', '==', managerId), orderBy('createdAt', 'desc'))
-  }, [db, managerId])
+  }, [db, managerId, user])
 
   const coverPostsQuery = useMemoFirebase(() => {
-    if (!db || !managerId) return null
+    if (!db || !managerId || !user) return null
     return query(collection(db, 'coverWorkPosts'), where('managerId', '==', managerId))
-  }, [db, managerId])
+  }, [db, managerId, user])
 
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
@@ -375,7 +375,14 @@ export default function TasksPage() {
     router.push('/')
   }
 
-  if (!managerId) return null
+  if (!managerId) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background items-center justify-center">
+        <Loader2 className="animate-spin w-10 h-10 text-primary" />
+        <p className="mt-4 text-muted-foreground">Redirecting to login...</p>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -427,7 +434,7 @@ export default function TasksPage() {
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-4">
-            {(isTasksLoading) ? (
+            {(isTasksLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
             ) : !tasks || tasks.length === 0 ? (
               <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks for your profile.</CardContent></Card>
@@ -444,7 +451,7 @@ export default function TasksPage() {
                             {task.title}
                           </CardTitle>
                           <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(task.createdAt), "PPp")}</span>
+                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {task.createdAt ? format(new Date(task.createdAt), "PPp") : 'Just now'}</span>
                             <Badge variant="outline" className="border-white/10 uppercase tracking-tighter">{task.type}</Badge>
                             <Badge className={cn("text-[10px] h-5", task.status === 'Completed' ? "bg-green-500/20 text-green-400" : "bg-primary/20 text-primary")}>
                               {task.status}
@@ -455,7 +462,7 @@ export default function TasksPage() {
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
-                      <p className="text-sm text-muted-foreground bg-white/5 p-3 rounded-lg border border-white/5">{task.description}</p>
+                      <p className="text-sm text-muted-foreground bg-white/5 p-3 rounded-lg border border-white/5 leading-relaxed">{task.description}</p>
                       <div className="space-y-2">
                         <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1"><MessageSquare className="w-3 h-3" /> Manager Feedback</Label>
                         <Input placeholder="Update staff board..." value={managerNotes[task.id] ?? task.managerNote ?? ""} onChange={(e) => setManagerNotes({...managerNotes, [task.id]: e.target.value})} className="bg-secondary/30 border-white/5 h-9 text-sm" />
@@ -496,7 +503,7 @@ export default function TasksPage() {
               </Dialog>
             </div>
 
-            {(isCoverLoading) ? (
+            {(isCoverLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-sky-400" /></div>
             ) : !coverPosts || coverPosts.length === 0 ? (
               <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No cover posts for your profile.</CardContent></Card>
