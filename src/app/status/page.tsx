@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -143,7 +142,6 @@ export default function StatusBoardPage() {
     if (!allTasks) return null;
     return allTasks.filter(task => {
       // Hide other people's concerns from the manager on the public status board
-      // Managers should use the dedicated /tasks dashboard for full oversight
       if (task.type === 'Staff Concern') {
         return isAuthorized || task.ownerId === user?.uid;
       }
