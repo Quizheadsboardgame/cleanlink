@@ -107,6 +107,7 @@ export default function StatusBoardPage() {
   }, [user, isUserLoading, auth])
 
   useEffect(() => {
+    // Robustly check for management tokens
     const managerToken = sessionStorage.getItem("manager_auth_token")
     const controlToken = sessionStorage.getItem("control_room_auth")
     if (managerToken || controlToken === "true") {
@@ -119,6 +120,8 @@ export default function StatusBoardPage() {
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !user || authStatus === 'loading') return null
     
+    // We strictly wait until authStatus is determined before running the query
+    // to prevent permission errors from unauthorized initial states.
     const currentM = managerId || "generic"
     
     if (authStatus === 'authorized') {
@@ -144,6 +147,7 @@ export default function StatusBoardPage() {
   const tasks = React.useMemo(() => {
     if (!allTasks) return null;
     return allTasks.filter(task => {
+      // Secondary safety check for sensitive tasks
       if (task.type === 'Staff Concern') {
         return authStatus === 'authorized' || task.ownerId === user?.uid;
       }
