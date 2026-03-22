@@ -56,7 +56,7 @@ export default function HomeHub() {
               <span className="text-xs font-bold uppercase tracking-[0.3em]">System Online</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold font-headline portal-text-gradient tracking-tighter">
-              The Cleaners Cupboard
+              My Tidy Tracker
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto opacity-80">
               Select a task below to begin your digital workflow.

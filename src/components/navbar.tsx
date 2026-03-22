@@ -241,7 +241,7 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-primary animate-pulse hidden sm:block" />
               <span className="text-2xl sm:text-4xl lg:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
-                The Cleaners Cupboard
+                My Tidy Tracker
               </span>
             </div>
             <div className="flex items-center gap-1.5 mt-2.5">

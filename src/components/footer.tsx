@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from "next/link"
@@ -32,7 +33,7 @@ export function Footer() {
         {/* Brand info on the right */}
         <div className="flex flex-col items-center md:items-end gap-3 text-center md:text-right">
           <div className="flex flex-col gap-1">
-            <span className="text-2xl sm:text-3xl font-bold font-headline portal-text-gradient tracking-tighter">The Cleaners Cupboard</span>
+            <span className="text-2xl sm:text-3xl font-bold font-headline portal-text-gradient tracking-tighter">My Tidy Tracker</span>
             <div className="flex items-center justify-center md:justify-end gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.3em]">
               <Sparkles className="w-3 h-3" />
               <span>{t.footer.tagline}</span>

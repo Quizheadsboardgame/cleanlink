@@ -266,7 +266,7 @@ export default function StatusBoardPage() {
                       )}
                     </div>
                     <CardFooter className="p-4 pt-2 border-t border-white/5 bg-white/[0.01] flex justify-between items-center text-[8px] text-muted-foreground uppercase tracking-[0.2em]">
-                      <span>The Cleaners Cupboard</span>
+                      <span>My Tidy Tracker</span>
                       <span>{task.createdAt ? format(new Date(task.createdAt), "yyyy") : '2024'}</span>
                     </CardFooter>
                   </Card>
