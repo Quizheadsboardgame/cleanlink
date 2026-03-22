@@ -1,7 +1,7 @@
-
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { StockOrderForm } from "@/components/stock-order-form"
+import { Suspense } from "react"
 
 export default function StoresPage() {
   return (
@@ -13,7 +13,9 @@ export default function StoresPage() {
           <h1 className="text-3xl font-bold font-headline stores-text-gradient">Stores Order</h1>
           <p className="text-muted-foreground">Submit a new stock request for your site.</p>
         </div>
-        <StockOrderForm />
+        <Suspense fallback={<div className="flex items-center justify-center py-20"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+          <StockOrderForm />
+        </Suspense>
       </main>
 
       <Footer />
