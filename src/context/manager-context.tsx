@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useFirestore } from '@/firebase';
 import { collection, query, where, limit, getDocs } from 'firebase/firestore';
@@ -23,9 +23,11 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
   const [isManagerAuthorized, setIsManagerAuthorized] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const searchParams = useSearchParams();
+  const hasResolved = useRef(false);
 
   useEffect(() => {
     const resolveManager = async () => {
+      if (hasResolved.current) return;
       setIsMounted(true);
       
       // 1. Check for logged-in manager session (takes priority)
@@ -35,6 +37,7 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
         setManagerIdState(authToken);
         setManagerNameState(authName || "Manager");
         setIsManagerAuthorized(true);
+        hasResolved.current = true;
         return;
       }
 
@@ -42,7 +45,6 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
       const mParam = searchParams.get('m');
       if (mParam && db) {
         try {
-          // Resolve Display Name to the actual internal Key (managerId)
           const q = query(
             collection(db, 'managerKeys'),
             where('displayName', '==', decodeURIComponent(mParam)),
@@ -53,20 +55,22 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
           if (!snap.empty) {
             const data = snap.docs[0].data();
             setManagerId(data.key, data.displayName); 
+            hasResolved.current = true;
             return;
           }
         } catch (err) {
-          console.error("Failed to resolve manager name:", err);
+          console.error("Manager resolution failed:", err);
         }
       }
 
-      // 3. Check LocalStorage for saved internal ID (linked cleaner persistence)
+      // 3. Check LocalStorage for saved internal ID
       const savedId = localStorage.getItem('cupboard_manager_id');
       const savedName = localStorage.getItem('cupboard_manager_name');
       if (savedId) {
         setManagerIdState(savedId);
         setManagerNameState(savedName || "Linked Manager");
       }
+      hasResolved.current = true;
     };
 
     resolveManager();

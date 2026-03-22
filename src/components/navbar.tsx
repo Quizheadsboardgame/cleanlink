@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -21,12 +20,10 @@ import {
   Heart, 
   Lock, 
   LayoutDashboard,
-  ChevronRight,
   ClipboardList,
   Users,
   Search,
-  HelpCircle,
-  ShieldCheck
+  HelpCircle
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -74,22 +71,18 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/60 backdrop-blur-xl">
       <div className="container mx-auto px-4 h-32 flex items-center relative">
-        {/* Menu far left */}
         <div className="flex-shrink-0 z-10">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="glass-panel border-white/10 gap-2 h-12 px-4 sm:px-6 rounded-2xl shadow-lg hover:bg-white/5 transition-all active:scale-95 group">
                 <Menu className="w-5 h-5 transition-transform group-hover:rotate-90 text-primary" />
-                <span className="font-headline font-bold text-base hidden xs:inline-block text-primary">
-                  Menu
-                </span>
+                <span className="font-headline font-bold text-base hidden xs:inline-block text-primary">Menu</span>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-72 glass-panel border-white/10 p-0 mt-2 shadow-2xl rounded-2xl overflow-hidden">
-              <ScrollArea className="h-full max-h-[85vh]">
+              <ScrollArea className="h-full max-h-[80vh]">
                 <div className="p-2 space-y-1">
-                  {/* Home Hub always at the top */}
                   <Link href="/">
                     <DropdownMenuItem className={cn(
                       "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl transition-colors",
@@ -103,7 +96,6 @@ export function Navbar() {
                   <DropdownMenuSeparator className="bg-white/5" />
 
                   <Accordion type="single" collapsible className="w-full">
-                    {/* Daily Tasks Group */}
                     <AccordionItem value="workplace" className="border-none">
                       <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
                         <div className="flex items-center gap-3 text-muted-foreground group-data-[state=open]:text-white">
@@ -113,28 +105,19 @@ export function Navbar() {
                       </AccordionTrigger>
                       <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
                         <Link href="/stores">
-                          <DropdownMenuItem className={cn(
-                            "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg",
-                            pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5"
-                          )}>
+                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5")}>
                             <PlusCircle className="w-4 h-4 text-[#6E76F5]" />
                             <span className="text-sm">{t.nav.stores}</span>
                           </DropdownMenuItem>
                         </Link>
                         <Link href="/faulty-equipment">
-                          <DropdownMenuItem className={cn(
-                            "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg",
-                            pathname === "/faulty-equipment" ? "bg-white/10" : "hover:bg-white/5"
-                          )}>
+                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/faulty-equipment" ? "bg-white/10" : "hover:bg-white/5")}>
                             <Hammer className="w-4 h-4 text-[#F59E0B]" />
                             <span className="text-sm">{t.nav.faulty}</span>
                           </DropdownMenuItem>
                         </Link>
                         <Link href="/incomplete-task">
-                          <DropdownMenuItem className={cn(
-                            "flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg",
-                            pathname === "/incomplete-task" ? "bg-white/10" : "hover:bg-white/5"
-                          )}>
+                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/incomplete-task" ? "bg-white/10" : "hover:bg-white/5")}>
                             <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
                             <span className="text-sm">{t.nav.incomplete}</span>
                           </DropdownMenuItem>
@@ -142,7 +125,6 @@ export function Navbar() {
                       </AccordionContent>
                     </AccordionItem>
 
-                    {/* Staff Services Group */}
                     <AccordionItem value="staff" className="border-none">
                       <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
                         <div className="flex items-center gap-3 text-muted-foreground">
@@ -178,7 +160,6 @@ export function Navbar() {
                       </AccordionContent>
                     </AccordionItem>
 
-                    {/* Tracking & Privacy Group */}
                     <AccordionItem value="tracking" className="border-none">
                       <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
                         <div className="flex items-center gap-3 text-muted-foreground">
@@ -202,7 +183,6 @@ export function Navbar() {
                       </AccordionContent>
                     </AccordionItem>
 
-                    {/* Info & Support Group */}
                     <AccordionItem value="help" className="border-none">
                       <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
                         <div className="flex items-center gap-3 text-muted-foreground">
@@ -233,13 +213,7 @@ export function Navbar() {
                     </AccordionItem>
                   </Accordion>
 
-                  {/* Management at the very bottom */}
                   <DropdownMenuSeparator className="bg-white/10 h-px my-4" />
-                  <div className="px-4 py-2">
-                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary/60">
-                      {t.nav.groupAdmin}
-                    </span>
-                  </div>
                   <Link href={isManagerAuthorized ? "/tasks" : "/manager-login"}>
                     <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-primary/5 transition-colors border border-primary/10">
                       {isManagerAuthorized ? <LayoutDashboard className="w-5 h-5 text-primary" /> : <Lock className="w-5 h-5 text-primary" />}
@@ -254,7 +228,6 @@ export function Navbar() {
           </DropdownMenu>
         </div>
 
-        {/* Branding Centered */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <Link href="/" className="flex flex-col items-center pointer-events-auto group">
             <div className="flex items-center gap-2">
@@ -263,29 +236,20 @@ export function Navbar() {
                 The Cleaners Cupboard
               </span>
             </div>
-            <div className="flex flex-col items-center mt-2.5">
-              <div className="flex items-center gap-1.5">
-                <span className="h-px w-4 bg-primary/30" />
-                <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] whitespace-nowrap opacity-70 group-hover:opacity-100 transition-opacity">
-                  Powered by Harley:work smarter
-                </span>
-                <span className="h-px w-4 bg-primary/30" />
-              </div>
+            <div className="flex items-center gap-1.5 mt-2.5">
+              <span className="h-px w-4 bg-primary/30" />
+              <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] whitespace-nowrap opacity-70">
+                Powered by Harley:work smarter
+              </span>
+              <span className="h-px w-4 bg-primary/30" />
             </div>
           </Link>
         </div>
 
-        {/* Right Logo */}
-        <div className="flex-shrink-0 z-10 ml-auto pointer-events-auto">
+        <div className="flex-shrink-0 z-10 ml-auto">
           {rightLogo && (
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 animate-float">
-              <Image
-                src={rightLogo.imageUrl}
-                alt={rightLogo.description}
-                fill
-                className="object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                data-ai-hint={rightLogo.imageHint}
-              />
+              <Image src={rightLogo.imageUrl} alt={rightLogo.description} fill className="object-contain" />
             </div>
           )}
         </div>
