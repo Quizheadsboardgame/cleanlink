@@ -11,7 +11,7 @@ import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Key, Loader2 } from "lucide-react"
+import { Key, Loader2, ShieldCheck } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
@@ -35,31 +35,39 @@ export default function ManagerLoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!accessKey) return
+    const cleanKey = accessKey.trim().toUpperCase()
+    if (!cleanKey) return
     
-    if (!user) {
-      toast({ variant: "destructive", title: "Wait", description: "System is still connecting. Please try again in a second." })
-      return
-    }
-
     setIsChecking(true)
     
     try {
-      const q = query(collection(db, 'managerKeys'), where('key', '==', accessKey.trim().toUpperCase()), limit(1))
+      // Query the managerKeys collection for the matching unique key
+      const q = query(
+        collection(db, 'managerKeys'), 
+        where('key', '==', cleanKey), 
+        limit(1)
+      )
+      
       const snap = await getDocs(q)
       
       if (!snap.empty) {
         const data = snap.docs[0].data()
+        // Store manager details in session
         sessionStorage.setItem("manager_auth_token", data.key)
         sessionStorage.setItem("manager_display_name", data.displayName)
+        
         toast({ title: "Access Granted", description: `Welcome, ${data.displayName}.` })
-        router.push('/tasks')
+        
+        // Use a small delay before redirect to ensure session storage is committed
+        setTimeout(() => {
+          router.push('/tasks')
+        }, 100)
       } else {
-        toast({ variant: "destructive", title: "Error", description: "Invalid access key." })
+        toast({ variant: "destructive", title: "Denied", description: "Invalid access key. Please check and try again." })
       }
     } catch (err: any) {
       console.error("Login Error:", err)
-      toast({ variant: "destructive", title: "Connection Error", description: "Failed to contact security server." })
+      toast({ variant: "destructive", title: "System Error", description: "Could not connect to security servers." })
     } finally {
       setIsChecking(false)
     }
@@ -72,33 +80,41 @@ export default function ManagerLoginPage() {
         <Card className="glass-panel w-full max-w-md border-none">
           <CardHeader className="text-center">
             <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
-              <Key className="w-6 h-6 text-primary" />
+              <ShieldCheck className="w-6 h-6 text-primary" />
             </div>
             <CardTitle className="text-2xl font-headline">{t.nav.managerPortal}</CardTitle>
-            <CardDescription>Enter your unique access key.</CardDescription>
+            <CardDescription>Enter your unique site access key to continue.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label>Unique Key</Label>
+                <Label>Security Access Key</Label>
                 <div className="relative">
                   <Key className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                   <Input 
                     placeholder="e.g. ALPHA-77" 
                     value={accessKey}
                     onChange={(e) => setAccessKey(e.target.value)}
-                    className="bg-secondary/50 border-white/5 pl-10 uppercase font-mono"
+                    className="bg-secondary/50 border-white/5 pl-10 uppercase font-mono h-12"
                     disabled={isChecking}
                     autoFocus
                   />
                 </div>
               </div>
-              <Button type="submit" disabled={isChecking || !user} className="w-full tasks-gradient text-white h-12 rounded-xl mt-4">
-                {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : "Access Dashboard"}
+              <Button 
+                type="submit" 
+                disabled={isChecking} 
+                className="w-full tasks-gradient text-white h-12 rounded-xl mt-4 font-bold shadow-lg"
+              >
+                {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify & Access Dashboard"}
               </Button>
-              {!user && !isUserLoading && (
-                <p className="text-[10px] text-red-400 text-center mt-2 animate-pulse">Initializing Secure Connection...</p>
-              )}
+              
+              <div className="pt-4 text-center">
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest leading-relaxed">
+                  Secure access for authorized site managers only.<br/>
+                  Powered by Harley Infrastructure.
+                </p>
+              </div>
             </form>
           </CardContent>
         </Card>

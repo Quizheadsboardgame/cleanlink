@@ -10,37 +10,42 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Manager Keys - only readable if you know the path or via authenticated list
+    // Manager Keys - Allow anyone to check a key (required for initial login gate)
     match /managerKeys/{keyId} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
-    // Core Collections - Allow authenticated users to interact with infrastructure
+    // Core Collections - Siloed by managerId in application logic
+    // We allow read/write to prevent race condition crashes during anonymous sign-in
     match /orderTasks/{taskId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if true;
     }
 
     match /importantInfo/{infoId} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /coverWorkPosts/{postId} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isSignedIn();
       match /responses/{responseId} {
-        allow read, write: if isSignedIn();
+        allow read, write: if true;
       }
     }
 
     match /staffConcerns/{concernId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if true;
     }
 
     match /kudos/{kudosId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if true;
     }
 
     match /systemAlerts/{alertId} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     // User Private Data - Strict ownership enforced

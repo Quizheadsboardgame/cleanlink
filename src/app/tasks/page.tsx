@@ -47,7 +47,7 @@ function ResponseList({ postId }: { postId: string }) {
           <div key={res.id} className="bg-white/5 p-3 rounded-lg border border-white/5">
             <div className="flex justify-between items-center mb-1">
               <span className="text-xs font-bold text-white">{res.cleanerName}</span>
-              <span className="text-[10px] text-muted-foreground">{format(new Date(res.createdAt), "MMM d, HH:mm")}</span>
+              <span className="text-[10px] text-muted-foreground">{res.createdAt ? format(new Date(res.createdAt), "MMM d, HH:mm") : '...'}</span>
             </div>
             {res.notes && <p className="text-xs text-muted-foreground italic leading-relaxed">"{res.notes}"</p>}
           </div>
@@ -211,7 +211,7 @@ function BroadcastTab({ managerId }: { managerId: string }) {
             </div>
             <Switch checked={isActive} onCheckedChange={setIsActive} />
           </div>
-          <Button type="submit" disabled={isSubmitting} className="w-full tasks-gradient text-white h-12 rounded-xl shadow-lg">
+          <Button type="submit" disabled={isSubmitting} className="w-full tasks-gradient text-white h-12 rounded-xl shadow-lg font-bold">
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
             Update System Banner
           </Button>
@@ -269,6 +269,7 @@ export default function TasksPage() {
   const [displayName, setDisplayName] = useState("")
   const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
   const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const [isReady, setIsReady] = useState(false)
   const lastTaskCountRef = useRef<number>(0)
 
   const [isCreatingCover, setIsCreatingCover] = useState(false)
@@ -283,11 +284,22 @@ export default function TasksPage() {
   useEffect(() => {
     const savedId = sessionStorage.getItem("manager_auth_token")
     const savedName = sessionStorage.getItem("manager_display_name")
+    
     if (savedId) {
       setManagerId(savedId)
       setDisplayName(savedName || "Manager")
+      setIsReady(true)
     } else if (!isUserLoading) {
-      router.push('/manager-login')
+      // Small delay to ensure any setItem from login has finished
+      setTimeout(() => {
+        const retryId = sessionStorage.getItem("manager_auth_token")
+        if (retryId) {
+          setManagerId(retryId)
+          setIsReady(true)
+        } else {
+          router.push('/manager-login')
+        }
+      }, 500)
     }
     
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -306,14 +318,14 @@ export default function TasksPage() {
   }
 
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !managerId || !user) return null
+    if (!db || !managerId || !user || !isReady) return null
     return query(collection(db, 'orderTasks'), where('managerId', '==', managerId), orderBy('createdAt', 'desc'))
-  }, [db, managerId, user])
+  }, [db, managerId, user, isReady])
 
   const coverPostsQuery = useMemoFirebase(() => {
-    if (!db || !managerId || !user) return null
+    if (!db || !managerId || !user || !isReady) return null
     return query(collection(db, 'coverWorkPosts'), where('managerId', '==', managerId))
-  }, [db, managerId, user])
+  }, [db, managerId, user, isReady])
 
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
@@ -374,11 +386,11 @@ export default function TasksPage() {
     router.push('/')
   }
 
-  if (!managerId) {
+  if (!isReady) {
     return (
       <div className="min-h-screen flex flex-col bg-background items-center justify-center">
         <Loader2 className="animate-spin w-10 h-10 text-primary" />
-        <p className="mt-4 text-muted-foreground">Redirecting to login...</p>
+        <p className="mt-4 text-muted-foreground font-headline uppercase tracking-widest text-xs">Authenticating Profile...</p>
       </div>
     )
   }
@@ -421,26 +433,26 @@ export default function TasksPage() {
           </TabsList>
 
           <TabsContent value="profile">
-            <ProfileTab managerId={managerId} />
+            <ProfileTab managerId={managerId!} />
           </TabsContent>
 
           <TabsContent value="broadcast">
-            <BroadcastTab managerId={managerId} />
+            <BroadcastTab managerId={managerId!} />
           </TabsContent>
 
           <TabsContent value="analytics">
-            {tasks && tasks.length > 0 ? <AnalyticsTab tasks={tasks} /> : <p className="text-center text-muted-foreground py-20">Not enough data for analytics.</p>}
+            {tasks && tasks.length > 0 ? <AnalyticsTab tasks={tasks} /> : <p className="text-center text-muted-foreground py-20 italic">Gathering more data for insights...</p>}
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-4">
             {(isTasksLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
             ) : !tasks || tasks.length === 0 ? (
-              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks for your key.</CardContent></Card>
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent className="text-muted-foreground">No active tasks reported for your site key.</CardContent></Card>
             ) : (
               <div className="grid gap-4">
                 {tasks.map((task) => (
-                  <Card key={task.id} className={cn("glass-panel overflow-hidden", task.type === 'Staff Concern' && "border-red-500/20 bg-red-500/5")}>
+                  <Card key={task.id} className={cn("glass-panel overflow-hidden transition-all duration-300 hover:border-white/20", task.type === 'Staff Concern' && "border-red-500/20 bg-red-500/5")}>
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
@@ -449,7 +461,7 @@ export default function TasksPage() {
                             {task.type === 'Staff Concern' && <ShieldAlert className="w-4 h-4" />}
                             {task.title}
                           </CardTitle>
-                          <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                          <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {task.createdAt ? format(new Date(task.createdAt), "PPp") : 'Just now'}</span>
                             <Badge variant="outline" className="border-white/10 uppercase tracking-tighter">{task.type}</Badge>
                             <Badge className={cn("text-[10px] h-5", task.status === 'Completed' ? "bg-green-500/20 text-green-400" : "bg-primary/20 text-primary")}>
@@ -469,9 +481,9 @@ export default function TasksPage() {
                       <div className="flex gap-2 pt-2">
                         {task.status !== 'Completed' && task.status !== 'Rejected' && (
                           <>
-                            <Button onClick={() => handleUpdateStatus(task.id, 'In Progress')} variant="outline" className="flex-1 h-9 border-amber-500/20 text-amber-400 hover:bg-amber-500/10"><PlayCircle className="w-4 h-4 mr-2" /> Progress</Button>
-                            <Button onClick={() => handleUpdateStatus(task.id, 'Completed')} className="flex-1 h-9 bg-green-500/10 text-green-500 hover:bg-green-600 hover:text-white border border-green-500/20"><CheckCircle2 className="w-4 h-4 mr-2" /> Finish</Button>
-                            <Button onClick={() => handleUpdateStatus(task.id, 'Rejected')} variant="outline" className="flex-1 h-9 border-red-500/20 text-red-400 hover:bg-red-500/10"><XCircle className="w-4 h-4 mr-2" /> Reject</Button>
+                            <Button onClick={() => handleUpdateStatus(task.id, 'In Progress')} variant="outline" className="flex-1 h-9 border-amber-500/20 text-amber-400 hover:bg-amber-500/10 font-bold text-[10px] uppercase tracking-wider"><PlayCircle className="w-4 h-4 mr-2" /> Progress</Button>
+                            <Button onClick={() => handleUpdateStatus(task.id, 'Completed')} className="flex-1 h-9 bg-green-500/10 text-green-500 hover:bg-green-600 hover:text-white border border-green-500/20 font-bold text-[10px] uppercase tracking-wider"><CheckCircle2 className="w-4 h-4 mr-2" /> Finish</Button>
+                            <Button onClick={() => handleUpdateStatus(task.id, 'Rejected')} variant="outline" className="flex-1 h-9 border-red-500/20 text-red-400 hover:bg-red-500/10 font-bold text-[10px] uppercase tracking-wider"><XCircle className="w-4 h-4 mr-2" /> Reject</Button>
                           </>
                         )}
                       </div>
@@ -487,16 +499,16 @@ export default function TasksPage() {
               <p className="text-sm text-muted-foreground">Manage your cover work opportunities.</p>
               <Dialog open={isCreatingCover} onOpenChange={setIsCreatingCover}>
                 <DialogTrigger asChild>
-                  <Button className="cover-gradient text-white gap-2 rounded-xl"><Plus className="w-4 h-4" /> Create Post</Button>
+                  <Button className="cover-gradient text-white gap-2 rounded-xl h-10 px-6 font-bold shadow-lg"><Plus className="w-4 h-4" /> Create Post</Button>
                 </DialogTrigger>
                 <DialogContent className="glass-panel border-none text-foreground">
                   <DialogHeader><DialogTitle className="font-headline text-2xl">New Cover Opportunity</DialogTitle></DialogHeader>
                   <form onSubmit={handleCreateCover} className="space-y-4 pt-4">
                     <div className="space-y-2"><Label>Title / Role</Label><Input placeholder="e.g. Office Suite Cover - Evenings" value={newCover.title} onChange={(e) => setNewCover({...newCover, title: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
-                    <div className="space-y-2"><Label>Location (Optional)</Label><Input placeholder="e.g. Addenbrooke's Site C" value={newCover.location} onChange={(e) => setNewCover({...newCover, location: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
+                    <div className="space-y-2"><Label>Location (Optional)</Label><Input placeholder="e.g. Site C" value={newCover.location} onChange={(e) => setNewCover({...newCover, location: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
                     <div className="space-y-2"><Label>Response Deadline</Label><Input type="datetime-local" value={newCover.deadline} onChange={(e) => setNewCover({...newCover, deadline: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
-                    <div className="space-y-2"><Label>Description & Details</Label><Textarea placeholder="Dates, times, and specific duties..." value={newCover.description} onChange={(e) => setNewCover({...newCover, description: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
-                    <DialogFooter><Button type="submit" className="w-full cover-gradient text-white">Post to Your Board</Button></DialogFooter>
+                    <div className="space-y-2"><Label>Description & Details</Label><Textarea placeholder="Dates, times, and specific duties..." value={newCover.description} onChange={(e) => setNewCover({...newCover, description: e.target.value})} className="bg-secondary/50 border-white/5 min-h-[100px]" /></div>
+                    <DialogFooter><Button type="submit" className="w-full cover-gradient text-white h-12 rounded-xl font-bold">Post to Your Board</Button></DialogFooter>
                   </form>
                 </DialogContent>
               </Dialog>
@@ -505,7 +517,7 @@ export default function TasksPage() {
             {(isCoverLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-sky-400" /></div>
             ) : !coverPosts || coverPosts.length === 0 ? (
-              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No cover posts for your key.</CardContent></Card>
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent className="text-muted-foreground">No active cover posts for your key.</CardContent></Card>
             ) : (
               <div className="grid gap-6">
                 {coverPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((post) => (
@@ -519,13 +531,13 @@ export default function TasksPage() {
                           </CardTitle>
                           <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">
                             {post.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-sky-400" /> {post.location}</span>}
-                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Ends {format(new Date(post.deadline), "PPp")}</span>
+                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Ends {post.deadline ? format(new Date(post.deadline), "PPp") : '...'}</span>
                           </div>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent className="p-6 pt-2">
-                      <p className="text-sm text-muted-foreground whitespace-pre-wrap mb-4">{post.description}</p>
+                      <p className="text-sm text-muted-foreground whitespace-pre-wrap mb-4 leading-relaxed">{post.description}</p>
                       <div className="h-px bg-white/5 w-full" />
                       <ResponseList postId={post.id} />
                     </CardContent>
