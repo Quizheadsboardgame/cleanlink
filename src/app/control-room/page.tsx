@@ -14,10 +14,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw, Settings2, CheckCircle2 } from "lucide-react"
+import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw, Settings2, CheckCircle2, LifeBuoy, Clock, Building2, User } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { format } from "date-fns"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 const MODULES = [
   { id: 'stores', label: 'Order Supplies' },
@@ -90,7 +93,13 @@ export default function ControlRoomPage() {
     return query(collection(db, 'managerKeys'), orderBy('createdAt', 'desc'))
   }, [db, isAuthorized, user, mounted])
 
+  const ticketsQuery = useMemoFirebase(() => {
+    if (!db || !isAuthorized || !user || !mounted) return null
+    return query(collection(db, 'controlRoomTickets'), orderBy('createdAt', 'desc'))
+  }, [db, isAuthorized, user, mounted])
+
   const { data: keys, isLoading } = useCollection(keysQuery)
+  const { data: tickets, isLoading: isTicketsLoading } = useCollection(ticketsQuery)
 
   const handleSaveKey = (e: React.FormEvent) => {
     e.preventDefault()
@@ -102,7 +111,6 @@ export default function ControlRoomPage() {
     const keyId = editingKey?.id || Math.random().toString(36).substr(2, 9)
     const keyRef = doc(db, 'managerKeys', keyId)
 
-    // Initial modules state if new key
     const initialModules = MODULES.reduce((acc, mod) => ({ ...acc, [mod.id]: true }), {})
 
     setDocumentNonBlocking(keyRef, {
@@ -133,13 +141,22 @@ export default function ControlRoomPage() {
     setConfigTarget({ ...configTarget, enabledModules: newModules })
   }
 
+  const handleUpdateTicketStatus = (id: string, status: string) => {
+    const ticketRef = doc(db, 'controlRoomTickets', id)
+    updateDocumentNonBlocking(ticketRef, { 
+      status, 
+      resolvedAt: status === 'Resolved' ? new Date().toISOString() : null 
+    })
+    toast({ title: "Ticket Updated" })
+  }
+
   const handleResetAllData = async () => {
     const confirmation = prompt("Type 'RESET' to delete all site data (Tasks, Alerts, and Keys):")
     if (confirmation !== "RESET") return
 
     setIsResetting(true)
     try {
-      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos', 'coverWorkPosts']
+      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos', 'coverWorkPosts', 'controlRoomTickets']
       for (const colName of collections) {
         const snap = await getDocs(collection(db, colName))
         const batch = writeBatch(db)
@@ -348,6 +365,81 @@ export default function ControlRoomPage() {
           </div>
         )}
 
+        <div className="space-y-6 mb-12">
+          <div className="flex items-center gap-3">
+            <LifeBuoy className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold font-headline">Manager Support Tickets</h2>
+          </div>
+          
+          {isTicketsLoading ? (
+            <div className="py-10 flex justify-center"><Loader2 className="animate-spin" /></div>
+          ) : !tickets || tickets.length === 0 ? (
+            <Card className="glass-panel border-dashed py-10 text-center text-muted-foreground">
+              No support tickets raised by managers yet.
+            </Card>
+          ) : (
+            <div className="grid gap-4">
+              {tickets.map((t) => (
+                <Card key={t.id} className={cn("glass-panel border-white/5 transition-all", t.status === 'Open' ? "border-amber-500/20" : "opacity-60")}>
+                  <CardContent className="p-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                      <div className="space-y-3 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant="outline" className="border-primary/30 text-primary uppercase text-[10px]">
+                            {t.type}
+                          </Badge>
+                          <Badge className={cn("text-[10px]", t.status === 'Open' ? "bg-amber-500/20 text-amber-400" : "bg-green-500/20 text-green-400")}>
+                            {t.status}
+                          </Badge>
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {format(new Date(t.createdAt), "PPp")}
+                          </span>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 text-sm font-bold text-white">
+                            <Building2 className="w-4 h-4 text-muted-foreground" />
+                            {t.managerName}
+                          </div>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {t.description}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        {t.status === 'Open' ? (
+                          <Button 
+                            onClick={() => handleUpdateTicketStatus(t.id, 'Resolved')}
+                            className="bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 h-9 px-4 text-xs font-bold uppercase"
+                          >
+                            Mark Resolved
+                          </Button>
+                        ) : (
+                          <Button 
+                            onClick={() => handleUpdateTicketStatus(t.id, 'Open')}
+                            variant="outline"
+                            className="border-white/10 h-9 px-4 text-xs font-bold uppercase"
+                          >
+                            Re-open
+                          </Button>
+                        )}
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => deleteDocumentNonBlocking(doc(db, 'controlRoomTickets', t.id))}
+                          className="h-9 w-9 text-muted-foreground hover:text-red-500"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
         <Accordion type="single" collapsible className="mt-12">
           <AccordionItem value="danger-zone" className="border-red-500/20">
             <AccordionTrigger className="text-red-400 hover:text-red-300 hover:no-underline">
@@ -362,7 +454,7 @@ export default function ControlRoomPage() {
                   <div className="space-y-1">
                     <h4 className="font-bold text-red-400">Reset All System Data</h4>
                     <p className="text-sm text-muted-foreground">
-                      This will permanently delete all tasks, keys, alerts, and kudos across the entire platform. 
+                      This will permanently delete all tasks, keys, alerts, tickets, and kudos across the entire platform. 
                       Use this only if you want to start from a clean slate.
                     </p>
                   </div>

@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -17,15 +18,17 @@ service cloud.firestore {
       allow write: if isSignedIn();
     }
 
+    // Tickets for Control Room oversight
+    match /controlRoomTickets/{ticketId} {
+      allow read, write: if true;
+    }
+
     // Tasks for management visibility (Orders, Reports, Inquiries)
-    // Siloing is enforced at the application query level via managerId
     match /orderTasks/{taskId} {
       allow read, write: if true;
     }
 
     // Public staff appreciation board
-    // Filtered by 'Authorized' status in the UI
-    // Expiry handled via client-side filtering and manager cleanup
     match /kudos/{kudosId} {
       allow read, write: if true;
     }
@@ -56,8 +59,7 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    // User Private Data - Strict ownership enforced for personal request copies
-    // Includes payErrors and local copies of other requests
+    // User Private Data
     match /users/{userId} {
       allow read, write: if isOwner(userId);
       match /{allSubcollections=**} {

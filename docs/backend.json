@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "ManagerKey": {
@@ -29,6 +30,23 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "key", "displayName", "createdAt"]
+    },
+    "ControlRoomTicket": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ControlRoomTicket",
+      "type": "object",
+      "description": "A support ticket raised by a manager to the Control Room staff.",
+      "properties": {
+        "id": { "type": "string" },
+        "managerId": { "type": "string" },
+        "managerName": { "type": "string" },
+        "type": { "type": "string", "enum": ["Site Fault", "Feature Request", "Extra Training"] },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["Open", "Resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "resolvedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "managerId", "type", "description", "status", "createdAt"]
     },
     "StockOrder": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -160,6 +178,14 @@
           "entityName": "ManagerKey",
           "schema": { "$ref": "#/backend/entities/ManagerKey" },
           "description": "Unique access keys for managers managed by Control Room."
+        }
+      },
+      {
+        "path": "/controlRoomTickets/{ticketId}",
+        "definition": {
+          "entityName": "ControlRoomTicket",
+          "schema": { "$ref": "#/backend/entities/ControlRoomTicket" },
+          "description": "Tickets raised by managers to the control room."
         }
       },
       {

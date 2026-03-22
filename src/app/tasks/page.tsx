@@ -11,7 +11,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, addDays } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, TrainFront } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,6 +22,7 @@ import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts'
 import { useRouter } from "next/navigation"
 
@@ -54,6 +55,123 @@ function ResponseList({ postId }: { postId: string }) {
           </div>
         ))}
       </div>
+    </div>
+  )
+}
+
+function SupportTab({ managerId, managerName }: { managerId: string, managerName: string }) {
+  const db = useFirestore()
+  const { toast } = useToast()
+  const [type, setType] = useState<"Site Fault" | "Feature Request" | "Extra Training">("Site Fault")
+  const [description, setDescription] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const ticketsQuery = useMemoFirebase(() => {
+    if (!db || !managerId) return null
+    return query(collection(db, 'controlRoomTickets'), where('managerId', '==', managerId))
+  }, [db, managerId])
+
+  const { data: tickets, isLoading } = useCollection(ticketsQuery)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!description) return
+    setIsSubmitting(true)
+    const ticketId = Math.random().toString(36).substr(2, 9)
+    const ticketRef = doc(db, 'controlRoomTickets', ticketId)
+    
+    setDocumentNonBlocking(ticketRef, {
+      id: ticketId,
+      managerId,
+      managerName,
+      type,
+      description,
+      status: 'Open',
+      createdAt: new Date().toISOString()
+    }, { merge: true })
+
+    toast({ title: "Ticket Raised", description: "The Control Room has been notified." })
+    setDescription("")
+    setIsSubmitting(false)
+  }
+
+  return (
+    <div className="grid gap-6 md:grid-cols-3">
+      <Card className="glass-panel border-white/5 md:col-span-1">
+        <CardHeader>
+          <CardTitle className="text-xl font-headline flex items-center gap-2">
+            <LifeBuoy className="w-5 h-5 text-primary" />
+            Raise Ticket
+          </CardTitle>
+          <CardDescription>Direct line to the Control Room.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label>Ticket Type</Label>
+              <Select value={type} onValueChange={(v: any) => setType(v)}>
+                <SelectTrigger className="bg-secondary/50 border-white/5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-white/10">
+                  <SelectItem value="Site Fault">Site Fault</SelectItem>
+                  <SelectItem value="Feature Request">Feature Request</SelectItem>
+                  <SelectItem value="Extra Training">Extra Training</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Details</Label>
+              <Textarea 
+                placeholder="Describe the issue or request..." 
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="bg-secondary/50 border-white/5 min-h-[120px]"
+              />
+            </div>
+            <Button type="submit" disabled={isSubmitting} className="w-full tasks-gradient text-white h-12 rounded-xl shadow-lg">
+              {isSubmitting ? <Loader2 className="animate-spin" /> : "Submit to Control Room"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card className="glass-panel border-white/5 md:col-span-2 overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-xl font-headline flex items-center gap-2">
+            <Clock className="w-5 h-5 text-muted-foreground" />
+            Ticket History
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="p-10 flex justify-center"><Loader2 className="animate-spin" /></div>
+          ) : !tickets || tickets.length === 0 ? (
+            <div className="p-10 text-center text-muted-foreground italic">No tickets raised yet.</div>
+          ) : (
+            <div className="divide-y divide-white/5">
+              {[...tickets].sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((t) => (
+                <div key={t.id} className="p-4 space-y-2 hover:bg-white/[0.02] transition-colors">
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="border-white/10 uppercase text-[10px]">
+                        {t.type}
+                      </Badge>
+                      <Badge className={cn("text-[10px]", t.status === 'Open' ? "bg-amber-500/20 text-amber-400" : "bg-green-500/20 text-green-400")}>
+                        {t.status}
+                      </Badge>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground">
+                      {format(new Date(t.createdAt), "MMM d, HH:mm")}
+                    </span>
+                  </div>
+                  <p className="text-sm text-white/80 line-clamp-2">{t.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -382,12 +500,16 @@ export default function TasksPage() {
             </TabsTrigger>
             <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Analytics</TabsTrigger>
             <TabsTrigger value="cover" className="rounded-xl flex-1 px-6">Cover Work</TabsTrigger>
+            <TabsTrigger value="support" className="rounded-xl flex-1 px-6 flex items-center gap-2">
+              <LifeBuoy className="w-4 h-4" /> Support
+            </TabsTrigger>
             <TabsTrigger value="profile" className="rounded-xl flex-1 px-6">Connectivity</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile"><ProfileTab displayName={displayName} /></TabsContent>
           <TabsContent value="broadcast"><BroadcastTab managerId={managerId!} /></TabsContent>
           <TabsContent value="analytics">{sortedTasks.length > 0 ? <AnalyticsTab tasks={sortedTasks} /> : <p className="text-center py-20 italic">Gathering data...</p>}</TabsContent>
+          <TabsContent value="support"><SupportTab managerId={managerId!} managerName={displayName} /></TabsContent>
 
           <TabsContent value="kudos" className="space-y-4">
             <div className="flex items-center justify-between">
