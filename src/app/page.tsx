@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -72,7 +71,7 @@ export default function HomeHub() {
             ) : (
               <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-1.5 rounded-full border border-amber-500/20 text-[10px] font-bold uppercase tracking-widest">
                 <ShieldAlert className="w-3 h-3" />
-                Generic View: Please scan your site QR code for exclusive access
+                Generic View: Please use your manager's direct link for exclusive access
               </div>
             )}
           </div>

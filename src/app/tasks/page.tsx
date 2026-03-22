@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -249,7 +248,7 @@ function ProfileTab({ managerId }: { managerId: string }) {
           </div>
           <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Tip:</strong> Create a QR code for this link and stick it in your site's cleaner cupboards. Any staff member scanning it will be automatically linked to you.
+              <strong>Tip:</strong> Send this link to your staff via text or messaging app. Once they open it, their browser will be automatically linked to your management profile.
             </p>
           </div>
         </CardContent>
