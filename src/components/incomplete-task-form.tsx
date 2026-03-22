@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { AlertTriangle, Send, Building2, User, Loader2, Info } from "lucide-react"
+import { AlertTriangle, Send, Building2, User, Loader2, Info, Layout } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -32,6 +32,7 @@ export function IncompleteTaskForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
   const [site, setSite] = useState("")
+  const [area, setArea] = useState("")
   const [reason, setReason] = useState("")
   const [details, setDetails] = useState("")
 
@@ -48,7 +49,7 @@ export function IncompleteTaskForm() {
       return
     }
 
-    if (!name || !site || !reason) {
+    if (!name || !site || !reason || !area) {
       toast({
         variant: "destructive",
         title: t.common.missingInfo,
@@ -67,6 +68,7 @@ export function IncompleteTaskForm() {
       id: reportId,
       cleanerName: name,
       site: site,
+      area: area,
       reason: reason,
       details: details,
       status: 'Submitted',
@@ -82,7 +84,7 @@ export function IncompleteTaskForm() {
       stockOrderId: reportId,
       managerId: managerId || "generic",
       title: `Incomplete Task: ${site}`,
-      description: `Reported by: ${name}. Reason: ${reason}. ${details ? `Details: ${details}` : ""}`,
+      description: `Reported by: ${name}. Area/Section: ${area}. Reason: ${reason}. ${details ? `Details: ${details}` : ""}`,
       status: 'Pending Review',
       ownerId: user.uid,
       type: 'Incomplete Task',
@@ -140,6 +142,22 @@ export function IncompleteTaskForm() {
                 suppressHydrationWarning
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-muted-foreground flex items-center gap-2">
+              <Layout className="w-4 h-4" /> {t.incomplete.areaLabel}
+            </Label>
+            <Input 
+              placeholder={t.incomplete.areaPlaceholder} 
+              value={area} 
+              onChange={(e) => setArea(e.target.value)}
+              className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+              suppressHydrationWarning
+            />
+            <p className="text-[10px] text-muted-foreground italic pl-6">
+              Please specify if this is a whole area, a single section, or just a part.
+            </p>
           </div>
 
           <div className="space-y-2">
