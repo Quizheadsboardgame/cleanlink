@@ -12,7 +12,7 @@ import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Lock, Loader2, UserPlus, Trash2, Edit2, ShieldCheck, Check } from "lucide-react"
+import { Lock, Loader2, UserPlus, Trash2, Edit2, ShieldCheck, Check, LogOut } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 
@@ -54,6 +54,13 @@ export default function ControlRoomPage() {
       }
       setIsChecking(false)
     }, 600)
+  }
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("control_room_auth")
+    setIsAuthorized(false)
+    setPassword("")
+    toast({ title: "Logged Out", description: "You have left the Control Room." })
   }
 
   const profilesQuery = useMemoFirebase(() => {
@@ -131,57 +138,62 @@ export default function ControlRoomPage() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-5xl">
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
           <div className="space-y-1">
             <h1 className="text-4xl font-bold font-headline portal-text-gradient">Manager Administration</h1>
             <p className="text-muted-foreground">Manage accounts and credentials for the Managers Portal.</p>
           </div>
-          <Dialog open={isAdding} onOpenChange={(o) => { setIsAdding(o); if(!o) setEditingProfile(null); }}>
-            <DialogTrigger asChild>
-              <Button className="tasks-gradient text-white gap-2">
-                <UserPlus className="w-4 h-4" /> Add Manager
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="glass-panel border-none text-foreground">
-              <DialogHeader>
-                <DialogTitle className="font-headline text-2xl">{editingProfile ? "Edit Manager" : "Create New Manager"}</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSaveProfile} className="space-y-4 pt-4">
-                <div className="space-y-2">
-                  <Label>Manager Name (e.g. Site Supervisor A)</Label>
-                  <Input 
-                    value={formData.displayName} 
-                    onChange={(e) => setFormData({...formData, displayName: e.target.value})}
-                    placeholder="Display Name"
-                    className="bg-secondary/50 border-white/5"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Login Username</Label>
-                  <Input 
-                    value={formData.username} 
-                    onChange={(e) => setFormData({...formData, username: e.target.value})}
-                    placeholder="Username"
-                    className="bg-secondary/50 border-white/5"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Login Password</Label>
-                  <Input 
-                    value={formData.password} 
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    placeholder="Password"
-                    className="bg-secondary/50 border-white/5"
-                  />
-                </div>
-                <DialogFooter>
-                  <Button type="submit" className="w-full tasks-gradient text-white h-12 rounded-xl">
-                    Save Profile
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <Button variant="ghost" onClick={handleLogout} className="rounded-xl h-10 text-muted-foreground hover:text-white">
+              <LogOut className="w-4 h-4 mr-2" /> Logout
+            </Button>
+            <Dialog open={isAdding} onOpenChange={(o) => { setIsAdding(o); if(!o) setEditingProfile(null); }}>
+              <DialogTrigger asChild>
+                <Button className="tasks-gradient text-white gap-2 h-10 rounded-xl">
+                  <UserPlus className="w-4 h-4" /> Add Manager
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="glass-panel border-none text-foreground">
+                <DialogHeader>
+                  <DialogTitle className="font-headline text-2xl">{editingProfile ? "Edit Manager" : "Create New Manager"}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSaveProfile} className="space-y-4 pt-4">
+                  <div className="space-y-2">
+                    <Label>Manager Name (e.g. Site Supervisor A)</Label>
+                    <Input 
+                      value={formData.displayName} 
+                      onChange={(e) => setFormData({...formData, displayName: e.target.value})}
+                      placeholder="Display Name"
+                      className="bg-secondary/50 border-white/5"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Login Username</Label>
+                    <Input 
+                      value={formData.username} 
+                      onChange={(e) => setFormData({...formData, username: e.target.value})}
+                      placeholder="Username"
+                      className="bg-secondary/50 border-white/5"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Login Password</Label>
+                    <Input 
+                      value={formData.password} 
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      placeholder="Password"
+                      className="bg-secondary/50 border-white/5"
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit" className="w-full tasks-gradient text-white h-12 rounded-xl">
+                      Save Profile
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         {isLoading ? (

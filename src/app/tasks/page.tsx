@@ -388,7 +388,7 @@ export default function TasksPage() {
             <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Welcome, {displayName}</h1>
             <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Manager ID: {managerId.substring(0, 8)}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <Button 
               variant="outline" 
               onClick={requestNotificationPermission}
