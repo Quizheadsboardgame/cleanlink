@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { Clock, Send, User, Loader2, Calendar } from "lucide-react"
+import { Clock, Send, User, Loader2, Calendar, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -82,7 +82,7 @@ export function AdditionalHoursForm() {
       stockOrderId: requestId,
       managerId: managerId || "generic",
       title: `Extra Hours: ${name}`,
-      description: `Type: ${requestType}. Availability: ${timesAvailable}. ${datesFree ? `Dates: ${datesFree}` : ""}`,
+      description: `Type: ${requestType === 'Permanent' ? 'Permanent Position' : 'Cover/Extra Shifts'}. Details: ${timesAvailable}. ${datesFree ? `Dates: ${datesFree}` : ""}`,
       status: 'Pending Review',
       ownerId: user.uid,
       type: 'Additional Hours',
@@ -134,21 +134,27 @@ export function AdditionalHoursForm() {
               defaultValue="Permanent" 
               value={requestType} 
               onValueChange={(v) => setRequestType(v as "Permanent" | "Temporary")}
-              className="flex gap-6"
+              className="flex flex-col gap-3"
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Permanent" id="permanent" className="border-primary text-primary" />
-                <Label htmlFor="permanent" className="cursor-pointer text-white">{t.hours.permanent}</Label>
+              <div className="flex items-start space-x-3 bg-white/5 p-4 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition-colors group">
+                <RadioGroupItem value="Permanent" id="permanent" className="border-primary text-primary mt-1" />
+                <Label htmlFor="permanent" className="cursor-pointer leading-tight">
+                  <div className="text-white font-bold">{t.hours.permanent}</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Select this if you want a regular, set shift every week.</p>
+                </Label>
               </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Temporary" id="temporary" className="border-primary text-primary" />
-                <Label htmlFor="temporary" className="cursor-pointer text-white">{t.hours.temporary}</Label>
+              <div className="flex items-start space-x-3 bg-white/5 p-4 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition-colors group">
+                <RadioGroupItem value="Temporary" id="temporary" className="border-primary text-primary mt-1" />
+                <Label htmlFor="temporary" className="cursor-pointer leading-tight">
+                  <div className="text-white font-bold">{t.hours.temporary}</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">Select this if you just want to earn a bit more by covering extra shifts.</p>
+                </Label>
               </div>
             </RadioGroup>
           </div>
 
           {requestType === "Temporary" && (
-            <div className="space-y-2">
+            <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
               <Label className="text-muted-foreground flex items-center gap-2">
                 <Calendar className="w-4 h-4" /> {t.hours.datesFree}
               </Label>
@@ -163,12 +169,14 @@ export function AdditionalHoursForm() {
           )}
 
           <div className="space-y-2">
-            <Label className="text-muted-foreground">{t.hours.timesAvailable}</Label>
+            <Label className="text-muted-foreground flex items-center gap-2">
+              <HelpCircle className="w-4 h-4" /> {t.hours.timesAvailable}
+            </Label>
             <Textarea 
               placeholder={t.hours.timesPlaceholder} 
               value={timesAvailable} 
               onChange={(e) => setTimesAvailable(e.target.value)}
-              className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[100px] text-white"
+              className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px] text-white leading-relaxed"
               suppressHydrationWarning
             />
           </div>
