@@ -1,19 +1,17 @@
-
 {
   "entities": {
-    "ManagerProfile": {
+    "ManagerKey": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ManagerProfile",
+      "title": "ManagerKey",
       "type": "object",
-      "description": "Credentials and profile info for a manager created in the Control Room.",
+      "description": "A unique access key for a manager created in the Control Room.",
       "properties": {
         "id": { "type": "string" },
-        "username": { "type": "string" },
-        "password": { "type": "string" },
+        "key": { "type": "string" },
         "displayName": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "username", "password", "displayName", "createdAt"]
+      "required": ["id", "key", "displayName", "createdAt"]
     },
     "StockOrder": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -29,6 +27,7 @@
         "needStoresDelivered": { "type": "boolean" },
         "isPickedUp": { "type": "boolean" },
         "pickupLocation": { "type": "string" },
+        "managerId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
@@ -46,6 +45,7 @@
         "description": { "type": "string" },
         "status": { "type": "string" },
         "managerNote": { "type": "string" },
+        "managerId": { "type": "string" },
         "assignedToUserId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
         "completedAt": { "type": "string", "format": "date-time" },
@@ -66,6 +66,7 @@
         "senderName": { "type": "string" },
         "recipientName": { "type": "string" },
         "message": { "type": "string" },
+        "managerId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "senderName", "recipientName", "message", "createdAt"]
@@ -79,22 +80,23 @@
         "id": { "type": "string" },
         "message": { "type": "string" },
         "active": { "type": "boolean" },
+        "managerId": { "type": "string" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "message", "active", "updatedAt"]
     }
   },
   "auth": {
-    "providers": ["password", "anonymous"]
+    "providers": ["anonymous"]
   },
   "firestore": {
     "structure": [
       {
-        "path": "/managerProfiles/{profileId}",
+        "path": "/managerKeys/{keyId}",
         "definition": {
-          "entityName": "ManagerProfile",
-          "schema": { "$ref": "#/backend/entities/ManagerProfile" },
-          "description": "Manager credentials managed by Control Room."
+          "entityName": "ManagerKey",
+          "schema": { "$ref": "#/backend/entities/ManagerKey" },
+          "description": "Unique access keys for managers managed by Control Room."
         }
       },
       {

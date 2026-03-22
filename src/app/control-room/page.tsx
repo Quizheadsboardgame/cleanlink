@@ -4,7 +4,7 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, doc, orderBy } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
@@ -12,7 +12,7 @@ import { setDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/no
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Lock, Loader2, UserPlus, Trash2, Edit2, ShieldCheck, Check, LogOut } from "lucide-react"
+import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 
@@ -27,8 +27,8 @@ export default function ControlRoomPage() {
   const [isChecking, setIsChecking] = useState(false)
 
   const [isAdding, setIsAdding] = useState(false)
-  const [editingProfile, setEditingProfile] = useState<any>(null)
-  const [formData, setFormData] = useState({ username: "", password: "", displayName: "" })
+  const [editingKey, setEditingKey] = useState<any>(null)
+  const [formData, setFormData] = useState({ key: "", displayName: "" })
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -63,39 +63,39 @@ export default function ControlRoomPage() {
     toast({ title: "Logged Out", description: "You have left the Control Room." })
   }
 
-  const profilesQuery = useMemoFirebase(() => {
+  const keysQuery = useMemoFirebase(() => {
     if (!db || !isAuthorized || !user) return null
-    return query(collection(db, 'managerProfiles'), orderBy('createdAt', 'desc'))
+    return query(collection(db, 'managerKeys'), orderBy('createdAt', 'desc'))
   }, [db, isAuthorized, user])
 
-  const { data: profiles, isLoading } = useCollection(profilesQuery)
+  const { data: keys, isLoading } = useCollection(keysQuery)
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+  const handleSaveKey = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.username || !formData.password || !formData.displayName) {
+    if (!formData.key || !formData.displayName) {
       toast({ variant: "destructive", title: "Error", description: "Please fill in all fields." })
       return
     }
 
-    const profileId = editingProfile?.id || Math.random().toString(36).substr(2, 9)
-    const profileRef = doc(db, 'managerProfiles', profileId)
+    const keyId = editingKey?.id || Math.random().toString(36).substr(2, 9)
+    const keyRef = doc(db, 'managerKeys', keyId)
 
-    setDocumentNonBlocking(profileRef, {
+    setDocumentNonBlocking(keyRef, {
       ...formData,
-      id: profileId,
-      createdAt: editingProfile?.createdAt || new Date().toISOString()
+      id: keyId,
+      createdAt: editingKey?.createdAt || new Date().toISOString()
     }, { merge: true })
 
-    toast({ title: "Success", description: `Manager ${formData.displayName} saved.` })
+    toast({ title: "Success", description: `Access key for ${formData.displayName} saved.` })
     setIsAdding(false)
-    setEditingProfile(null)
-    setFormData({ username: "", password: "", displayName: "" })
+    setEditingKey(null)
+    setFormData({ key: "", displayName: "" })
   }
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to remove this manager?")) {
-      deleteDocumentNonBlocking(doc(db, 'managerProfiles', id))
-      toast({ title: "Removed", description: "Manager profile deleted." })
+    if (confirm("Are you sure you want to remove this manager access?")) {
+      deleteDocumentNonBlocking(doc(db, 'managerKeys', id))
+      toast({ title: "Removed", description: "Access key deleted." })
     }
   }
 
@@ -110,7 +110,7 @@ export default function ControlRoomPage() {
                 <ShieldCheck className="w-6 h-6 text-primary" />
               </div>
               <CardTitle className="text-2xl font-headline">Control Room</CardTitle>
-              <CardDescription>Enter code to manage the infrastructure.</CardDescription>
+              <CardDescription>Enter code to manage keys.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin} className="space-y-4">
@@ -140,54 +140,55 @@ export default function ControlRoomPage() {
       <main className="flex-1 container mx-auto px-4 py-8 max-w-5xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold font-headline portal-text-gradient">Manager Administration</h1>
-            <p className="text-muted-foreground">Manage accounts and credentials for the Managers Portal.</p>
+            <h1 className="text-4xl font-bold font-headline portal-text-gradient">Access Key Management</h1>
+            <p className="text-muted-foreground">Manage unique keys for the Managers Portal.</p>
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <Button variant="ghost" onClick={handleLogout} className="rounded-xl h-10 text-muted-foreground hover:text-white">
               <LogOut className="w-4 h-4 mr-2" /> Logout
             </Button>
-            <Dialog open={isAdding} onOpenChange={(o) => { setIsAdding(o); if(!o) setEditingProfile(null); }}>
+            <Dialog open={isAdding} onOpenChange={(o) => { setIsAdding(o); if(!o) setEditingKey(null); }}>
               <DialogTrigger asChild>
                 <Button className="tasks-gradient text-white gap-2 h-10 rounded-xl">
-                  <UserPlus className="w-4 h-4" /> Add Manager
+                  <Plus className="w-4 h-4" /> New Key
                 </Button>
               </DialogTrigger>
               <DialogContent className="glass-panel border-none text-foreground">
                 <DialogHeader>
-                  <DialogTitle className="font-headline text-2xl">{editingProfile ? "Edit Manager" : "Create New Manager"}</DialogTitle>
+                  <DialogTitle className="font-headline text-2xl">{editingKey ? "Edit Key" : "Generate New Access Key"}</DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleSaveProfile} className="space-y-4 pt-4">
+                <form onSubmit={handleSaveKey} className="space-y-4 pt-4">
                   <div className="space-y-2">
-                    <Label>Manager Name (e.g. Site Supervisor A)</Label>
+                    <Label>Manager Name</Label>
                     <Input 
                       value={formData.displayName} 
                       onChange={(e) => setFormData({...formData, displayName: e.target.value})}
-                      placeholder="Display Name"
+                      placeholder="e.g. Site Supervisor A"
                       className="bg-secondary/50 border-white/5"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Login Username</Label>
-                    <Input 
-                      value={formData.username} 
-                      onChange={(e) => setFormData({...formData, username: e.target.value})}
-                      placeholder="Username"
-                      className="bg-secondary/50 border-white/5"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Login Password</Label>
-                    <Input 
-                      value={formData.password} 
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
-                      placeholder="Password"
-                      className="bg-secondary/50 border-white/5"
-                    />
+                    <Label>Unique Access Key</Label>
+                    <div className="flex gap-2">
+                      <Input 
+                        value={formData.key} 
+                        onChange={(e) => setFormData({...formData, key: e.target.value})}
+                        placeholder="e.g. ALPHA-77"
+                        className="bg-secondary/50 border-white/5"
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="border-white/10"
+                        onClick={() => setFormData({...formData, key: Math.random().toString(36).substring(2, 8).toUpperCase()})}
+                      >
+                        Gen
+                      </Button>
+                    </div>
                   </div>
                   <DialogFooter>
                     <Button type="submit" className="w-full tasks-gradient text-white h-12 rounded-xl">
-                      Save Profile
+                      Save Access Key
                     </Button>
                   </DialogFooter>
                 </form>
@@ -198,24 +199,23 @@ export default function ControlRoomPage() {
 
         {isLoading ? (
           <div className="py-20 flex justify-center"><Loader2 className="animate-spin" /></div>
-        ) : !profiles || profiles.length === 0 ? (
+        ) : !keys || keys.length === 0 ? (
           <Card className="glass-panel border-dashed py-20 text-center text-muted-foreground">
-            No manager profiles found. Create one above.
+            No access keys found. Create one above.
           </Card>
         ) : (
           <div className="grid gap-4">
-            {profiles.map((p) => (
-              <Card key={p.id} className="glass-panel border-white/5 hover:border-primary/20 transition-all">
+            {keys.map((k) => (
+              <Card key={k.id} className="glass-panel border-white/5 hover:border-primary/20 transition-all">
                 <CardContent className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="flex items-center gap-4">
                     <div className="bg-primary/10 p-3 rounded-xl">
-                      <ShieldCheck className="w-6 h-6 text-primary" />
+                      <Key className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-xl font-headline">{p.displayName}</h3>
+                      <h3 className="font-bold text-xl font-headline">{k.displayName}</h3>
                       <div className="flex gap-4 text-xs text-muted-foreground mt-1">
-                        <span>User: <span className="text-white">{p.username}</span></span>
-                        <span>Pass: <span className="text-white">{p.password}</span></span>
+                        <span>Access Key: <span className="text-white font-mono font-bold">{k.key}</span></span>
                       </div>
                     </div>
                   </div>
@@ -224,8 +224,8 @@ export default function ControlRoomPage() {
                       variant="outline" 
                       className="border-white/10 flex-1 sm:flex-none"
                       onClick={() => {
-                        setEditingProfile(p);
-                        setFormData({ username: p.username, password: p.password, displayName: p.displayName });
+                        setEditingKey(k);
+                        setFormData({ key: k.key, displayName: k.displayName });
                         setIsAdding(true);
                       }}
                     >
@@ -234,7 +234,7 @@ export default function ControlRoomPage() {
                     <Button 
                       variant="outline" 
                       className="border-white/10 text-red-400 hover:bg-red-500/10 flex-1 sm:flex-none"
-                      onClick={() => handleDelete(p.id)}
+                      onClick={() => handleDelete(k.id)}
                     >
                       <Trash2 className="w-4 h-4 mr-2" /> Remove
                     </Button>

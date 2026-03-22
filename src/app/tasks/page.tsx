@@ -10,7 +10,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -249,7 +249,7 @@ function ProfileTab({ managerId }: { managerId: string }) {
           </div>
           <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Tip:</strong> Send this link to your staff via text or messaging app. Once they open it, their browser will be automatically linked to your management profile.
+              <strong>Tip:</strong> Send this link to your staff via text or messaging app. Once they open it, their browser will be automatically linked to your management profile via your unique key.
             </p>
           </div>
         </CardContent>
@@ -305,7 +305,6 @@ export default function TasksPage() {
     })
   }
 
-  // Ensure user is signed in before querying to avoid permission errors
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !managerId || !user) return null
     return query(collection(db, 'orderTasks'), where('managerId', '==', managerId), orderBy('createdAt', 'desc'))
@@ -392,7 +391,7 @@ export default function TasksPage() {
         <div className="mb-8 flex flex-col sm:flex-row justify-between items-end gap-4">
           <div className="space-y-1">
             <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Welcome, {displayName}</h1>
-            <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Manager ID: {managerId.substring(0, 8)}</p>
+            <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Access Key: {managerId}</p>
           </div>
           <div className="flex gap-2 items-center">
             <Button 
@@ -437,7 +436,7 @@ export default function TasksPage() {
             {(isTasksLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
             ) : !tasks || tasks.length === 0 ? (
-              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks for your profile.</CardContent></Card>
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks for your key.</CardContent></Card>
             ) : (
               <div className="grid gap-4">
                 {tasks.map((task) => (
@@ -506,7 +505,7 @@ export default function TasksPage() {
             {(isCoverLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-sky-400" /></div>
             ) : !coverPosts || coverPosts.length === 0 ? (
-              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No cover posts for your profile.</CardContent></Card>
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No cover posts for your key.</CardContent></Card>
             ) : (
               <div className="grid gap-6">
                 {coverPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((post) => (

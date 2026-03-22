@@ -10,13 +10,13 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Core Collections - Allow authenticated users to interact with infrastructure
-    // These include list operations needed for the dashboards
-    match /orderTasks/{taskId} {
+    // Manager Keys - only readable if you know the path or via authenticated list
+    match /managerKeys/{keyId} {
       allow read, write: if isSignedIn();
     }
 
-    match /managerProfiles/{profileId} {
+    // Core Collections - Allow authenticated users to interact with infrastructure
+    match /orderTasks/{taskId} {
       allow read, write: if isSignedIn();
     }
 
