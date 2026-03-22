@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -106,8 +107,9 @@ export default function StatusBoardPage() {
   }, [user, isUserLoading, auth])
 
   useEffect(() => {
-    const savedAuth = sessionStorage.getItem("portalflow_auth")
-    if (savedAuth === "true") {
+    const managerToken = sessionStorage.getItem("manager_auth_token")
+    const controlToken = sessionStorage.getItem("control_room_auth")
+    if (managerToken || controlToken === "true") {
       setIsAuthorized(true)
     }
   }, [])
@@ -116,21 +118,21 @@ export default function StatusBoardPage() {
     if (!db || !user) return null
     const currentM = managerId || "generic"
     
-    // If not a manager viewing their own site, restricted to personal submissions only
-    if (!isAuthorized || currentM !== user.uid) {
+    // If a manager is logged in, show all tasks for this manager link
+    if (isAuthorized) {
       return query(
         collection(db, 'orderTasks'), 
         where('managerId', '==', currentM),
-        where('ownerId', '==', user.uid),
         orderBy('createdAt', 'desc'), 
         limit(50)
       )
     }
 
-    // Manager full view
+    // Otherwise (Cleaner view), show only tasks owned by this specific browser user
     return query(
       collection(db, 'orderTasks'), 
       where('managerId', '==', currentM),
+      where('ownerId', '==', user.uid),
       orderBy('createdAt', 'desc'), 
       limit(50)
     )
@@ -161,7 +163,7 @@ export default function StatusBoardPage() {
             {isAuthorized && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-primary/20 mt-2">
                 <Lock className="w-3 h-3" />
-                Full Site Oversight Active
+                Management Overlay Active
               </div>
             )}
           </div>

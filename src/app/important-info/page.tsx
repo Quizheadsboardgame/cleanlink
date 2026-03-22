@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -42,8 +43,9 @@ export default function ImportantInfoPage() {
   }, [user, isUserLoading, auth])
 
   useEffect(() => {
-    const savedAuth = sessionStorage.getItem("portalflow_auth")
-    if (savedAuth === "true") {
+    const managerToken = sessionStorage.getItem("manager_auth_token")
+    const controlToken = sessionStorage.getItem("control_room_auth")
+    if (managerToken || controlToken === "true") {
       setIsAuthorized(true)
     }
   }, [])
