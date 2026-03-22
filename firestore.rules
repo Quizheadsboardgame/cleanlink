@@ -24,6 +24,7 @@ service cloud.firestore {
 
     // Public staff appreciation board
     // Filtered by 'Authorized' status in the UI
+    // Expiry handled via client-side filtering and manager cleanup
     match /kudos/{kudosId} {
       allow read, write: if true;
     }
@@ -55,6 +56,7 @@ service cloud.firestore {
     }
 
     // User Private Data - Strict ownership enforced for personal request copies
+    // Includes payErrors and local copies of other requests
     match /users/{userId} {
       allow read, write: if isOwner(userId);
       match /{allSubcollections=**} {

@@ -152,6 +152,14 @@
           "schema": { "$ref": "#/backend/entities/SystemAlert" },
           "description": "Global notification alerts siloed by manager."
         }
+      },
+      {
+        "path": "/users/{userId}/payErrors/{errorId}",
+        "definition": {
+          "entityName": "PayError",
+          "schema": { "$ref": "#/backend/entities/PayError" },
+          "description": "Individual payroll discrepancy reports."
+        }
       }
     ]
   }
