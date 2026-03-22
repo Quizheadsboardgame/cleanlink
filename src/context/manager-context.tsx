@@ -1,10 +1,9 @@
-
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useFirestore } from '@/firebase';
-import { collection, query, where, limit, getDocs, onSnapshot, doc } from 'firebase/firestore';
+import { collection, query, where, limit, getDocs, onSnapshot } from 'firebase/firestore';
 
 interface EnabledModules {
   stores?: boolean;
@@ -24,7 +23,7 @@ interface ManagerContextType {
   managerId: string | null;
   managerName: string | null;
   enabledModules: EnabledModules | null;
-  setManagerId: (id: string, name: string) => void;
+  setManagerId: (id: string, name: string, expiry?: number) => void;
   isManagerLinked: boolean;
   isManagerAuthorized: boolean;
   isMounted: boolean;
@@ -42,11 +41,9 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
   const hasResolved = useRef(false);
 
-  // Sync state with Firestore if managerId is set
   useEffect(() => {
     if (!managerId || !db) return;
 
-    // Find the managerKey doc to get modules
     const q = query(collection(db, 'managerKeys'), where('key', '==', managerId), limit(1));
     const unsub = onSnapshot(q, (snap) => {
       if (!snap.empty) {
@@ -63,18 +60,22 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
       if (hasResolved.current) return;
       setIsMounted(true);
       
-      // 1. Check for logged-in manager session (takes priority)
       const authToken = sessionStorage.getItem("manager_auth_token");
       const authName = sessionStorage.getItem("manager_display_name");
-      if (authToken) {
-        setManagerIdState(authToken);
-        setManagerNameState(authName || "Manager");
-        setIsManagerAuthorized(true);
-        hasResolved.current = true;
-        return;
+      const expiry = sessionStorage.getItem("manager_expiry");
+
+      if (authToken && expiry) {
+        if (Date.now() < parseInt(expiry)) {
+          setManagerIdState(authToken);
+          setManagerNameState(authName || "Manager");
+          setIsManagerAuthorized(true);
+          hasResolved.current = true;
+          return;
+        } else {
+          sessionStorage.clear();
+        }
       }
 
-      // 2. Check URL for manager identifier (?m=Site%20Supervisor)
       const mParam = searchParams.get('m');
       if (mParam && db) {
         try {
@@ -87,7 +88,8 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
           
           if (!snap.empty) {
             const data = snap.docs[0].data();
-            setManagerId(data.key, data.displayName); 
+            const midnight = new Date().setHours(23, 59, 59, 999);
+            setManagerId(data.key, data.displayName, midnight); 
             hasResolved.current = true;
             return;
           }
@@ -96,7 +98,6 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      // 3. Check LocalStorage for saved internal ID
       const savedId = localStorage.getItem('cupboard_manager_id');
       const savedName = localStorage.getItem('cupboard_manager_name');
       if (savedId) {
@@ -109,12 +110,15 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
     resolveManager();
   }, [searchParams, db]);
 
-  const setManagerId = (id: string, name: string) => {
+  const setManagerId = (id: string, name: string, expiry?: number) => {
     setManagerIdState(id);
     setManagerNameState(name);
     if (typeof window !== 'undefined') {
       localStorage.setItem('cupboard_manager_id', id);
       localStorage.setItem('cupboard_manager_name', name);
+      if (expiry) {
+        sessionStorage.setItem("manager_expiry", expiry.toString());
+      }
     }
   };
 

@@ -46,7 +46,6 @@ export default function ManagerLoginPage() {
     setIsChecking(true)
     
     try {
-      // Query the managerKeys collection for the matching unique key
       const q = query(
         collection(db, 'managerKeys'), 
         where('key', '==', cleanKey), 
@@ -57,13 +56,16 @@ export default function ManagerLoginPage() {
       
       if (!snap.empty) {
         const data = snap.docs[0].data()
-        // Store manager details in session
+        
+        // Calculate midnight expiry
+        const midnight = new Date().setHours(23, 59, 59, 999);
+        
         sessionStorage.setItem("manager_auth_token", data.key)
         sessionStorage.setItem("manager_display_name", data.displayName)
+        sessionStorage.setItem("manager_expiry", midnight.toString())
         
-        toast({ title: "Access Granted", description: `Welcome, ${data.displayName}.` })
+        toast({ title: "Access Granted", description: `Welcome, ${data.displayName}. Session valid until midnight.` })
         
-        // Use a small delay before redirect to ensure session storage is committed
         setTimeout(() => {
           router.push('/tasks')
         }, 100)
@@ -92,7 +94,7 @@ export default function ManagerLoginPage() {
               <ShieldCheck className="w-6 h-6 text-primary" />
             </div>
             <CardTitle className="text-2xl font-headline">{t.nav.managerPortal}</CardTitle>
-            <CardDescription>Enter your unique site access key to continue.</CardDescription>
+            <CardDescription>Enter your unique site access key. Sessions expire at midnight.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning>
@@ -121,7 +123,7 @@ export default function ManagerLoginPage() {
               
               <div className="pt-4 text-center">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest leading-relaxed">
-                  Secure access for authorized site managers only.<br/>
+                  Secure access for authorised site managers only.<br/>
                   Powered by Harley Infrastructure.
                 </p>
               </div>
