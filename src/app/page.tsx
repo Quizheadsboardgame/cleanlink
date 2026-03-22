@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils"
 
 export default function HomeHub() {
   const { t } = useLanguage()
-  const { managerName, isManagerLinked, isManagerAuthorized } = useManagerContext()
+  const { managerName, isManagerLinked, isManagerAuthorized, enabledModules } = useManagerContext()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -26,20 +26,27 @@ export default function HomeHub() {
   }, [])
 
   const services = [
-    { href: "/stores", label: t.nav.stores, icon: PlusCircle, color: "stores-text-gradient", border: "hover:border-[#6E76F5]/40", bg: "bg-[#6E76F5]/5" },
-    { href: "/faulty-equipment", label: t.nav.faulty, icon: Hammer, color: "faulty-text-gradient", border: "hover:border-[#F59E0B]/40", bg: "bg-[#F59E0B]/5" },
-    { href: "/incomplete-task", label: t.nav.incomplete, icon: AlertTriangle, color: "incomplete-text-gradient", border: "hover:border-[#EF4444]/40", bg: "bg-[#EF4444]/5" },
-    { href: "/additional-hours", label: t.nav.hours, icon: Clock, color: "hours-text-gradient", border: "hover:border-[#D946EF]/40", bg: "bg-[#D946EF]/5" },
-    { href: "/pay-error", label: t.nav.pay, icon: CreditCard, color: "text-emerald-400", border: "hover:border-emerald-400/40", bg: "bg-emerald-400/5" },
-    { href: "/referral", label: t.nav.referral, icon: UserPlus, color: "referral-text-gradient", border: "hover:border-[#FACC15]/40", bg: "bg-[#FACC15]/5" },
-    { href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "cover-text-gradient", border: "hover:border-[#0EA5E9]/40", bg: "bg-[#0EA5E9]/5" },
-    { href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "hover:border-rose-400/40", bg: "bg-rose-400/5" },
-    { href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5" },
-    { href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5" },
-    { href: isManagerAuthorized ? "/tasks" : "/manager-login", label: isManagerAuthorized ? "Management Hub" : t.nav.managerPortal, icon: Lock, color: "text-primary", border: "border-primary/20 bg-primary/5", bg: "bg-primary/10" },
-    { href: "/important-info", label: t.nav.info, icon: Info, color: "info-text-gradient", border: "hover:border-orange-500/40", bg: "bg-orange-500/5" },
-    { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5" },
+    { id: 'stores', href: "/stores", label: t.nav.stores, icon: PlusCircle, color: "stores-text-gradient", border: "hover:border-[#6E76F5]/40", bg: "bg-[#6E76F5]/5" },
+    { id: 'faulty', href: "/faulty-equipment", label: t.nav.faulty, icon: Hammer, color: "faulty-text-gradient", border: "hover:border-[#F59E0B]/40", bg: "bg-[#F59E0B]/5" },
+    { id: 'incomplete', href: "/incomplete-task", label: t.nav.incomplete, icon: AlertTriangle, color: "incomplete-text-gradient", border: "hover:border-[#EF4444]/40", bg: "bg-[#EF4444]/5" },
+    { id: 'hours', href: "/additional-hours", label: t.nav.hours, icon: Clock, color: "hours-text-gradient", border: "hover:border-[#D946EF]/40", bg: "bg-[#D946EF]/5" },
+    { id: 'pay', href: "/pay-error", label: t.nav.pay, icon: CreditCard, color: "text-emerald-400", border: "hover:border-emerald-400/40", bg: "bg-emerald-400/5" },
+    { id: 'referral', href: "/referral", label: t.nav.referral, icon: UserPlus, color: "referral-text-gradient", border: "hover:border-[#FACC15]/40", bg: "bg-[#FACC15]/5" },
+    { id: 'cover', href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "cover-text-gradient", border: "hover:border-[#0EA5E9]/40", bg: "bg-[#0EA5E9]/5" },
+    { id: 'kudos', href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "hover:border-rose-400/40", bg: "bg-rose-400/5" },
+    { id: 'status', href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5", always: true },
+    { id: 'concern', href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5" },
+    { id: 'portal', href: isManagerAuthorized ? "/tasks" : "/manager-login", label: isManagerAuthorized ? "Management Hub" : t.nav.managerPortal, icon: Lock, color: "text-primary", border: "border-primary/20 bg-primary/5", bg: "bg-primary/10", always: true },
+    { id: 'info', href: "/important-info", label: t.nav.info, icon: Info, color: "info-text-gradient", border: "hover:border-orange-500/40", bg: "bg-orange-500/5" },
+    { id: 'guide', href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5" },
   ]
+
+  // Filter based on visibility toggles if manager is linked
+  const filteredServices = services.filter(s => {
+    if (s.always) return true;
+    if (enabledModules && enabledModules[s.id as keyof typeof enabledModules] === false) return false;
+    return true;
+  });
 
   if (!mounted) {
     return <div className="min-h-screen bg-background" />
@@ -77,7 +84,7 @@ export default function HomeHub() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {services.map((service) => (
+            {filteredServices.map((service) => (
               <Link key={service.href} href={service.href} className="group">
                 <Card className={cn("glass-panel h-full border-white/5 transition-all duration-300 group-hover:-translate-y-1 overflow-hidden relative", service.border)}>
                   <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500", service.bg)} />

@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -8,14 +9,29 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, doc, orderBy, getDocs, writeBatch } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
-import { setDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { setDocumentNonBlocking, deleteDocumentNonBlocking, updateDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw, Settings2, CheckCircle2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+
+const MODULES = [
+  { id: 'stores', label: 'Order Supplies' },
+  { id: 'faulty', label: 'Broken Equipment' },
+  { id: 'incomplete', label: 'Unfinished Tasks' },
+  { id: 'hours', label: 'Extra Hours Request' },
+  { id: 'pay', label: 'Pay Inquiry' },
+  { id: 'referral', label: 'Refer a Friend' },
+  { id: 'cover', label: 'Cover Work Posts' },
+  { id: 'kudos', label: 'Kudos Board' },
+  { id: 'concern', label: 'Report Concern' },
+  { id: 'info', label: 'Management Feed' },
+  { id: 'guide', label: 'How-to Guide' },
+]
 
 export default function ControlRoomPage() {
   const { user, isUserLoading } = useUser()
@@ -32,6 +48,8 @@ export default function ControlRoomPage() {
   const [isAdding, setIsAdding] = useState(false)
   const [editingKey, setEditingKey] = useState<any>(null)
   const [formData, setFormData] = useState({ key: "", displayName: "" })
+
+  const [configTarget, setConfigTarget] = useState<any>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -84,9 +102,13 @@ export default function ControlRoomPage() {
     const keyId = editingKey?.id || Math.random().toString(36).substr(2, 9)
     const keyRef = doc(db, 'managerKeys', keyId)
 
+    // Initial modules state if new key
+    const initialModules = MODULES.reduce((acc, mod) => ({ ...acc, [mod.id]: true }), {})
+
     setDocumentNonBlocking(keyRef, {
       ...formData,
       id: keyId,
+      enabledModules: editingKey?.enabledModules || initialModules,
       createdAt: editingKey?.createdAt || new Date().toISOString()
     }, { merge: true })
 
@@ -101,6 +123,14 @@ export default function ControlRoomPage() {
       deleteDocumentNonBlocking(doc(db, 'managerKeys', id))
       toast({ title: "Removed", description: "Access key deleted." })
     }
+  }
+
+  const handleToggleModule = (moduleId: string, value: boolean) => {
+    if (!configTarget) return
+    const keyRef = doc(db, 'managerKeys', configTarget.id)
+    const newModules = { ...(configTarget.enabledModules || {}), [moduleId]: value }
+    updateDocumentNonBlocking(keyRef, { enabledModules: newModules })
+    setConfigTarget({ ...configTarget, enabledModules: newModules })
   }
 
   const handleResetAllData = async () => {
@@ -126,7 +156,6 @@ export default function ControlRoomPage() {
     }
   }
 
-  // Defer rendering until mounted to prevent hydration mismatch from sessionStorage or extension-injected attributes
   if (!mounted) {
     return <div className="min-h-screen bg-background" />
   }
@@ -142,7 +171,7 @@ export default function ControlRoomPage() {
                 <ShieldCheck className="w-6 h-6 text-primary" />
               </div>
               <CardTitle className="text-2xl font-headline">Control Room</CardTitle>
-              <CardDescription>Enter code to manage keys.</CardDescription>
+              <CardDescription>Enter code to manage keys and module access.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning>
@@ -173,8 +202,8 @@ export default function ControlRoomPage() {
       <main className="flex-1 container mx-auto px-4 py-8 max-w-5xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold font-headline portal-text-gradient">Access Key Management</h1>
-            <p className="text-muted-foreground">Manage unique keys for the Managers Portal.</p>
+            <h1 className="text-4xl font-bold font-headline portal-text-gradient">Manager Configuration</h1>
+            <p className="text-muted-foreground">Manage keys and toggle specific features for each manager.</p>
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <Button variant="ghost" onClick={handleLogout} className="rounded-xl h-10 text-muted-foreground hover:text-white">
@@ -239,7 +268,7 @@ export default function ControlRoomPage() {
         ) : (
           <div className="grid gap-4 mb-12">
             {keys.map((k) => (
-              <Card key={k.id} className="glass-panel border-white/5 hover:border-primary/20 transition-all">
+              <Card key={k.id} className="glass-panel border-white/5 hover:border-primary/20 transition-all overflow-hidden">
                 <CardContent className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="flex items-center gap-4">
                     <div className="bg-primary/10 p-3 rounded-xl">
@@ -253,6 +282,47 @@ export default function ControlRoomPage() {
                     </div>
                   </div>
                   <div className="flex gap-2 w-full sm:w-auto">
+                    <Dialog open={!!configTarget && configTarget.id === k.id} onOpenChange={(o) => !o && setConfigTarget(null)}>
+                      <DialogTrigger asChild>
+                        <Button 
+                          variant="outline" 
+                          className="border-white/10 flex-1 sm:flex-none"
+                          onClick={() => setConfigTarget(k)}
+                        >
+                          <Settings2 className="w-4 h-4 mr-2" /> Modules
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="glass-panel border-none text-foreground max-w-lg">
+                        <DialogHeader>
+                          <DialogTitle className="font-headline text-2xl flex items-center gap-2">
+                            <Settings2 className="w-6 h-6 text-primary" />
+                            Module Access: {k.displayName}
+                          </DialogTitle>
+                          <DialogDescription>Choose which features staff can see when linked to this manager.</DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-3 py-4 max-h-[60vh] overflow-y-auto no-scrollbar pr-2">
+                          {MODULES.map((mod) => {
+                            const isEnabled = configTarget?.enabledModules?.[mod.id] ?? true
+                            return (
+                              <div key={mod.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 transition-all hover:bg-white/10">
+                                <Label htmlFor={`mod-${mod.id}`} className="cursor-pointer font-bold">{mod.label}</Label>
+                                <Switch 
+                                  id={`mod-${mod.id}`} 
+                                  checked={isEnabled} 
+                                  onCheckedChange={(val) => handleToggleModule(mod.id, val)} 
+                                />
+                              </div>
+                            )
+                          })}
+                        </div>
+                        <DialogFooter>
+                          <Button onClick={() => setConfigTarget(null)} className="w-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 h-12 rounded-xl">
+                            <CheckCircle2 className="w-4 h-4 mr-2" /> Finish Configuration
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+
                     <Button 
                       variant="outline" 
                       className="border-white/10 flex-1 sm:flex-none"
@@ -269,7 +339,7 @@ export default function ControlRoomPage() {
                       className="border-white/10 text-red-400 hover:bg-red-500/10 flex-1 sm:flex-none"
                       onClick={() => handleDelete(k.id)}
                     >
-                      <Trash2 className="w-4 h-4 mr-2" /> Remove
+                      <Trash2 className="w-4 h-4 mr-2" />
                     </Button>
                   </div>
                 </CardContent>

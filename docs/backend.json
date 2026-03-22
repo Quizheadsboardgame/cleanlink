@@ -10,6 +10,23 @@
         "id": { "type": "string" },
         "key": { "type": "string" },
         "displayName": { "type": "string" },
+        "enabledModules": {
+          "type": "object",
+          "description": "Visibility toggles for various app features.",
+          "properties": {
+            "stores": { "type": "boolean" },
+            "faulty": { "type": "boolean" },
+            "incomplete": { "type": "boolean" },
+            "hours": { "type": "boolean" },
+            "pay": { "type": "boolean" },
+            "referral": { "type": "boolean" },
+            "cover": { "type": "boolean" },
+            "kudos": { "type": "boolean" },
+            "concern": { "type": "boolean" },
+            "info": { "type": "boolean" },
+            "guide": { "type": "boolean" }
+          }
+        },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "key", "displayName", "createdAt"]

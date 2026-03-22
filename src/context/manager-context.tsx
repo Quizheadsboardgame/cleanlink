@@ -1,13 +1,29 @@
+
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useFirestore } from '@/firebase';
-import { collection, query, where, limit, getDocs } from 'firebase/firestore';
+import { collection, query, where, limit, getDocs, onSnapshot, doc } from 'firebase/firestore';
+
+interface EnabledModules {
+  stores?: boolean;
+  faulty?: boolean;
+  incomplete?: boolean;
+  hours?: boolean;
+  pay?: boolean;
+  referral?: boolean;
+  cover?: boolean;
+  kudos?: boolean;
+  concern?: boolean;
+  info?: boolean;
+  guide?: boolean;
+}
 
 interface ManagerContextType {
   managerId: string | null;
   managerName: string | null;
+  enabledModules: EnabledModules | null;
   setManagerId: (id: string, name: string) => void;
   isManagerLinked: boolean;
   isManagerAuthorized: boolean;
@@ -20,10 +36,27 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
   const db = useFirestore();
   const [managerId, setManagerIdState] = useState<string | null>(null);
   const [managerName, setManagerNameState] = useState<string | null>(null);
+  const [enabledModules, setEnabledModules] = useState<EnabledModules | null>(null);
   const [isManagerAuthorized, setIsManagerAuthorized] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const searchParams = useSearchParams();
   const hasResolved = useRef(false);
+
+  // Sync state with Firestore if managerId is set
+  useEffect(() => {
+    if (!managerId || !db) return;
+
+    // Find the managerKey doc to get modules
+    const q = query(collection(db, 'managerKeys'), where('key', '==', managerId), limit(1));
+    const unsub = onSnapshot(q, (snap) => {
+      if (!snap.empty) {
+        const data = snap.docs[0].data();
+        setEnabledModules(data.enabledModules || null);
+      }
+    });
+
+    return () => unsub();
+  }, [managerId, db]);
 
   useEffect(() => {
     const resolveManager = async () => {
@@ -89,6 +122,7 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
     <ManagerContext.Provider value={{ 
       managerId, 
       managerName,
+      enabledModules,
       setManagerId, 
       isManagerLinked: !!managerId,
       isManagerAuthorized,

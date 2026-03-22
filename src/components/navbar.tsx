@@ -54,13 +54,18 @@ export function Navbar() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
   const { t } = useLanguage()
-  const { isManagerAuthorized } = useManagerContext()
+  const { isManagerAuthorized, enabledModules } = useManagerContext()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const rightLogo = placeholderData.placeholderImages.find(img => img.id === "header-right-logo")
+
+  const isVisible = (moduleId: string) => {
+    if (!enabledModules) return true;
+    return enabledModules[moduleId as keyof typeof enabledModules] !== false;
+  }
 
   if (!mounted) {
     return (
@@ -98,75 +103,95 @@ export function Navbar() {
                   <DropdownMenuSeparator className="bg-white/5" />
 
                   <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="workplace" className="border-none">
-                      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
-                        <div className="flex items-center gap-3 text-muted-foreground group-data-[state=open]:text-white">
-                          <ClipboardList className="w-4 h-4 text-[#6E76F5]" />
-                          <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupOps}</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
-                        <Link href="/stores">
-                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5")}>
-                            <PlusCircle className="w-4 h-4 text-[#6E76F5]" />
-                            <span className="text-sm">{t.nav.stores}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/faulty-equipment">
-                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/faulty-equipment" ? "bg-white/10" : "hover:bg-white/5")}>
-                            <Hammer className="w-4 h-4 text-[#F59E0B]" />
-                            <span className="text-sm">{t.nav.faulty}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/incomplete-task">
-                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/incomplete-task" ? "bg-white/10" : "hover:bg-white/5")}>
-                            <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
-                            <span className="text-sm">{t.nav.incomplete}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                      </AccordionContent>
-                    </AccordionItem>
+                    {(isVisible('stores') || isVisible('faulty') || isVisible('incomplete')) && (
+                      <AccordionItem value="workplace" className="border-none">
+                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
+                          <div className="flex items-center gap-3 text-muted-foreground group-data-[state=open]:text-white">
+                            <ClipboardList className="w-4 h-4 text-[#6E76F5]" />
+                            <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupOps}</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                          {isVisible('stores') && (
+                            <Link href="/stores">
+                              <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5")}>
+                                <PlusCircle className="w-4 h-4 text-[#6E76F5]" />
+                                <span className="text-sm">{t.nav.stores}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                          {isVisible('faulty') && (
+                            <Link href="/faulty-equipment">
+                              <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/faulty-equipment" ? "bg-white/10" : "hover:bg-white/5")}>
+                                <Hammer className="w-4 h-4 text-[#F59E0B]" />
+                                <span className="text-sm">{t.nav.faulty}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                          {isVisible('incomplete') && (
+                            <Link href="/incomplete-task">
+                              <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/incomplete-task" ? "bg-white/10" : "hover:bg-white/5")}>
+                                <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
+                                <span className="text-sm">{t.nav.incomplete}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
 
-                    <AccordionItem value="staff" className="border-none">
-                      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
-                        <div className="flex items-center gap-3 text-muted-foreground">
-                          <Users className="w-4 h-4 text-[#D946EF]" />
-                          <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupStaff}</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
-                        <Link href="/additional-hours">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <Clock className="w-4 h-4 text-[#D946EF]" />
-                            <span className="text-sm">{t.nav.hours}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/cover-work">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <CalendarDays className="w-4 h-4 text-[#0EA5E9]" />
-                            <span className="text-sm">{t.nav.cover}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/pay-error">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <CreditCard className="w-4 h-4 text-emerald-400" />
-                            <span className="text-sm">{t.nav.pay}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/referral">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <UserPlus className="w-4 h-4 text-[#FACC15]" />
-                            <span className="text-sm">{t.nav.referral}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/kudos">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <Heart className="w-4 h-4 text-rose-400" />
-                            <span className="text-sm">{t.nav.kudos}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                      </AccordionContent>
-                    </AccordionItem>
+                    {(isVisible('hours') || isVisible('cover') || isVisible('pay') || isVisible('referral') || isVisible('kudos')) && (
+                      <AccordionItem value="staff" className="border-none">
+                        <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
+                          <div className="flex items-center gap-3 text-muted-foreground">
+                            <Users className="w-4 h-4 text-[#D946EF]" />
+                            <span className="text-[11px] uppercase tracking-[0.2em] font-bold">{t.nav.groupStaff}</span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                          {isVisible('hours') && (
+                            <Link href="/additional-hours">
+                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                                <Clock className="w-4 h-4 text-[#D946EF]" />
+                                <span className="text-sm">{t.nav.hours}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                          {isVisible('cover') && (
+                            <Link href="/cover-work">
+                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                                <CalendarDays className="w-4 h-4 text-[#0EA5E9]" />
+                                <span className="text-sm">{t.nav.cover}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                          {isVisible('pay') && (
+                            <Link href="/pay-error">
+                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                                <CreditCard className="w-4 h-4 text-emerald-400" />
+                                <span className="text-sm">{t.nav.pay}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                          {isVisible('referral') && (
+                            <Link href="/referral">
+                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                                <UserPlus className="w-4 h-4 text-[#FACC15]" />
+                                <span className="text-sm">{t.nav.referral}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                          {isVisible('kudos') && (
+                            <Link href="/kudos">
+                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                                <Heart className="w-4 h-4 text-rose-400" />
+                                <span className="text-sm">{t.nav.kudos}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
 
                     <AccordionItem value="tracking" className="border-none">
                       <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
@@ -182,12 +207,14 @@ export function Navbar() {
                             <span className="text-sm">{t.nav.status}</span>
                           </DropdownMenuItem>
                         </Link>
-                        <Link href="/report-concern">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <ShieldAlert className="w-4 h-4 text-red-500" />
-                            <span className="text-sm">{t.nav.concern}</span>
-                          </DropdownMenuItem>
-                        </Link>
+                        {isVisible('concern') && (
+                          <Link href="/report-concern">
+                            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                              <ShieldAlert className="w-4 h-4 text-red-500" />
+                              <span className="text-sm">{t.nav.concern}</span>
+                            </DropdownMenuItem>
+                          </Link>
+                        )}
                       </AccordionContent>
                     </AccordionItem>
 
@@ -199,18 +226,22 @@ export function Navbar() {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
-                        <Link href="/important-info">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <Info className="w-4 h-4 text-orange-500" />
-                            <span className="text-sm">{t.nav.info}</span>
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link href="/how-to-use">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
-                            <BookOpen className="w-4 h-4 text-[#84CC16]" />
-                            <span className="text-sm">{t.nav.guide}</span>
-                          </DropdownMenuItem>
-                        </Link>
+                        {isVisible('info') && (
+                          <Link href="/important-info">
+                            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                              <Info className="w-4 h-4 text-orange-500" />
+                              <span className="text-sm">{t.nav.info}</span>
+                            </DropdownMenuItem>
+                          </Link>
+                        )}
+                        {isVisible('guide') && (
+                          <Link href="/how-to-use">
+                            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                              <BookOpen className="w-4 h-4 text-[#84CC16]" />
+                              <span className="text-sm">{t.nav.guide}</span>
+                            </DropdownMenuItem>
+                          </Link>
+                        )}
                         <Link href="/language">
                           <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
                             <Languages className="w-4 h-4 text-primary" />
