@@ -34,6 +34,7 @@ export function StockOrderForm() {
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
 
+  const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
   const [site, setSite] = useState("")
@@ -46,6 +47,7 @@ export function StockOrderForm() {
   ])
 
   useEffect(() => {
+    setMounted(true)
     if (!isUserLoading && !user) {
       initiateAnonymousSignIn(auth)
     }
@@ -137,6 +139,10 @@ export function StockOrderForm() {
     }, 1500)
   }
 
+  if (!mounted) {
+    return <div className="max-w-2xl mx-auto py-20 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="glass-panel overflow-hidden border-none shadow-2xl">
@@ -158,6 +164,7 @@ export function StockOrderForm() {
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
                 className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full"
+                suppressHydrationWarning
               />
             </div>
             <div className="space-y-2">
@@ -169,6 +176,7 @@ export function StockOrderForm() {
                 value={dateStr}
                 onChange={(e) => setDateStr(e.target.value)}
                 className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full appearance-none"
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -183,6 +191,7 @@ export function StockOrderForm() {
                 value={site} 
                 onChange={(e) => setSite(e.target.value)}
                 className="h-12 bg-secondary/50 border-white/5 focus:border-primary/50 text-white w-full"
+                suppressHydrationWarning
               />
             </div>
 
@@ -232,6 +241,7 @@ export function StockOrderForm() {
                       value={pickupLocation}
                       onChange={(e) => setPickupLocation(e.target.value)}
                       className="h-10 bg-secondary/30 border-white/5 focus:border-primary/50 text-white text-sm"
+                      suppressHydrationWarning
                     />
                   </div>
                 )}
@@ -262,6 +272,7 @@ export function StockOrderForm() {
                         value={item.name}
                         onChange={(e) => updateItem(item.id, "name", e.target.value)}
                         className="bg-secondary/30 border-white/5 text-white"
+                        suppressHydrationWarning
                       />
                     </div>
                     <div className="w-24">
@@ -272,6 +283,7 @@ export function StockOrderForm() {
                         value={item.quantity || ""}
                         onChange={(e) => updateItem(item.id, "quantity", parseInt(e.target.value) || 0)}
                         className="bg-secondary/30 border-white/5 text-white"
+                        suppressHydrationWarning
                       />
                     </div>
                   </div>
@@ -282,6 +294,7 @@ export function StockOrderForm() {
                         value={item.code}
                         onChange={(e) => updateItem(item.id, "code", e.target.value)}
                         className="bg-secondary/30 border-white/5 text-white"
+                        suppressHydrationWarning
                       />
                     </div>
                     <Button 

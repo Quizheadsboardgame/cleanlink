@@ -28,6 +28,7 @@ export function AdditionalHoursForm() {
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
 
+  const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
   const [requestType, setRequestType] = useState<"Permanent" | "Temporary">("Permanent")
@@ -35,6 +36,7 @@ export function AdditionalHoursForm() {
   const [timesAvailable, setTimesAvailable] = useState("")
 
   useEffect(() => {
+    setMounted(true)
     if (!isUserLoading && !user) {
       initiateAnonymousSignIn(auth)
     }
@@ -98,6 +100,10 @@ export function AdditionalHoursForm() {
     }, 1500)
   }
 
+  if (!mounted) {
+    return <div className="max-w-2xl mx-auto py-20 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="glass-panel overflow-hidden border-none shadow-2xl">
@@ -118,6 +124,7 @@ export function AdditionalHoursForm() {
               value={name} 
               onChange={(e) => setName(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+              suppressHydrationWarning
             />
           </div>
 
@@ -150,6 +157,7 @@ export function AdditionalHoursForm() {
                 value={datesFree} 
                 onChange={(e) => setDatesFree(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                suppressHydrationWarning
               />
             </div>
           )}
@@ -161,6 +169,7 @@ export function AdditionalHoursForm() {
               value={timesAvailable} 
               onChange={(e) => setTimesAvailable(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[100px] text-white"
+              suppressHydrationWarning
             />
           </div>
         </CardContent>

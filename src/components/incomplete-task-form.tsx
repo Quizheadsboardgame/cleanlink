@@ -28,6 +28,7 @@ export function IncompleteTaskForm() {
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
 
+  const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
   const [site, setSite] = useState("")
@@ -35,6 +36,7 @@ export function IncompleteTaskForm() {
   const [details, setDetails] = useState("")
 
   useEffect(() => {
+    setMounted(true)
     if (!isUserLoading && !user) {
       initiateAnonymousSignIn(auth)
     }
@@ -98,6 +100,10 @@ export function IncompleteTaskForm() {
     }, 1500)
   }
 
+  if (!mounted) {
+    return <div className="max-w-2xl mx-auto py-20 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="glass-panel overflow-hidden border-none shadow-2xl">
@@ -119,6 +125,7 @@ export function IncompleteTaskForm() {
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                suppressHydrationWarning
               />
             </div>
             <div className="space-y-2">
@@ -130,6 +137,7 @@ export function IncompleteTaskForm() {
                 value={site} 
                 onChange={(e) => setSite(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -157,6 +165,7 @@ export function IncompleteTaskForm() {
               value={details} 
               onChange={(e) => setDetails(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[120px] text-white"
+              suppressHydrationWarning
             />
           </div>
         </CardContent>

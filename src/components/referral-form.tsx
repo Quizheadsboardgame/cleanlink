@@ -27,6 +27,7 @@ export function ReferralForm() {
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
 
+  const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [referrerName, setReferrerName] = useState("")
   const [friendName, setFriendName] = useState("")
@@ -35,6 +36,7 @@ export function ReferralForm() {
   const [extraInfo, setExtraInfo] = useState("")
 
   useEffect(() => {
+    setMounted(true)
     if (!isUserLoading && !user) {
       initiateAnonymousSignIn(auth)
     }
@@ -99,6 +101,10 @@ export function ReferralForm() {
     }, 1500)
   }
 
+  if (!mounted) {
+    return <div className="max-w-2xl mx-auto py-20 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="glass-panel overflow-hidden border-none shadow-2xl">
@@ -119,6 +125,7 @@ export function ReferralForm() {
               value={referrerName} 
               onChange={(e) => setReferrerName(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+              suppressHydrationWarning
             />
           </div>
 
@@ -136,6 +143,7 @@ export function ReferralForm() {
                 value={friendName} 
                 onChange={(e) => setFriendName(e.target.value)}
                 className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                suppressHydrationWarning
               />
             </div>
 
@@ -150,6 +158,7 @@ export function ReferralForm() {
                   value={friendEmail} 
                   onChange={(e) => setFriendEmail(e.target.value)}
                   className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                  suppressHydrationWarning
                 />
               </div>
               <div className="space-y-2">
@@ -161,6 +170,7 @@ export function ReferralForm() {
                   value={friendPhone} 
                   onChange={(e) => setFriendPhone(e.target.value)}
                   className="bg-secondary/50 border-white/5 focus:border-primary/50 text-white"
+                  suppressHydrationWarning
                 />
               </div>
             </div>
@@ -175,6 +185,7 @@ export function ReferralForm() {
               value={extraInfo} 
               onChange={(e) => setExtraInfo(e.target.value)}
               className="bg-secondary/50 border-white/5 focus:border-primary/50 min-h-[100px] text-white"
+              suppressHydrationWarning
             />
           </div>
         </CardContent>
