@@ -115,27 +115,41 @@ export default function StatusBoardPage() {
 
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !user) return null
-    // Filter by active manager context
     const currentM = managerId || "generic"
+    
+    // If not a manager viewing their own site, restricted to personal submissions only
+    if (!isAuthorized || currentM !== user.uid) {
+      return query(
+        collection(db, 'orderTasks'), 
+        where('managerId', '==', currentM),
+        where('ownerId', '==', user.uid),
+        orderBy('createdAt', 'desc'), 
+        limit(50)
+      )
+    }
+
+    // Manager full view
     return query(
       collection(db, 'orderTasks'), 
       where('managerId', '==', currentM),
       orderBy('createdAt', 'desc'), 
       limit(50)
     )
-  }, [db, user, managerId])
+  }, [db, user, managerId, isAuthorized])
 
   const { data: allTasks, isLoading } = useCollection(tasksQuery)
 
   const tasks = React.useMemo(() => {
     if (!allTasks) return null;
     return allTasks.filter(task => {
+      // Hide other people's concerns from the manager on the public status board
+      // Managers should use the dedicated /tasks dashboard for full oversight
       if (task.type === 'Staff Concern') {
-        return isAuthorized;
+        return isAuthorized || task.ownerId === user?.uid;
       }
       return true;
     });
-  }, [allTasks, isAuthorized]);
+  }, [allTasks, isAuthorized, user?.uid]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -145,11 +159,11 @@ export default function StatusBoardPage() {
         <div className="space-y-8">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold font-headline status-text-gradient">{t.status.title}</h1>
-            <p className="text-muted-foreground">{t.status.description}</p>
+            <p className="text-muted-foreground">{isAuthorized ? "Monitoring site-wide activity." : t.status.description}</p>
             {isAuthorized && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-primary/20 mt-2">
                 <Lock className="w-3 h-3" />
-                Management View Active
+                Full Site Oversight Active
               </div>
             )}
           </div>
@@ -201,7 +215,7 @@ export default function StatusBoardPage() {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-lg">
-                                {task.type === 'Staff Concern' ? 'Confidential Report' : task.title.split(':')[0]}
+                                {task.type === 'Staff Concern' && !isAuthorized ? 'Confidential Report' : task.title.split(':')[0]}
                               </span>
                               <Badge variant="outline" className={cn("text-[10px] uppercase tracking-tighter h-5", meta.border, meta.color)}>
                                 {task.type}
