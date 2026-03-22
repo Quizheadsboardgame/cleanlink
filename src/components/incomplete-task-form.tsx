@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -16,6 +17,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 
 export function IncompleteTaskForm() {
   const { toast } = useToast()
@@ -24,6 +26,7 @@ export function IncompleteTaskForm() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -66,6 +69,7 @@ export function IncompleteTaskForm() {
       details: details,
       status: 'Submitted',
       ownerId: user.uid,
+      managerId: managerId || "generic",
       createdAt: new Date().toISOString()
     }
 
@@ -74,6 +78,7 @@ export function IncompleteTaskForm() {
     const taskData = {
       id: reportId,
       stockOrderId: reportId,
+      managerId: managerId || "generic",
       title: `Incomplete Task: ${site}`,
       description: `Reported by: ${name}. Reason: ${reason}. ${details ? `Details: ${details}` : ""}`,
       status: 'Pending Review',
@@ -89,7 +94,7 @@ export function IncompleteTaskForm() {
     })
 
     setTimeout(() => {
-      router.push('/tasks')
+      router.push('/status')
     }, 1500)
   }
 

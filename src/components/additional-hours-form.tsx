@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -16,6 +17,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 
 export function AdditionalHoursForm() {
   const { toast } = useToast()
@@ -24,6 +26,7 @@ export function AdditionalHoursForm() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -66,6 +69,7 @@ export function AdditionalHoursForm() {
       timesAvailable: timesAvailable,
       status: 'Submitted',
       ownerId: user.uid,
+      managerId: managerId || "generic",
       createdAt: new Date().toISOString()
     }
 
@@ -74,6 +78,7 @@ export function AdditionalHoursForm() {
     const taskData = {
       id: requestId,
       stockOrderId: requestId,
+      managerId: managerId || "generic",
       title: `Extra Hours: ${name}`,
       description: `Type: ${requestType}. Availability: ${timesAvailable}. ${datesFree ? `Dates: ${datesFree}` : ""}`,
       status: 'Pending Review',

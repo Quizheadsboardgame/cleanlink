@@ -98,7 +98,7 @@ export default function StatusBoardPage() {
   const auth = useAuth()
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
-  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [authStatus, setAuthStatus] = useState<'loading' | 'authorized' | 'unauthorized'>('loading')
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -110,16 +110,18 @@ export default function StatusBoardPage() {
     const managerToken = sessionStorage.getItem("manager_auth_token")
     const controlToken = sessionStorage.getItem("control_room_auth")
     if (managerToken || controlToken === "true") {
-      setIsAuthorized(true)
+      setAuthStatus('authorized')
+    } else {
+      setAuthStatus('unauthorized')
     }
   }, [])
 
   const tasksQuery = useMemoFirebase(() => {
-    if (!db || !user) return null
+    if (!db || !user || authStatus === 'loading') return null
+    
     const currentM = managerId || "generic"
     
-    // If a manager is logged in, show all tasks for this manager link
-    if (isAuthorized) {
+    if (authStatus === 'authorized') {
       return query(
         collection(db, 'orderTasks'), 
         where('managerId', '==', currentM),
@@ -128,8 +130,6 @@ export default function StatusBoardPage() {
       )
     }
 
-    // Otherwise (Cleaner view), show only tasks owned by this specific browser user
-    // CRITICAL: Filter by managerId AND ownerId to satisfy rules and siloing
     return query(
       collection(db, 'orderTasks'), 
       where('managerId', '==', currentM),
@@ -137,20 +137,19 @@ export default function StatusBoardPage() {
       orderBy('createdAt', 'desc'), 
       limit(50)
     )
-  }, [db, user, managerId, isAuthorized])
+  }, [db, user, managerId, authStatus])
 
   const { data: allTasks, isLoading } = useCollection(tasksQuery)
 
   const tasks = React.useMemo(() => {
     if (!allTasks) return null;
     return allTasks.filter(task => {
-      // Hide other people's concerns from the manager on the public status board
       if (task.type === 'Staff Concern') {
-        return isAuthorized || task.ownerId === user?.uid;
+        return authStatus === 'authorized' || task.ownerId === user?.uid;
       }
       return true;
     });
-  }, [allTasks, isAuthorized, user?.uid]);
+  }, [allTasks, authStatus, user?.uid]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -160,8 +159,8 @@ export default function StatusBoardPage() {
         <div className="space-y-8">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold font-headline status-text-gradient">{t.status.title}</h1>
-            <p className="text-muted-foreground">{isAuthorized ? "Monitoring site-wide activity." : t.status.description}</p>
-            {isAuthorized && (
+            <p className="text-muted-foreground">{authStatus === 'authorized' ? "Monitoring site-wide activity." : t.status.description}</p>
+            {authStatus === 'authorized' && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-primary/20 mt-2">
                 <Lock className="w-3 h-3" />
                 Management Overlay Active
@@ -169,7 +168,7 @@ export default function StatusBoardPage() {
             )}
           </div>
 
-          {(isLoading || isUserLoading) ? (
+          {(isLoading || isUserLoading || authStatus === 'loading') ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
               <Loader2 className="w-10 h-10 text-white animate-spin" />
               <p className="text-muted-foreground">{t.status.loading}</p>
@@ -216,7 +215,7 @@ export default function StatusBoardPage() {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-lg">
-                                {task.type === 'Staff Concern' && !isAuthorized ? 'Confidential Report' : task.title.split(':')[0]}
+                                {task.type === 'Staff Concern' && authStatus !== 'authorized' ? 'Confidential Report' : task.title.split(':')[0]}
                               </span>
                               <Badge variant="outline" className={cn("text-[10px] uppercase tracking-tighter h-5", meta.border, meta.color)}>
                                 {task.type}

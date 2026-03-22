@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -15,6 +16,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 
 export function ReferralForm() {
   const { toast } = useToast()
@@ -23,6 +25,7 @@ export function ReferralForm() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [referrerName, setReferrerName] = useState("")
@@ -67,6 +70,7 @@ export function ReferralForm() {
       extraInfo: extraInfo,
       status: 'Submitted',
       ownerId: user.uid,
+      managerId: managerId || "generic",
       createdAt: new Date().toISOString()
     }
 
@@ -75,6 +79,7 @@ export function ReferralForm() {
     const taskData = {
       id: referralId,
       stockOrderId: referralId,
+      managerId: managerId || "generic",
       title: `Staff Referral: ${friendName}`,
       description: `Referred by: ${referrerName}. Contact: ${friendEmail} / ${friendPhone}. Notes: ${extraInfo}`,
       status: 'Pending Review',
