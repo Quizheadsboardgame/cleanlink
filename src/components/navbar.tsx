@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -14,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import placeholderData from "@/app/lib/placeholder-images.json"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
@@ -69,22 +69,26 @@ export function Navbar() {
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-2 mt-2 shadow-2xl rounded-2xl">
-                {navItems.map((item) => (
-                  <Link key={item.href} href={item.href}>
-                    <DropdownMenuItem className={cn(
-                      "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl transition-colors mb-1 last:mb-0",
-                      pathname === item.href 
-                        ? "bg-white/10 font-bold" 
-                        : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                    )}>
-                      <item.icon className={cn("w-5 h-5", item.color)} />
-                      <span className={cn("text-sm font-medium", pathname === item.href ? item.color : "")}>
-                        {item.label}
-                      </span>
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
+              <DropdownMenuContent align="start" className="w-64 glass-panel border-white/10 p-0 mt-2 shadow-2xl rounded-2xl overflow-hidden">
+                <ScrollArea className="h-full max-h-[70vh]">
+                  <div className="p-2">
+                    {navItems.map((item) => (
+                      <Link key={item.href} href={item.href}>
+                        <DropdownMenuItem className={cn(
+                          "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl transition-colors mb-1 last:mb-0",
+                          pathname === item.href 
+                            ? "bg-white/10 font-bold" 
+                            : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                        )}>
+                          <item.icon className={cn("w-5 h-5", item.color)} />
+                          <span className={cn("text-sm font-medium", pathname === item.href ? item.color : "")}>
+                            {item.label}
+                          </span>
+                        </DropdownMenuItem>
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollArea>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
