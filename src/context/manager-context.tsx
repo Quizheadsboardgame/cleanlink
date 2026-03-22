@@ -64,6 +64,7 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
       const authName = sessionStorage.getItem("manager_display_name");
       const expiry = sessionStorage.getItem("manager_expiry");
 
+      // Check if session is still valid (midnight expiry)
       if (authToken && expiry) {
         if (Date.now() < parseInt(expiry)) {
           setManagerIdState(authToken);
@@ -72,7 +73,10 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
           hasResolved.current = true;
           return;
         } else {
-          sessionStorage.clear();
+          // Session expired
+          sessionStorage.removeItem("manager_auth_token");
+          sessionStorage.removeItem("manager_display_name");
+          sessionStorage.removeItem("manager_expiry");
         }
       }
 
@@ -88,8 +92,9 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
           
           if (!snap.empty) {
             const data = snap.docs[0].data();
-            const midnight = new Date().setHours(23, 59, 59, 999);
-            setManagerId(data.key, data.displayName, midnight); 
+            const midnight = new Date();
+            midnight.setHours(23, 59, 59, 999);
+            setManagerId(data.key, data.displayName, midnight.getTime()); 
             hasResolved.current = true;
             return;
           }

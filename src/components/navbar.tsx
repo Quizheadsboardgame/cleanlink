@@ -268,15 +268,15 @@ export function Navbar() {
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <Link href="/" className="flex items-center pointer-events-auto group">
-            <div className="flex flex-col items-center sm:items-baseline sm:flex-row gap-2">
+            <div className="flex flex-col items-center gap-1">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary animate-pulse hidden sm:block" />
-                <span className="text-2xl sm:text-4xl lg:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
+                <span className="text-3xl sm:text-5xl lg:text-6xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
                   My Tidy Tracker
                 </span>
               </div>
-              <span className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] whitespace-nowrap opacity-50 sm:mb-1">
-                by Harley: work smarter
+              <span className="text-[8px] sm:text-[10px] font-bold text-primary/60 uppercase tracking-[0.4em] whitespace-nowrap">
+                POWERED BY HARLEY: WORK SMARTER
               </span>
             </div>
           </Link>
