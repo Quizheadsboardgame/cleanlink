@@ -1,21 +1,23 @@
+
 "use client"
 
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, doc, setDoc } from "firebase/firestore"
-import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { collection, query, doc, setDoc, orderBy, limit } from "firebase/firestore"
+import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
-import { format, subDays, isBefore } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, TrendingUp, ShieldAlert } from "lucide-react"
+import { format } from "date-fns"
+import { CheckCircle2, Clock, Package, Building2, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -67,7 +69,6 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
   const dataBySite = React.useMemo(() => {
     const counts: Record<string, number> = {}
     tasks.forEach(t => {
-      // Basic extraction of site from description
       const siteMatch = t.description.match(/Site:\s*([^.]+)/)
       const siteName = siteMatch ? siteMatch[1].trim() : 'Unknown'
       counts[siteName] = (counts[siteName] || 0) + 1
@@ -144,6 +145,81 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
   )
 }
 
+function BroadcastTab() {
+  const db = useFirestore()
+  const { toast } = useToast()
+  const [message, setMessage] = useState("")
+  const [isActive, setIsActive] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const alertQuery = useMemoFirebase(() => {
+    if (!db) return null
+    return query(collection(db, 'systemAlerts'), limit(1))
+  }, [db])
+
+  const { data: currentAlert } = useCollection(alertQuery)
+
+  useEffect(() => {
+    if (currentAlert && currentAlert.length > 0) {
+      setMessage(currentAlert[0].message)
+      setIsActive(currentAlert[0].active)
+    }
+  }, [currentAlert])
+
+  const handleUpdate = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    const alertId = "global-alert"
+    const alertRef = doc(db, 'systemAlerts', alertId)
+
+    setDocumentNonBlocking(alertRef, {
+      id: alertId,
+      message,
+      active: isActive,
+      updatedAt: new Date().toISOString()
+    }, { merge: true })
+
+    toast({ title: "Broadcast Updated", description: "All staff will see the new banner message." })
+    setIsSubmitting(false)
+  }
+
+  return (
+    <Card className="glass-panel border-white/5">
+      <CardHeader>
+        <CardTitle className="text-xl font-headline flex items-center gap-2">
+          <Megaphone className="w-5 h-5 text-primary" /> Live Broadcast
+        </CardTitle>
+        <CardDescription>This message scrolls at the top of every staff member's screen.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleUpdate} className="space-y-6">
+          <div className="space-y-2">
+            <Label>Banner Message</Label>
+            <Input 
+              placeholder="e.g. Urgent: All sites please check your storage keys." 
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="bg-secondary/50 border-white/5"
+            />
+          </div>
+          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+            <div className="space-y-0.5">
+              <Label className="text-base">Broadcast Active</Label>
+              <p className="text-xs text-muted-foreground">Toggle visibility for all users.</p>
+            </div>
+            <Switch checked={isActive} onCheckedChange={setIsActive} />
+          </div>
+          <Button type="submit" disabled={isSubmitting} className="w-full tasks-gradient text-white h-12 rounded-xl shadow-lg">
+            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+            Update System Banner
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function TasksPage() {
   const { user, isUserLoading } = useUser()
   const db = useFirestore()
@@ -154,6 +230,8 @@ export default function TasksPage() {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
   const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const lastTaskCountRef = useRef<number>(0)
 
   // Cover Work Creation State
   const [isCreatingCover, setIsCreatingCover] = useState(false)
@@ -170,7 +248,22 @@ export default function TasksPage() {
     if (savedAuth === "true") {
       setIsAuthorized(true)
     }
+    
+    if ('Notification' in window) {
+      setNotificationsEnabled(Notification.permission === 'granted')
+    }
   }, [])
+
+  // Push notification trigger
+  const requestNotificationPermission = () => {
+    if (!('Notification' in window)) return
+    Notification.requestPermission().then(permission => {
+      setNotificationsEnabled(permission === 'granted')
+      if (permission === 'granted') {
+        toast({ title: "Alerts Enabled", description: "You will receive desktop notifications for new tasks." })
+      }
+    })
+  }
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -191,7 +284,7 @@ export default function TasksPage() {
   // Data queries
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !isAuthorized || !user) return null
-    return query(collection(db, 'orderTasks'))
+    return query(collection(db, 'orderTasks'), orderBy('createdAt', 'desc'))
   }, [db, isAuthorized, user])
 
   const coverPostsQuery = useMemoFirebase(() => {
@@ -201,6 +294,20 @@ export default function TasksPage() {
 
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
+
+  // Browser Notification Logic
+  useEffect(() => {
+    if (tasks && tasks.length > lastTaskCountRef.current) {
+      if (lastTaskCountRef.current > 0 && notificationsEnabled) {
+        const newestTask = tasks[0]
+        new Notification("New Request: " + newestTask.type, {
+          body: newestTask.title,
+          icon: "/favicon.ico"
+        })
+      }
+      lastTaskCountRef.current = tasks.length
+    }
+  }, [tasks, notificationsEnabled])
 
   const handleUpdateStatus = (taskId: string, status: string) => {
     const taskRef = doc(db, 'orderTasks', taskId)
@@ -279,15 +386,35 @@ export default function TasksPage() {
       <Navbar />
       
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-5xl">
-        <Tabs defaultValue="tasks" className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 className="text-3xl font-bold font-headline tasks-text-gradient">Management Portal</h1>
-            <TabsList className="bg-secondary/50 border border-white/5 p-1">
-              <TabsTrigger value="tasks">Tasks</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="cover">Cover Work</TabsTrigger>
-            </TabsList>
+        <div className="mb-8 flex flex-col sm:flex-row justify-between items-end gap-4">
+          <div className="space-y-1">
+            <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Management Portal</h1>
+            <p className="text-muted-foreground">Monitor site activity and broadcast updates.</p>
           </div>
+          <Button 
+            variant="outline" 
+            onClick={requestNotificationPermission}
+            className={cn(
+              "rounded-xl border-white/10 h-10 gap-2 font-bold uppercase text-[10px] tracking-widest",
+              notificationsEnabled ? "bg-green-500/10 text-green-400 border-green-500/20" : "bg-white/5 text-muted-foreground"
+            )}
+          >
+            {notificationsEnabled ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+            {notificationsEnabled ? "Desktop Alerts: ON" : "Enable Desktop Alerts"}
+          </Button>
+        </div>
+
+        <Tabs defaultValue="tasks" className="space-y-6">
+          <TabsList className="bg-secondary/50 border border-white/5 p-1 w-full justify-start h-12 rounded-2xl overflow-x-auto no-scrollbar">
+            <TabsTrigger value="tasks" className="rounded-xl flex-1 px-6">Tasks</TabsTrigger>
+            <TabsTrigger value="broadcast" className="rounded-xl flex-1 px-6">Broadcast</TabsTrigger>
+            <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Analytics</TabsTrigger>
+            <TabsTrigger value="cover" className="rounded-xl flex-1 px-6">Cover Work</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="broadcast">
+            <BroadcastTab />
+          </TabsContent>
 
           <TabsContent value="analytics">
             {tasks && tasks.length > 0 ? <AnalyticsTab tasks={tasks} /> : <p className="text-center text-muted-foreground py-20">Not enough data for analytics.</p>}
@@ -300,7 +427,7 @@ export default function TasksPage() {
               <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks found.</CardContent></Card>
             ) : (
               <div className="grid gap-4">
-                {tasks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((task) => (
+                {tasks.map((task) => (
                   <Card key={task.id} className={cn("glass-panel overflow-hidden", task.type === 'Staff Concern' && "border-red-500/20 bg-red-500/5")}>
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-start">

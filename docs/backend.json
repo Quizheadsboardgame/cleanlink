@@ -55,6 +55,19 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "senderName", "recipientName", "message", "createdAt"]
+    },
+    "SystemAlert": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SystemAlert",
+      "type": "object",
+      "description": "Global broadcast message set by management.",
+      "properties": {
+        "id": { "type": "string" },
+        "message": { "type": "string" },
+        "active": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "message", "active", "updatedAt"]
     }
   },
   "auth": {
@@ -84,6 +97,14 @@
           "entityName": "StaffKudos",
           "schema": { "$ref": "#/backend/entities/StaffKudos" },
           "description": "Public staff appreciation board."
+        }
+      },
+      {
+        "path": "/systemAlerts/{alertId}",
+        "definition": {
+          "entityName": "SystemAlert",
+          "schema": { "$ref": "#/backend/entities/SystemAlert" },
+          "description": "Global notification alerts."
         }
       }
     ]
