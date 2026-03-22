@@ -8,14 +8,17 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   t: TranslationPath;
   isRTL: boolean;
+  isMounted: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>('en');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const saved = localStorage.getItem('cleanlink_lang') as Language;
     if (saved && translations[saved]) {
       setLanguageState(saved);
@@ -24,21 +27,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('cleanlink_lang', lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cleanlink_lang', lang);
+    }
   };
 
   const isRTL = language === 'ar';
 
   useEffect(() => {
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-    document.documentElement.lang = language;
-  }, [language, isRTL]);
+    if (isMounted) {
+      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+      document.documentElement.lang = language;
+    }
+  }, [language, isRTL, isMounted]);
 
   const value = {
     language,
     setLanguage,
     t: translations[language],
     isRTL,
+    isMounted,
   };
 
   return (

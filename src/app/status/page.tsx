@@ -106,7 +106,6 @@ export default function StatusBoardPage() {
   }, [user, isUserLoading, auth])
 
   useEffect(() => {
-    // Check for management tokens reliably
     const managerToken = sessionStorage.getItem("manager_auth_token")
     const controlToken = sessionStorage.getItem("control_room_auth")
     if (managerToken || controlToken === "true") {
@@ -117,7 +116,6 @@ export default function StatusBoardPage() {
   }, [])
 
   const tasksQuery = useMemoFirebase(() => {
-    // Only proceed once we have a user and authStatus is determined
     if (!db || !user || authStatus === 'loading') return null
     
     const currentM = managerId || "generic"
@@ -127,7 +125,6 @@ export default function StatusBoardPage() {
       return query(
         collection(db, 'orderTasks'), 
         where('managerId', '==', currentM),
-        orderBy('createdAt', 'desc'), 
         limit(50)
       )
     }
@@ -137,12 +134,19 @@ export default function StatusBoardPage() {
       collection(db, 'orderTasks'), 
       where('managerId', '==', currentM),
       where('ownerId', '==', user.uid),
-      orderBy('createdAt', 'desc'), 
       limit(50)
     )
   }, [db, user, managerId, authStatus])
 
   const { data: allTasks, isLoading } = useCollection(tasksQuery)
+
+  // Sort on client to avoid index creation requirement during rapid prototyping
+  const sortedTasks = React.useMemo(() => {
+    if (!allTasks) return []
+    return [...allTasks].sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    })
+  }, [allTasks])
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -168,7 +172,7 @@ export default function StatusBoardPage() {
               <Loader2 className="w-10 h-10 text-white animate-spin" />
               <p className="text-muted-foreground">{t.status.loading}</p>
             </div>
-          ) : !allTasks || allTasks.length === 0 ? (
+          ) : !sortedTasks || sortedTasks.length === 0 ? (
             <Card className="glass-panel border-dashed py-20 text-center">
               <CardContent className="flex flex-col items-center gap-4">
                 <div className="bg-secondary/50 p-4 rounded-full">
@@ -184,7 +188,7 @@ export default function StatusBoardPage() {
             </Card>
           ) : (
             <div className="grid gap-4">
-              {allTasks.map((task) => {
+              {sortedTasks.map((task) => {
                 const meta = getTaskMeta(task.type);
                 const Icon = meta.icon;
 

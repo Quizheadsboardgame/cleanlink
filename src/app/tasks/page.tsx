@@ -58,6 +58,9 @@ function ResponseList({ postId }: { postId: string }) {
 }
 
 function AnalyticsTab({ tasks }: { tasks: any[] }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   const dataByType = React.useMemo(() => {
     const counts: Record<string, number> = {}
     tasks.forEach(t => {
@@ -80,6 +83,8 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
   }, [tasks])
 
   const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9']
+
+  if (!mounted) return <div className="h-[300px] flex items-center justify-center text-muted-foreground italic">Initializing visualizer...</div>
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -223,7 +228,13 @@ function BroadcastTab({ managerId }: { managerId: string }) {
 
 function ProfileTab({ managerId }: { managerId: string }) {
   const [copied, setCopied] = useState(false)
-  const staffUrl = typeof window !== 'undefined' ? `${window.location.origin}/?m=${managerId}` : ""
+  const [staffUrl, setStaffUrl] = useState("")
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setStaffUrl(`${window.location.origin}/?m=${managerId}`)
+    }
+  }, [managerId])
 
   const copyLink = () => {
     navigator.clipboard.writeText(staffUrl)
@@ -290,7 +301,6 @@ export default function TasksPage() {
       setDisplayName(savedName || "Manager")
       setIsReady(true)
     } else if (!isUserLoading) {
-      // Small delay to ensure any setItem from login has finished
       setTimeout(() => {
         const retryId = sessionStorage.getItem("manager_auth_token")
         if (retryId) {
@@ -319,7 +329,7 @@ export default function TasksPage() {
 
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !managerId || !user || !isReady) return null
-    return query(collection(db, 'orderTasks'), where('managerId', '==', managerId), orderBy('createdAt', 'desc'))
+    return query(collection(db, 'orderTasks'), where('managerId', '==', managerId))
   }, [db, managerId, user, isReady])
 
   const coverPostsQuery = useMemoFirebase(() => {
@@ -327,20 +337,25 @@ export default function TasksPage() {
     return query(collection(db, 'coverWorkPosts'), where('managerId', '==', managerId))
   }, [db, managerId, user, isReady])
 
-  const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
+  const { data: allTasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
 
+  const sortedTasks = React.useMemo(() => {
+    if (!allTasks) return []
+    return [...allTasks].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  }, [allTasks])
+
   useEffect(() => {
-    if (tasks && tasks.length > lastTaskCountRef.current) {
+    if (sortedTasks && sortedTasks.length > lastTaskCountRef.current) {
       if (lastTaskCountRef.current > 0 && notificationsEnabled && typeof window !== 'undefined') {
-        const newestTask = tasks[0]
+        const newestTask = sortedTasks[0]
         new Notification("New Request: " + newestTask.type, {
           body: newestTask.title,
         })
       }
-      lastTaskCountRef.current = tasks.length
+      lastTaskCountRef.current = sortedTasks.length
     }
-  }, [tasks, notificationsEnabled])
+  }, [sortedTasks, notificationsEnabled])
 
   const handleUpdateStatus = (taskId: string, status: string) => {
     const taskRef = doc(db, 'orderTasks', taskId)
@@ -441,17 +456,17 @@ export default function TasksPage() {
           </TabsContent>
 
           <TabsContent value="analytics">
-            {tasks && tasks.length > 0 ? <AnalyticsTab tasks={tasks} /> : <p className="text-center text-muted-foreground py-20 italic">Gathering more data for insights...</p>}
+            {sortedTasks && sortedTasks.length > 0 ? <AnalyticsTab tasks={sortedTasks} /> : <p className="text-center text-muted-foreground py-20 italic">Gathering more data for insights...</p>}
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-4">
             {(isTasksLoading || isUserLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
-            ) : !tasks || tasks.length === 0 ? (
+            ) : !sortedTasks || sortedTasks.length === 0 ? (
               <Card className="glass-panel border-dashed py-20 text-center"><CardContent className="text-muted-foreground">No active tasks reported for your site key.</CardContent></Card>
             ) : (
               <div className="grid gap-4">
-                {tasks.map((task) => (
+                {sortedTasks.map((task) => (
                   <Card key={task.id} className={cn("glass-panel overflow-hidden transition-all duration-300 hover:border-white/20", task.type === 'Staff Concern' && "border-red-500/20 bg-red-500/5")}>
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-start">

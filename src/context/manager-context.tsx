@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -8,15 +7,18 @@ interface ManagerContextType {
   managerId: string | null;
   setManagerId: (id: string) => void;
   isManagerLinked: boolean;
+  isMounted: boolean;
 }
 
 const ManagerContext = createContext<ManagerContextType | undefined>(undefined);
 
 export function ManagerProvider({ children }: { children: ReactNode }) {
   const [managerId, setManagerIdState] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    setIsMounted(true);
     // 1. Check URL for manager ID (?m=xyz)
     const mParam = searchParams.get('m');
     if (mParam) {
@@ -33,14 +35,17 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
 
   const setManagerId = (id: string) => {
     setManagerIdState(id);
-    localStorage.setItem('cupboard_manager_id', id);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cupboard_manager_id', id);
+    }
   };
 
   return (
     <ManagerContext.Provider value={{ 
       managerId, 
       setManagerId, 
-      isManagerLinked: !!managerId 
+      isManagerLinked: !!managerId,
+      isMounted
     }}>
       {children}
     </ManagerContext.Provider>
