@@ -10,7 +10,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { 
   PlusCircle, Hammer, AlertTriangle, Clock, UserPlus, 
   CalendarDays, LayoutList, Info, BookOpen, Sparkles, 
-  ArrowRight, ShieldAlert, Heart, Link2, Lock, CreditCard 
+  ArrowRight, ShieldAlert, Heart, Link2, Lock, CreditCard, UserCheck 
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
@@ -26,6 +26,7 @@ export default function HomeHub() {
   }, [])
 
   const services = [
+    { id: 'clocking', href: "/clock-in", label: t.nav.clocking, icon: UserCheck, color: "text-green-400", border: "hover:border-green-400/40", bg: "bg-green-400/5" },
     { id: 'stores', href: "/stores", label: t.nav.stores, icon: PlusCircle, color: "stores-text-gradient", border: "hover:border-[#6E76F5]/40", bg: "bg-[#6E76F5]/5" },
     { id: 'faulty', href: "/faulty-equipment", label: t.nav.faulty, icon: Hammer, color: "faulty-text-gradient", border: "hover:border-[#F59E0B]/40", bg: "bg-[#F59E0B]/5" },
     { id: 'incomplete', href: "/incomplete-task", label: t.nav.incomplete, icon: AlertTriangle, color: "incomplete-text-gradient", border: "hover:border-[#EF4444]/40", bg: "bg-[#EF4444]/5" },

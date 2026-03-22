@@ -10,8 +10,8 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, doc, orderBy, where, limit } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
-import { format, addDays } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, Lock, Info, BookOpen } from "lucide-react"
+import { format, addDays, isSameDay, startOfDay, endOfDay } from "date-fns"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, Lock, Info, BookOpen, UserCheck, History, Calendar as CalendarIcon, Building2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,6 +25,142 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts'
 import { useRouter } from "next/navigation"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+
+function ClockingTab({ managerId }: { managerId: string }) {
+  const db = useFirestore()
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  
+  const clockLogsQuery = useMemoFirebase(() => {
+    if (!db || !managerId) return null
+    return query(
+      collection(db, 'clockLogs'),
+      where('managerId', '==', managerId)
+    )
+  }, [db, managerId])
+
+  const { data: allLogs, isLoading } = useCollection(clockLogsQuery)
+
+  const liveLogs = allLogs?.filter(l => l.status === 'Active') || []
+  const historicalLogs = allLogs?.filter(l => {
+    if (l.status === 'Active') return false
+    return isSameDay(new Date(l.clockInTime), selectedDate)
+  }) || []
+
+  return (
+    <div className="space-y-8">
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="glass-panel border-green-500/20">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-xl font-headline flex items-center gap-2">
+                <UserCheck className="w-5 h-5 text-green-400" />
+                Live Staff Feed
+              </CardTitle>
+              <Badge variant="outline" className="text-[10px] uppercase border-green-500/20 text-green-400 animate-pulse">
+                Monitoring
+              </Badge>
+            </div>
+            <CardDescription>Cleaners currently clocked in at your sites.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {liveLogs.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic text-center py-10">No staff currently clocked in.</p>
+            ) : (
+              <div className="grid gap-3">
+                {liveLogs.map(log => (
+                  <div key={log.id} className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-bold text-white">{log.cleanerName}</span>
+                      <span className="text-[10px] font-mono text-green-400 flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        In at {format(new Date(log.clockInTime), "HH:mm")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Building2 className="w-3 h-3" />
+                      {log.site}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="glass-panel border-white/5">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-xl font-headline flex items-center gap-2">
+                <History className="w-5 h-5 text-primary" />
+                Staff Reports
+              </CardTitle>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 border-white/10 gap-2">
+                    <CalendarIcon className="w-3 h-3" />
+                    {format(selectedDate, "MMM d, yyyy")}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 glass-panel border-white/10" align="end">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(d) => d && setSelectedDate(d)}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <CardDescription>Search shift logs by day.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="py-10 flex justify-center"><Loader2 className="animate-spin" /></div>
+            ) : historicalLogs.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic text-center py-10">No completed logs for this date.</p>
+            ) : (
+              <div className="grid gap-3">
+                {historicalLogs.map(log => {
+                  const outTime = log.clockOutTime ? new Date(log.clockOutTime) : null
+                  const inTime = new Date(log.clockInTime)
+                  const isAutoOut = log.status === 'Auto-Out' || (!outTime && log.status === 'Completed') // simulation
+                  
+                  return (
+                    <div key={log.id} className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-bold text-white text-sm">{log.cleanerName}</span>
+                        {isAutoOut ? (
+                          <Badge variant="outline" className="border-red-500/20 text-red-400 text-[8px] uppercase">Auto-Out</Badge>
+                        ) : (
+                          <Badge variant="outline" className="border-green-500/20 text-green-400 text-[8px] uppercase">Verified</Badge>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-[10px]">
+                        <div className="space-y-1">
+                          <p className="text-muted-foreground uppercase tracking-widest">Clock In</p>
+                          <p className="text-white font-mono">{format(inTime, "HH:mm:ss")}</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-muted-foreground uppercase tracking-widest">Clock Out</p>
+                          <p className="text-white font-mono">{outTime ? format(outTime, "HH:mm:ss") : "--:--:--"}</p>
+                        </div>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-white/5 flex items-center gap-2 text-[10px] text-muted-foreground">
+                        <Building2 className="w-3 h-3" /> {log.site}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
 
 function ResponseList({ postId }: { postId: string }) {
   const db = useFirestore()
@@ -349,7 +485,7 @@ function GuideTab() {
     {
       title: "2. Feedback & Notes",
       icon: MessageSquare,
-      content: "Each task has two note fields. 'Staff Feedback' is visible to the cleaner on their screen—use this for instructions or updates. 'Internal Notes' are strictly for your own management records and will never be seen by staff."
+      content: "Each task has two note fields. 'Staff Feedback' is visible to the cleaner on their screen—use this for instructions or updates. 'Internal Notes' is strictly for your own management records and will never be seen by staff."
     },
     {
       title: "3. System Broadcasts",
@@ -362,7 +498,12 @@ function GuideTab() {
       content: "Staff can send each other appreciation notes. These appear in your 'Kudos' tab first. You must 'Authorise' them before they appear on the public wall. Notes automatically expire and disappear after 14 days."
     },
     {
-      title: "5. Support & Control Room",
+      title: "5. Clocking Feed",
+      icon: UserCheck,
+      content: "The 'Clocking' tab provides a live overview of which staff are currently active on site. You can also review historical shift logs by selecting any date on the calendar."
+    },
+    {
+      title: "6. Support & Control Room",
       icon: LifeBuoy,
       content: "If you encounter a technical fault with the site or need extra training, use the 'Support' tab to raise a ticket. This goes directly to the Control Room administrators. Watch for feedback—a badge will appear when the Control Room replies."
     }
@@ -568,6 +709,9 @@ export default function TasksPage() {
         <Tabs defaultValue="tasks" className="space-y-6">
           <TabsList className="bg-secondary/50 border border-white/5 p-1 w-full justify-start h-12 rounded-2xl overflow-x-auto no-scrollbar">
             <TabsTrigger value="tasks" className="rounded-xl flex-1 px-6">Live Tasks</TabsTrigger>
+            <TabsTrigger value="clocking" className="rounded-xl flex-1 px-6 flex items-center gap-2">
+              <UserCheck className="w-4 h-4" /> Clocking
+            </TabsTrigger>
             <TabsTrigger value="broadcast" className="rounded-xl flex-1 px-6">Broadcast</TabsTrigger>
             <TabsTrigger value="kudos" className="rounded-xl flex-1 px-6 flex items-center gap-2">
               Kudos {pendingKudos && pendingKudos.length > 0 && <Badge className="bg-rose-500 h-4 w-4 p-0 flex items-center justify-center text-[8px]">{pendingKudos.length}</Badge>}
@@ -590,6 +734,7 @@ export default function TasksPage() {
 
           <TabsContent value="profile"><ProfileTab displayName={displayName} /></TabsContent>
           <TabsContent value="broadcast"><BroadcastTab managerId={managerId!} /></TabsContent>
+          <TabsContent value="clocking"><ClockingTab managerId={managerId!} /></TabsContent>
           <TabsContent value="analytics">{sortedTasks.length > 0 ? <AnalyticsTab tasks={sortedTasks} /> : <p className="text-center py-20 italic">Gathering data...</p>}</TabsContent>
           <TabsContent value="support"><SupportTab managerId={managerId!} managerName={displayName} /></TabsContent>
           <TabsContent value="guide"><GuideTab /></TabsContent>

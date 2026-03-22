@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 const MODULES = [
+  { id: 'clocking', label: 'Clock In / Out' },
   { id: 'stores', label: 'Order Supplies' },
   { id: 'faulty', label: 'Broken Equipment' },
   { id: 'incomplete', label: 'Unfinished Tasks' },
@@ -164,7 +165,7 @@ export default function ControlRoomPage() {
 
     setIsResetting(true)
     try {
-      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos', 'coverWorkPosts', 'controlRoomTickets']
+      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos', 'coverWorkPosts', 'controlRoomTickets', 'clockLogs']
       for (const colName of collections) {
         const snap = await getDocs(collection(db, colName))
         const batch = writeBatch(db)

@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
@@ -17,6 +18,7 @@ interface EnabledModules {
   concern?: boolean;
   info?: boolean;
   guide?: boolean;
+  clocking?: boolean;
 }
 
 interface ManagerContextType {

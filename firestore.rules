@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -11,10 +12,15 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Manager access keys - used for site linking and portal entry
+    // Manager access keys
     match /managerKeys/{keyId} {
       allow read: if true;
       allow write: if isSignedIn();
+    }
+
+    // Clock In/Out Logs
+    match /clockLogs/{logId} {
+      allow read, write: if true;
     }
 
     // Tickets for Control Room oversight
@@ -22,7 +28,7 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    // Tasks for management visibility (Orders, Reports, Enquiries)
+    // Tasks for management visibility
     match /orderTasks/{taskId} {
       allow read, write: if true;
     }
@@ -32,19 +38,19 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    // Management announcements and site-specific protocols
+    // Management announcements
     match /importantInfo/{infoId} {
       allow read: if true;
       allow write: if isSignedIn();
     }
 
-    // Global system alerts scrolling banner
+    // Global system alerts
     match /systemAlerts/{alertId} {
       allow read: if true;
       allow write: if isSignedIn();
     }
 
-    // Cover work opportunities and staff responses
+    // Cover work opportunities
     match /coverWorkPosts/{postId} {
       allow read: if true;
       allow write: if isSignedIn();

@@ -1,3 +1,4 @@
+
 export const translations = {
   en: {
     nav: {
@@ -9,6 +10,7 @@ export const translations = {
       cover: "Upcoming Cover Work",
       pay: "Pay Enquiry",
       status: "Check Progress",
+      clocking: "Clock In / Out",
       info: "Updates & News",
       guide: "How it Works",
       language: "Change Language",
@@ -48,6 +50,25 @@ export const translations = {
       emergency: "If it's an emergency, please call your manager immediately.",
       select: "Please select...",
       downloadPdf: "Download PDF",
+      areYouSure: "Are you sure?",
+      confirm: "Yes, Confirm",
+      cancel: "No, Cancel",
+    },
+    clocking: {
+      title: "Staff Clocking",
+      description: "Sign in when you arrive and sign out when you finish your shift.",
+      clockIn: "Clock In",
+      clockOut: "Clock Out",
+      activeSession: "Shift in Progress",
+      timer: "Shift Duration",
+      locationRequired: "GPS location is required to clock in/out.",
+      outOfRange: "You must be within 10 metres of your clock-in location to clock out.",
+      successClockIn: "You have successfully clocked in.",
+      successClockOut: "You have successfully clocked out.",
+      failedAutoOut: "Auto-Out System active (Logs missing clock-outs by 3am).",
+      confirmClockIn: "Are you sure you want to clock in now?",
+      confirmClockOut: "Are you sure you want to clock out now?",
+      mapPin: "Your current site location",
     },
     pay: {
       title: "Report Pay Issue",
@@ -202,37 +223,60 @@ export const translations = {
       managerGuideTitle: "Manager's Strategic Sheet",
       managerGuideDesc: "Why My Tidy Tracker is critical for site performance and team management.",
       viewSheet: "Download PDF Guide"
-    },
-    sheetCleaner: {
-      title: "Cleaner's Success Sheet",
-      tagline: "Work Smarter, Not Harder",
-      intro: "My Tidy Tracker is your personal workspace. It removes the stress of paperwork and phone calls, giving you more time to focus on your work and your goals.",
-      section1Title: "No More Paperwork",
-      section1Desc: "Forget paper forms. Order supplies and report issues in seconds from your phone. No more searching for pens or waiting to see your manager.",
-      section2Title: "Know Your Status",
-      section2Desc: "Track every request live. See exactly when your supplies are being processed and when your manager has read your reports.",
-      section3Title: "Earn More",
-      section3Desc: "Instantly see extra shifts at nearby sites. Refer your friends through the app and get rewarded when they join the team.",
-      section4Title: "Privacy & Support",
-      section4Desc: "Your voice matters. Report concerns privately and securely. We are here to support your success and safety every single day.",
-      footer: "My Tidy Tracker: Professionalising the standard."
-    },
-    sheetManager: {
-      title: "Manager's Strategic Sheet",
-      tagline: "Operational Excellence & Oversight",
-      intro: "My Tidy Tracker is the neural centre of your infrastructure management. It provides the data and visibility needed to run a high-performance team with zero friction.",
-      section1Title: "Real-time Site Oversight",
-      section1Desc: "Instantly see performance across all locations. Identify trends in equipment failure and site access issues before they become crises.",
-      section2Title: "Supply Chain Control",
-      section2Desc: "Standardise ordering across your network. Reduce waste by tracking specific item requests and delivery frequencies in real-time.",
-      section3Title: "Confidentiality & Safety",
-      section3Desc: "Protect your team with encrypted concern reporting. Address health and safety issues proactively through structured staff feedback.",
-      section4Title: "Audit-Ready Data",
-      section4Desc: "Every request is logged and archived. Build a comprehensive history of site activity for compliance, performance reviews, and client reporting.",
-      footer: "Powered by Harley: work smarter"
     }
   },
-  es: { nav: { stores: "Pedir Suministros", faulty: "Equipo Roto", incomplete: "Tarea sin Terminar", hours: "Pedir Horas Extras", referral: "Referir Amigo", cover: "Próxima Cobertura", pay: "Consulta de Pago", status: "Ver Progreso", info: "Noticias", guide: "Cómo Funciona", language: "Cambiar Idioma", concern: "Reportar Inquietud", kudos: "Elogios (Próximamente)", managerPortal: "Portal de Gerentes", controlRoom: "Sala de Control", groupOps: "Tareas Diarias", groupStaff: "Servicios al Staff", groupTrack: "Seguimiento", groupInfo: "Ayuda y Soporte", groupAdmin: "Administración" }, footer: { tagline: "Powered by Harley: work smarter", copyright: "© 2024 TECNOLOGÍAS SMART HARLEY", subtext: "Gestión Inteligente para Limpieza" }, language: { title: "Elegir Idioma", description: "Seleccione el idioma que prefiere usar para My Tidy Tracker.", select: "Elegir un Idioma", back: "Volver al Inicio" }, common: { submit: "Enviar Ahora", loading: "Enviando...", site: "Tu Sitio", name: "Tu Nombre", date: "Fecha", back: "Atrás", error: "Algo salió mal", success: "¡Listo!", wait: "Un momento...", auth: "Conectando...", missingInfo: "Faltan detalles", emergency: "Si es una emergencia, llame a su jefe de inmediato.", select: "Seleccione...", downloadPdf: "Descargar PDF" }, pay: { title: "Reportar Problema de Pago", description: "Informa sobre errores en tus horas o salario.", siteCode: "Código de Sitio", siteCodePlaceholder: "ej. LON-01", addEntry: "Añadir otro día", missingDate: "Fecha", missingHours: "Horas que faltan", hoursPlaceholder: "ej. 4 horas", submit: "Enviar Consulta", successTitle: "Consulta Enviada", successDesc: "Recibido por gerencia.", missingFields: "Completa todos los campos." }, stores: { title: "Pedir Suministros", description: "¿Necesitas materiales? Cuéntanos qué te hace falta.", nameLabel: "Tu Nombre", namePlaceholder: "Tu nombre completo", dateLabel: "Fecha de Hoy", siteLabel: "¿Dónde trabajas?", sitePlaceholder: "Nombre del sitio", deliveredLabel: "¿Necesitas entrega?", deliveredSub: "Nota: La entrega suele tardar unos 3 días hábiles.", pickedUpLabel: "¿Lo recogiste tú mismo?", pickedUpLocationLabel: "¿De dónde lo recogiste?", itemsTitle: "¿Qué necesitas?", addItem: "Añadir otro", itemNamePlaceholder: "Artículo", qtyPlaceholder: "Cantidad", codePlaceholder: "Código", submit: "Enviar Pedido", successTitle: "¡Pedido Enviado!", successDesc: "Recibido. Lo revisaremos mañana antes de las 12h.", missingFields: "Por favor pon tu nombre, fecha y sitio." }, faulty: { title: "Equipo Roto", description: "¿Está el equipo roto? Solicite un reemplazo", cleanerName: "Tu Nombre", site: "¿Dónde está el equipo?", equipment: "¿Qué está roto?", equipmentPlaceholder: "ej. Aspiradora, Fregona", faultDescription: "Cuál es el problema?", faultPlaceholder: "Cuéntanos qué pasó...", submit: "Enviar Reporte", successTitle: "¡Reporte Enviado!", successDesc: "¡Gracias! Lo miraremos mañana.", missingFields: "Por favor rellena todos los cuadros." }, incomplete: { title: "Tarea sin Terminar", description: "Informa sobre tareas que no se terminaron. Puede ser un área entera, una sección o solo una parte.", areaLabel: "¿Qué área, sección o parte no se terminó?", areaPlaceholder: "ej. Oficina entera, Sección A, o Parte del comedor", reason: "¿Por qué no se terminó?", details: "Más detalles (Opcional)", detailsPlaceholder: "¿Algo más?", submit: "Enviar Info", successTitle: "¡Información Enviada!", successDesc: "Gracias. Lo revisaremos mañana.", missingFields: "Por favor especifica el área y la razón.", reasons: ["Puerta cerrada / Sin llave", "Había gente", "Estaban en mantenimiento", "No era seguro", "Otro"] }, hours: { title: "Pedir Horas Extras", description: "¿Quieres más turnos o más horas?", requestType: "¿Qué estás buscando?", permanent: "Posición Fija", temporary: "Temporal / Cobertura", datesFree: "¿Qué días puedes?", datesPlaceholder: "ej. Lunes a viernes", timesAvailable: "¿...?", timesPlaceholder: "Danos detalles...", submit: "Enviar Solicitud", successTitle: "¡Solicitud Enviada!", successDesc: "Gracias. Miraremos el horario.", missingFields: "Dinos qué horas buscas." }, referral: { title: "Referir Amigo", description: "¿Conoces a alguien? ¡Cuéntanos!", yourName: "Tu Nombre", friendInfo: "Datos del Amigo", friendName: "Nombre del Amigo", email: "Su Email", phone: "Su Teléfono", extraInfo: "¿Algo más?", extraPlaceholder: "Experiencia o disponibilidad...", submit: "Enviar Datos", successTitle: "¡Amigo Recomendado!", successDesc: "¡Gracias! Le llamaremos pronto.", missingFields: "Put el nombre y contacto de tu amigo." }, concern: { title: "Reportar Inquietud", description: "Informa sobre un colega o seguridad. Privado para la gerencia.", typeLabel: "¿Sobre qué es tu inquietud?", typeStaff: "Otro Miembro del Staff", typeSafety: "Problema de Salud y Seguridad", typeOther: "Otro / Algo Más", siteLabel: "¿Dónde ocurrió?", detailsLabel: "Describe tu inquietud", detailsPlaceholder: "Proporciona tantos detalles como sea posible...", submit: "Enviar Reporte Privado", successTitle: "Reporte Recibido", successDesc: "Tu reporte ha sido enviado directamente a la gerencia.", missingFields: "Selecciona un tipo y proporciona detalles." }, kudos: { title: "Tablero de Elogios (Próximamente)", description: "¡Celebra a tus compañeros!", senderLabel: "Tu Nombre", recipientLabel: "¿A quién agradeces?", messageLabel: "¿Qué hicieron bien?", messagePlaceholder: "ej. ¡Gracias por ayudarme hoy!", submit: "Publicar Elogio", successTitle: "¡Elogio Enviado!", successDesc: "Tu mensaje ha sido añadido al tablero.", noKudos: "No hay elogios todavía. ¡Sé el primero!" }, status: { title: "Ver Progreso", description: "Mira cómo van tus pedidos aquí.", loading: "Actualizando...", noTasks: "Sin pedidos", noTasksDesc: "No has enviado nada últimamente.", underReview: "Revisando", processing: "En proceso", reviewIn: "Revisión en:", managerUpdate: "Mensaje del Jefe" }, guide: { title: "Cómo usar My Tidy Tracker", description: "Una guía fácil para usar esta app.", workflow: "3 Pasos Fáciles", capabilities: "¿Qué puedo hacer?", benefits: "Cómo te ayuda", emergencyTitle: "¿Necesitas ayuda urgente?", emergencyDesc: "Si hay una emergencia real, llama a tu jefe ya.", developer: "Hecho por Smart Harley Technology", resourcesTitle: "Centro de Recursos Digitale", cleanerGuideTitle: "Hoja de Éxito del Limpiador", cleanerGuideDesc: "Aprende cómo My Tidy Tracker facilita tus turnos y te ayuda a ganar más.", managerGuideTitle: "Hoja Estratégica del Gerente", managerGuideDesc: "Por qué My Tidy Tracker es crítico para el rendimiento del sitio y la gestión del equipo.", viewSheet: "Descargar Guía PDF" }, sheetCleaner: { title: "Hoja de Éxito del Limpiador", tagline: "Trabaja más Inteligente, no más Duro", intro: "My Tidy Tracker es tu espacio de trabajo personal.", section1Title: "Sin más Papeleo", section1Desc: "Olvida los formularios de papel.", section2Title: "Conoce tu Estado", section2Desc: "Sigue cada solicitud en vivo.", section3Title: "Gana Más", section3Desc: "Mira turnos extra.", section4Title: "Privacidad", section4Desc: "Reporta inquietudes.", footer: "My Tidy Tracker: Professionalizing the standard." }, sheetManager: { title: "Hoja Estratégica del Gerente", tagline: "Excelencia Operativa", intro: "My Tidy Tracker es el centro neural.", section1Title: "Supervisión", section1Desc: "Rendimiento instantáneo.", section2Title: "Control", section2Desc: "Standardizează comenzile.", section3Title: "Seguridad", section3Desc: "Reportes encriptados.", section4Title: "Auditoría", section4Desc: "Historial completo.", footer: "Powered by Harley: work smarter" } }
+  es: {
+    nav: {
+      stores: "Pedir Suministros",
+      faulty: "Equipo Roto",
+      incomplete: "Tarea sin Terminar",
+      hours: "Pedir Horas Extras",
+      referral: "Referir Amigo",
+      cover: "Próxima Cobertura",
+      pay: "Consulta de Pago",
+      status: "Ver Progreso",
+      clocking: "Fichar Entrada / Salida",
+      info: "Noticias",
+      guide: "Cómo Funciona",
+      language: "Cambiar Idioma",
+      concern: "Reportar Inquietud",
+      kudos: "Elogios (Próximamente)",
+      managerPortal: "Portal de Gerentes",
+      controlRoom: "Sala de Control",
+      groupOps: "Tareas Diarias",
+      groupStaff: "Servicios al Staff",
+      groupTrack: "Seguimiento",
+      groupInfo: "Ayuda y Soporte",
+      groupAdmin: "Administración"
+    },
+    clocking: {
+      title: "Control de Horario",
+      description: "Fiche al llegar y al salir de su turno.",
+      clockIn: "Fichar Entrada",
+      clockOut: "Fichar Salida",
+      activeSession: "Turno en Curso",
+      timer: "Duración del Turno",
+      locationRequired: "Se requiere ubicación GPS.",
+      outOfRange: "Debe estar a menos de 10 metros del punto de entrada.",
+      successClockIn: "Entrada registrada.",
+      successClockOut: "Salida registrada.",
+      failedAutoOut: "Sistema de Auto-Salida activo.",
+      confirmClockIn: "¿Desea fichar la entrada?",
+      confirmClockOut: "¿Desea fichar la salida?",
+      mapPin: "Su ubicación actual",
+    },
+    common: { submit: "Enviar Ahora", loading: "Enviando...", site: "Tu Sitio", name: "Tu Nombre", date: "Fecha", back: "Atrás", error: "Algo salió mal", success: "¡Listo!", wait: "Un momento...", auth: "Conectando...", missingInfo: "Faltan detalles", emergency: "Si es una emergencia, llame a su jefe de inmediato.", select: "Seleccione...", downloadPdf: "Descargar PDF", areYouSure: "¿Está seguro?", confirm: "Sí, Confirmar", cancel: "No, Cancelar" },
+    pay: { title: "Reportar Problema de Pago", description: "Informa sobre errores en tus horas o salario.", siteCode: "Código de Sitio", siteCodePlaceholder: "ej. LON-01", addEntry: "Añadir otro día", missingDate: "Fecha", missingHours: "Horas que faltan", hoursPlaceholder: "ej. 4 horas", submit: "Enviar Consulta", successTitle: "Consulta Enviada", successDesc: "Recibido por gerencia.", missingFields: "Completa todos los campos." },
+    stores: { title: "Pedir Suministros", description: "¿Necesitas materiales? Cuéntanos qué te hace falta.", nameLabel: "Tu Nombre", namePlaceholder: "Tu nombre completo", dateLabel: "Fecha de Hoy", siteLabel: "¿Dónde trabajas?", sitePlaceholder: "Nombre del sitio", deliveredLabel: "¿Necesitas entrega?", deliveredSub: "Nota: La entrega suele tardar unos 3 días hábiles.", pickedUpLabel: "¿Lo recogiste tú mismo?", pickedUpLocationLabel: "¿De dónde lo recogiste?", itemsTitle: "¿Qué necesitas?", addItem: "Añadir otro", itemNamePlaceholder: "Artículo", qtyPlaceholder: "Cantidad", codePlaceholder: "Código", submit: "Enviar Pedido", successTitle: "¡Pedido Enviado!", successDesc: "Recibido. Lo revisaremos mañana antes de las 12h.", missingFields: "Por favor pon tu nombre, fecha y sitio." },
+    faulty: { title: "Equipo Roto", description: "¿Está el equipo roto? Solicite un reemplazo", cleanerName: "Tu Nombre", site: "¿Dónde está el equipo?", equipment: "¿Qué está roto?", equipmentPlaceholder: "ej. Aspiradora, Fregona", faultDescription: "Cuál es el problema?", faultPlaceholder: "Cuéntanos qué pasó...", submit: "Enviar Reporte", successTitle: "¡Reporte Enviado!", successDesc: "¡Gracias! Lo miraremos mañana.", missingFields: "Por favor rellena todos los cuadros." },
+    incomplete: { title: "Tarea sin Terminar", description: "Informa sobre tareas que no se terminaron. Puede ser un área entera, una sección o solo una parte.", areaLabel: "¿Qué área, sección o parte no se terminó?", areaPlaceholder: "ej. Oficina entera, Sección A, o Parte del comedor", reason: "¿Por qué no se terminó?", details: "Más detalles (Opcional)", detailsPlaceholder: "¿Algo más?", submit: "Enviar Info", successTitle: "¡Información Enviada!", successDesc: "Gracias. Lo revisaremos mañana.", missingFields: "Por favor especifica el área y la razón.", reasons: ["Puerta cerrada / Sin llave", "Había gente", "Estaban en mantenimiento", "No era seguro", "Otro"] },
+    hours: { title: "Pedir Horas Extras", description: "¿Quieres más turnos o más horas?", requestType: "¿Qué estás buscando?", permanent: "Posición Fija", temporary: "Temporal / Cobertura", datesFree: "¿Qué días puedes?", datesPlaceholder: "ej. Lunes a viernes", timesAvailable: "¿...?", timesPlaceholder: "Danos detalles...", submit: "Enviar Solicitud", successTitle: "¡Solicitud Enviada!", successDesc: "Gracias. Miraremos el horario.", missingFields: "Dinos qué horas buscas." },
+    referral: { title: "Referir Amigo", description: "¿Conoces a alguien? ¡Cuéntanos!", yourName: "Tu Nombre", friendInfo: "Datos del Amigo", friendName: "Nombre del Amigo", email: "Su Email", phone: "Su Teléfono", extraInfo: "¿Algo más?", extraPlaceholder: "Experiencia o disponibilidad...", submit: "Enviar Datos", successTitle: "¡Amigo Recomendado!", successDesc: "¡Gracias! Le llamaremos pronto.", missingFields: "Put el nombre y contacto de tu amigo." },
+    concern: { title: "Reportar Inquietud", description: "Informa sobre un colega o seguridad. Privado para la gerencia.", typeLabel: "¿Sobre qué es tu inquietud?", typeStaff: "Otro Miembro del Staff", typeSafety: "Problema de Salud y Seguridad", typeOther: "Otro / Algo Más", siteLabel: "¿Dónde ocurrió?", detailsLabel: "Describe tu inquietud", detailsPlaceholder: "Proporciona tantos detalles como sea posible...", submit: "Enviar Reporte Privado", successTitle: "Reporte Recibido", successDesc: "Tu reporte ha sido enviado directamente a la gerencia.", missingFields: "Selecciona un tipo y proporciona detalles." },
+    kudos: { title: "Tablero de Elogios (Próximamente)", description: "¡Celebra a tus compañeros!", senderLabel: "Tu Nombre", recipientLabel: "¿A quién agradeces?", messageLabel: "¿Qué hicieron bien?", messagePlaceholder: "ej. ¡Gracias por ayudarme hoy!", submit: "Publicar Elogio", successTitle: "¡Elogio Enviado!", successDesc: "Tu mensaje ha sido añadido al tablero.", noKudos: "No hay elogios todavía. ¡Sé el primero!" },
+    status: { title: "Ver Progreso", description: "Mira cómo van tus pedidos aquí.", loading: "Actualizando...", noTasks: "Sin pedidos", noTasksDesc: "No has enviado nada últimamente.", underReview: "Revisando", processing: "En proceso", reviewIn: "Revisión en:", managerUpdate: "Mensaje del Jefe" },
+    guide: { title: "Cómo usar My Tidy Tracker", description: "Una guía fácil para usar esta app.", workflow: "3 Pasos Fáciles", capabilities: "¿Qué puedo hacer?", benefits: "Cómo te ayuda", emergencyTitle: "¿Necesitas ayuda urgente?", emergencyDesc: "Si hay una emergencia real, llama a tu jefe ya.", developer: "Hecho por Smart Harley Technology", resourcesTitle: "Centro de Recursos Digitale", cleanerGuideTitle: "Hoja de Éxito del Limpiador", cleanerGuideDesc: "Aprende cómo My Tidy Tracker facilita tus turnos y te ayuda a ganar más.", managerGuideTitle: "Hoja Estratégica del Gerente", managerGuideDesc: "Por qué My Tidy Tracker es crítico para el rendimiento del sitio y la gestión del equipo.", viewSheet: "Descargar Guía PDF" }
+  }
 };
 
 export type Language = keyof typeof translations;

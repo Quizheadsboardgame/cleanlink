@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -24,7 +25,8 @@ import {
   Users,
   Search,
   HelpCircle,
-  CreditCard
+  CreditCard,
+  UserCheck
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -102,7 +104,7 @@ export function Navbar() {
                   <DropdownMenuSeparator className="bg-white/5" />
 
                   <Accordion type="single" collapsible className="w-full">
-                    {(isVisible('stores') || isVisible('faulty') || isVisible('incomplete')) && (
+                    {(isVisible('stores') || isVisible('faulty') || isVisible('incomplete') || isVisible('clocking')) && (
                       <AccordionItem value="workplace" className="border-none">
                         <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5 rounded-xl transition-all">
                           <div className="flex items-center gap-3 text-muted-foreground group-data-[state=open]:text-white">
@@ -111,6 +113,14 @@ export function Navbar() {
                           </div>
                         </AccordionTrigger>
                         <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
+                          {isVisible('clocking') && (
+                            <Link href="/clock-in">
+                              <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/clock-in" ? "bg-white/10" : "hover:bg-white/5")}>
+                                <UserCheck className="w-4 h-4 text-green-400" />
+                                <span className="text-sm">{t.nav.clocking}</span>
+                              </DropdownMenuItem>
+                            </Link>
+                          )}
                           {isVisible('stores') && (
                             <Link href="/stores">
                               <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg", pathname === "/stores" ? "bg-white/10" : "hover:bg-white/5")}>
@@ -253,7 +263,10 @@ export function Navbar() {
 
                   <DropdownMenuSeparator className="bg-white/10 h-px my-4" />
                   <Link href={isManagerAuthorized ? "/tasks" : "/manager-login"}>
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-primary/5 transition-colors border border-primary/10">
+                    <DropdownMenuItem className={cn(
+                      "flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-primary/5 transition-colors border border-primary/10",
+                      pathname === "/tasks" && "bg-primary/10 border-primary/30"
+                    )}>
                       {isManagerAuthorized ? <LayoutDashboard className="w-5 h-5 text-primary" /> : <Lock className="w-5 h-5 text-primary" />}
                       <span className="text-sm font-bold text-primary">
                         {isManagerAuthorized ? "Manager Dashboard" : t.nav.managerPortal}

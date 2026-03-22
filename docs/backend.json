@@ -24,12 +24,45 @@
             "kudos": { "type": "boolean" },
             "concern": { "type": "boolean" },
             "info": { "type": "boolean" },
-            "guide": { "type": "boolean" }
+            "guide": { "type": "boolean" },
+            "clocking": { "type": "boolean" }
           }
         },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "key", "displayName", "createdAt"]
+    },
+    "ClockLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ClockLog",
+      "type": "object",
+      "description": "A record of a staff member's working hours including GPS coordinates.",
+      "properties": {
+        "id": { "type": "string" },
+        "cleanerName": { "type": "string" },
+        "site": { "type": "string" },
+        "clockInTime": { "type": "string", "format": "date-time" },
+        "clockOutTime": { "type": "string", "format": "date-time" },
+        "inLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "outLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "status": { "type": "string", "enum": ["Active", "Completed", "Auto-Out"] },
+        "managerId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "cleanerName", "site", "clockInTime", "status", "managerId"]
     },
     "ControlRoomTicket": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -119,54 +152,6 @@
         }
       },
       "required": ["id", "title", "status", "createdAt", "managerId"]
-    },
-    "StaffKudos": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "StaffKudos",
-      "type": "object",
-      "description": "A public appreciation note from one staff member to another, moderated by management.",
-      "properties": {
-        "id": { "type": "string" },
-        "senderName": { "type": "string" },
-        "recipientName": { "type": "string" },
-        "message": { "type": "string" },
-        "status": { "type": "string", "enum": ["Pending Review", "Authorised", "Rejected"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "authorisedAt": { "type": "string", "format": "date-time" },
-        "expiresAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "senderName", "recipientName", "message", "createdAt", "status"]
-    },
-    "StaffConcern": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "StaffConcern",
-      "type": "object",
-      "description": "A private concern report submitted by a staff member.",
-      "properties": {
-        "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["Staff Member", "Health & Safety", "Other"] },
-        "site": { "type": "string" },
-        "description": { "type": "string" },
-        "status": { "type": "string" },
-        "ownerId": { "type": "string" },
-        "managerId": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "type", "site", "description", "status", "createdAt"]
-    },
-    "SystemAlert": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "SystemAlert",
-      "type": "object",
-      "description": "Global broadcast message set by management.",
-      "properties": {
-        "id": { "type": "string" },
-        "message": { "type": "string" },
-        "active": { "type": "boolean" },
-        "managerId": { "type": "string" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "message", "active", "updatedAt"]
     }
   },
   "auth": {
@@ -174,6 +159,14 @@
   },
   "firestore": {
     "structure": [
+      {
+        "path": "/clockLogs/{logId}",
+        "definition": {
+          "entityName": "ClockLog",
+          "schema": { "$ref": "#/backend/entities/ClockLog" },
+          "description": "Tracking logs for staff clocking in and out."
+        }
+      },
       {
         "path": "/managerKeys/{keyId}",
         "definition": {
@@ -188,46 +181,6 @@
           "entityName": "ControlRoomTicket",
           "schema": { "$ref": "#/backend/entities/ControlRoomTicket" },
           "description": "Tickets raised by managers to the control room."
-        }
-      },
-      {
-        "path": "/orderTasks/{taskId}",
-        "definition": {
-          "entityName": "OrderTask",
-          "schema": { "$ref": "#/backend/entities/OrderTask" },
-          "description": "Tasks for management visibility."
-        }
-      },
-      {
-        "path": "/kudos/{kudosId}",
-        "definition": {
-          "entityName": "StaffKudos",
-          "schema": { "$ref": "#/backend/entities/StaffKudos" },
-          "description": "Public staff appreciation board."
-        }
-      },
-      {
-        "path": "/systemAlerts/{alertId}",
-        "definition": {
-          "entityName": "SystemAlert",
-          "schema": { "$ref": "#/backend/entities/SystemAlert" },
-          "description": "Global notification alerts siloed by manager."
-        }
-      },
-      {
-        "path": "/staffConcerns/{concernId}",
-        "definition": {
-          "entityName": "StaffConcern",
-          "schema": { "$ref": "#/backend/entities/StaffConcern" },
-          "description": "Private staff concern reports."
-        }
-      },
-      {
-        "path": "/users/{userId}/payErrors/{errorId}",
-        "definition": {
-          "entityName": "PayError",
-          "schema": { "$ref": "#/backend/entities/PayError" },
-          "description": "Individual payroll discrepancy reports."
         }
       }
     ]
