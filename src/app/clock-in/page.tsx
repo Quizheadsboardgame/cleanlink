@@ -1,19 +1,18 @@
-
 "use client"
 
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useFirestore, useUser, useAuth, useCollection, useMemoFirebase } from "@/firebase"
-import { collection, query, where, doc, limit, orderBy } from "firebase/firestore"
+import { collection, query, where, doc, limit } from "firebase/firestore"
 import { setDocumentNonBlocking, updateDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, Clock, MapPin, Play, Square, Map as MapIcon, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { Loader2, Clock, MapPin, Play, Square, Map as MapIcon, AlertTriangle, CheckCircle2, RefreshCw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
@@ -51,6 +50,7 @@ export default function ClockingPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [coords, setCoords] = useState<{ lat: number, lng: number } | null>(null)
+  const [gpsError, setGpsError] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -61,16 +61,34 @@ export default function ClockingPage() {
     return () => clearInterval(timer)
   }, [user, isUserLoading, auth])
 
-  // Get current location
-  useEffect(() => {
-    if (typeof window !== 'undefined' && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => console.warn("Geolocation error:", err),
-        { enableHighAccuracy: true }
-      )
+  const requestLocation = useCallback(() => {
+    if (typeof window === 'undefined' || !navigator.geolocation) {
+      setGpsError("Geolocation is not supported by your browser.")
+      return
     }
+
+    setGpsError(null)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setGpsError(null)
+      },
+      (err) => {
+        console.warn("Geolocation error:", err)
+        if (err.code === 1) {
+          setGpsError("Location permission denied. Please allow location access in your browser settings to clock in.")
+        } else {
+          setGpsError("Could not find your location. Please check your GPS settings.")
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    )
   }, [])
+
+  // Initial location request
+  useEffect(() => {
+    requestLocation()
+  }, [requestLocation])
 
   const activeQuery = useMemoFirebase(() => {
     if (!db || !user) return null
@@ -91,7 +109,12 @@ export default function ClockingPage() {
       return
     }
     if (!coords) {
-      toast({ variant: "destructive", title: "Location Error", description: t.clocking.locationRequired })
+      toast({ 
+        variant: "destructive", 
+        title: "Location Required", 
+        description: gpsError || "Please allow GPS access to verify your site location." 
+      })
+      requestLocation()
       return
     }
 
@@ -119,6 +142,7 @@ export default function ClockingPage() {
     if (!activeLog) return
     if (!coords) {
       toast({ variant: "destructive", title: "Location Error", description: t.clocking.locationRequired })
+      requestLocation()
       return
     }
 
@@ -127,11 +151,12 @@ export default function ClockingPage() {
       coords.lat, coords.lng
     )
 
+    // Range checked in metres (UK Standard)
     if (distance > 10) {
       toast({ 
         variant: "destructive", 
         title: "Out of Range", 
-        description: `${t.clocking.outOfRange} (Current distance: ${Math.round(distance)}m)` 
+        description: `${t.clocking.outOfRange} (Current distance: ${Math.round(distance)} metres)` 
       })
       return
     }
@@ -212,6 +237,12 @@ export default function ClockingPage() {
                   </div>
                 </div>
 
+                {!coords && (
+                  <Button variant="outline" onClick={requestLocation} className="w-full border-primary/20 text-primary">
+                    <RefreshCw className="w-4 h-4 mr-2" /> Verify Location for Clock Out
+                  </Button>
+                )}
+
                 <div className="flex flex-col gap-4">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
@@ -271,11 +302,23 @@ export default function ClockingPage() {
                   </div>
                 </div>
 
-                <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex items-start gap-3">
-                  <MapIcon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    <strong>Note:</strong> We will securely record your GPS location when you clock in. You must be in this location to clock out later.
-                  </p>
+                <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-col gap-3">
+                  <div className="flex items-start gap-3">
+                    <MapIcon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      <strong>Location Tracking:</strong> We record your GPS location when you clock in. You must be in this location to clock out later.
+                    </p>
+                  </div>
+                  {gpsError && (
+                    <div className="text-[10px] text-red-400 bg-red-500/10 p-2 rounded border border-red-500/20">
+                      <AlertTriangle className="w-3 h-3 inline mr-1" /> {gpsError}
+                    </div>
+                  )}
+                  {!coords && (
+                    <Button variant="ghost" size="sm" onClick={requestLocation} className="text-primary hover:bg-primary/5 h-8">
+                      <RefreshCw className="w-3 h-3 mr-2" /> Ask for GPS Permission
+                    </Button>
+                  )}
                 </div>
 
                 <AlertDialog>
@@ -300,7 +343,7 @@ export default function ClockingPage() {
               </CardContent>
               <CardFooter className="bg-white/[0.02] border-t border-white/5 p-4 justify-center">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-2">
-                  <CheckCircle2 className="w-3 h-3 text-green-500" /> System Ready
+                  <CheckCircle2 className="w-3 h-3 text-green-500" /> {coords ? "GPS Active" : "Waiting for GPS"}
                 </p>
               </CardFooter>
             </Card>
