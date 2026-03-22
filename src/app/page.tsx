@@ -21,7 +21,8 @@ import {
   ArrowRight,
   ShieldAlert,
   Heart,
-  Link2
+  Link2,
+  Lock
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
@@ -30,7 +31,7 @@ import { Badge } from "@/components/ui/badge"
 
 export default function HomeHub() {
   const { t } = useLanguage()
-  const { managerId, isManagerLinked } = useManagerContext()
+  const { managerId, isManagerLinked, isManagerAuthorized } = useManagerContext()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function HomeHub() {
     { href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "hover:border-rose-400/40", bg: "bg-rose-400/5", desc: "Say thank you to a fellow teammate." },
     { href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5", desc: "Track your submitted forms and requests." },
     { href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5", desc: "Submit a private concern to management." },
+    { href: isManagerAuthorized ? "/tasks" : "/manager-login", label: isManagerAuthorized ? "Management Hub" : t.nav.managerPortal, icon: Lock, color: "text-primary", border: "border-primary/20 bg-primary/5", bg: "bg-primary/10", desc: "Access site analytics, task management, and staff broadcasts." },
     { href: "/important-info", label: t.nav.info, icon: Info, color: "info-text-gradient", border: "hover:border-orange-500/40", bg: "bg-orange-500/5", desc: "Contact details and site procedures." },
     { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5", desc: "Learn how to use our system." },
   ]
@@ -71,7 +73,12 @@ export default function HomeHub() {
             </p>
             
             {mounted && (
-              isManagerLinked ? (
+              isManagerAuthorized ? (
+                <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full border border-primary/20 text-[10px] font-bold uppercase tracking-widest">
+                  <Lock className="w-3 h-3" />
+                  Management Session Active
+                </div>
+              ) : isManagerLinked ? (
                 <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-400 px-4 py-1.5 rounded-full border border-green-500/20 text-[10px] font-bold uppercase tracking-widest">
                   <Link2 className="w-3 h-3" />
                   Linked to Manager Profile: {managerId?.substring(0, 8)}...
@@ -79,7 +86,7 @@ export default function HomeHub() {
               ) : (
                 <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-1.5 rounded-full border border-amber-500/20 text-[10px] font-bold uppercase tracking-widest">
                   <ShieldAlert className="w-3 h-3" />
-                  Generic View: Please use your manager's direct link for exclusive access
+                  Generic View: Use your manager's link for site data siloing
                 </div>
               )
             )}
@@ -118,7 +125,7 @@ export default function HomeHub() {
           {/* Quick Info Bar */}
           <div className="pt-12 text-center">
             <p className="text-[10px] text-muted-foreground uppercase tracking-[0.5em] font-bold opacity-40">
-              Secure Connection: {mounted ? (isManagerLinked ? "LINKED" : "ANONYMOUS") : "CONNECTING..."}
+              Secure Connection: {mounted ? (isManagerAuthorized ? "ADMIN" : isManagerLinked ? "LINKED" : "ANONYMOUS") : "CONNECTING..."}
             </p>
           </div>
         </div>

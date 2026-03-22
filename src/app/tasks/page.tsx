@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,7 +11,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -301,7 +302,8 @@ export default function TasksPage() {
       setDisplayName(savedName || "Manager")
       setIsReady(true)
     } else if (!isUserLoading) {
-      setTimeout(() => {
+      // Small delay to allow session storage to be populated if just coming from login
+      const timer = setTimeout(() => {
         const retryId = sessionStorage.getItem("manager_auth_token")
         if (retryId) {
           setManagerId(retryId)
@@ -310,6 +312,7 @@ export default function TasksPage() {
           router.push('/manager-login')
         }
       }, 500)
+      return () => clearTimeout(timer)
     }
     
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -417,8 +420,16 @@ export default function TasksPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-5xl">
         <div className="mb-8 flex flex-col sm:flex-row justify-between items-end gap-4">
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Welcome, {displayName}</h1>
-            <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Access Key: {managerId}</p>
+            <div className="flex items-center gap-2 text-primary">
+              <LayoutDashboard className="w-5 h-5" />
+              <span className="text-xs font-bold uppercase tracking-[0.3em]">Management Protocol</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold font-headline tasks-text-gradient tracking-tighter">Manager Control Hub</h1>
+            <div className="flex items-center gap-4 text-muted-foreground text-sm">
+              <span className="uppercase tracking-widest font-bold">Manager: {displayName}</span>
+              <span className="opacity-40">|</span>
+              <span className="uppercase tracking-widest font-bold">Key: {managerId}</span>
+            </div>
           </div>
           <div className="flex gap-2 items-center">
             <Button 
@@ -440,11 +451,11 @@ export default function TasksPage() {
 
         <Tabs defaultValue="tasks" className="space-y-6">
           <TabsList className="bg-secondary/50 border border-white/5 p-1 w-full justify-start h-12 rounded-2xl overflow-x-auto no-scrollbar">
-            <TabsTrigger value="tasks" className="rounded-xl flex-1 px-6">Tasks</TabsTrigger>
-            <TabsTrigger value="broadcast" className="rounded-xl flex-1 px-6">Broadcast</TabsTrigger>
-            <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Analytics</TabsTrigger>
+            <TabsTrigger value="tasks" className="rounded-xl flex-1 px-6">Live Tasks</TabsTrigger>
+            <TabsTrigger value="broadcast" className="rounded-xl flex-1 px-6">System Broadcast</TabsTrigger>
+            <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Site Analytics</TabsTrigger>
             <TabsTrigger value="cover" className="rounded-xl flex-1 px-6">Cover Work</TabsTrigger>
-            <TabsTrigger value="profile" className="rounded-xl flex-1 px-6">Profile & Link</TabsTrigger>
+            <TabsTrigger value="profile" className="rounded-xl flex-1 px-6">Staff Connectivity</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile">
