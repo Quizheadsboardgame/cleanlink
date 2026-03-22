@@ -7,8 +7,9 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, doc, deleteDoc, setDoc, orderBy } from "firebase/firestore"
+import { collection, query, doc, orderBy } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
+import { setDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -80,7 +81,7 @@ export default function ControlRoomPage() {
     const profileId = editingProfile?.id || Math.random().toString(36).substr(2, 9)
     const profileRef = doc(db, 'managerProfiles', profileId)
 
-    setDoc(profileRef, {
+    setDocumentNonBlocking(profileRef, {
       ...formData,
       id: profileId,
       createdAt: editingProfile?.createdAt || new Date().toISOString()
@@ -94,7 +95,7 @@ export default function ControlRoomPage() {
 
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to remove this manager?")) {
-      deleteDoc(doc(db, 'managerProfiles', id))
+      deleteDocumentNonBlocking(doc(db, 'managerProfiles', id))
       toast({ title: "Removed", description: "Manager profile deleted." })
     }
   }

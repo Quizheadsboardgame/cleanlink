@@ -291,13 +291,13 @@ export default function TasksPage() {
       router.push('/manager-login')
     }
     
-    if ('Notification' in window) {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
       setNotificationsEnabled(Notification.permission === 'granted')
     }
   }, [router])
 
   const requestNotificationPermission = () => {
-    if (!('Notification' in window)) return
+    if (typeof window === 'undefined' || !('Notification' in window)) return
     Notification.requestPermission().then(permission => {
       setNotificationsEnabled(permission === 'granted')
       if (permission === 'granted') {
@@ -321,11 +321,10 @@ export default function TasksPage() {
 
   useEffect(() => {
     if (tasks && tasks.length > lastTaskCountRef.current) {
-      if (lastTaskCountRef.current > 0 && notificationsEnabled) {
+      if (lastTaskCountRef.current > 0 && notificationsEnabled && typeof window !== 'undefined') {
         const newestTask = tasks[0]
         new Notification("New Request: " + newestTask.type, {
           body: newestTask.title,
-          icon: "/favicon.ico"
         })
       }
       lastTaskCountRef.current = tasks.length
@@ -357,13 +356,13 @@ export default function TasksPage() {
     const postId = Math.random().toString(36).substr(2, 9)
     const postRef = doc(db, 'coverWorkPosts', postId)
     
-    setDoc(postRef, {
+    setDocumentNonBlocking(postRef, {
       id: postId,
       managerId: managerId,
       ...newCover,
       deadline: new Date(newCover.deadline).toISOString(),
       createdAt: new Date().toISOString()
-    })
+    }, { merge: true })
 
     toast({ title: "Cover Posted", description: "Successfully added to your board." })
     setIsCreatingCover(false)

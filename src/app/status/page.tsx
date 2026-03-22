@@ -129,6 +129,7 @@ export default function StatusBoardPage() {
     }
 
     // Otherwise (Cleaner view), show only tasks owned by this specific browser user
+    // CRITICAL: Filter by managerId AND ownerId to satisfy rules and siloing
     return query(
       collection(db, 'orderTasks'), 
       where('managerId', '==', currentM),
