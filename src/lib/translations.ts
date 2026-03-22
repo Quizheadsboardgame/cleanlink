@@ -164,6 +164,34 @@ export const translations = {
       managerGuideTitle: "Manager's Strategic Sheet",
       managerGuideDesc: "Why CleanLink is critical for site performance and team management.",
       viewSheet: "View Digital Sheet"
+    },
+    sheetCleaner: {
+      title: "Cleaner's Success Sheet",
+      tagline: "Work Smarter, Not Harder",
+      intro: "CleanLink is your personal workspace. It removes the stress of paperwork and phone calls, giving you more time to focus on your work and your goals.",
+      section1Title: "No More Paperwork",
+      section1Desc: "Forget paper forms. Order supplies and report issues in seconds from your phone. No more searching for pens or waiting to see your manager.",
+      section2Title: "Know Your Status",
+      section2Desc: "Track every request live. See exactly when your supplies are being processed and when your manager has read your reports.",
+      section3Title: "Earn More",
+      section3Desc: "Instantly see extra shifts at nearby sites. Refer your friends through the app and get rewarded when they join the team.",
+      section4Title: "Privacy & Support",
+      section4Desc: "Your voice matters. Report concerns privately and securely. We are here to support your success and safety every single day.",
+      footer: "CleanLink: Professionalizing the standard."
+    },
+    sheetManager: {
+      title: "Manager's Strategic Sheet",
+      tagline: "Operational Excellence & Oversight",
+      intro: "CleanLink is the neural center of your infrastructure management. It provides the data and visibility needed to run a high-performance team with zero friction.",
+      section1Title: "Real-time Site Oversight",
+      section1Desc: "Instantly see performance across all locations. Identify trends in equipment failure and site access issues before they become crises.",
+      section2Title: "Supply Chain Control",
+      section2Desc: "Standardize ordering across your network. Reduce waste by tracking specific item requests and delivery frequencies in real-time.",
+      section3Title: "Confidentiality & Safety",
+      section3Desc: "Protect your team with encrypted concern reporting. Address health and safety issues proactively through structured staff feedback.",
+      section4Title: "Audit-Ready Data",
+      section4Desc: "Every request is logged and archived. Build a comprehensive history of site activity for compliance, performance reviews, and client reporting.",
+      footer: "Powered by Harley:work smarter"
     }
   },
   es: {
@@ -178,7 +206,35 @@ export const translations = {
     referral: { title: "Traer a un Amigo", description: "¿Conoces a alguien? ¡Cuéntanos!", yourName: "Tu Nombre", friendInfo: "Datos del Amigo", friendName: "Nombre del Amigo", email: "Su Email", phone: "Su Teléfono", extraInfo: "¿Algo más?", extraPlaceholder: "Experiencia o disponibilidad...", submit: "Enviar Datos", successTitle: "¡Amigo Recomendado!", successDesc: "¡Gracias! Le llamaremos pronto.", missingFields: "Pon el nombre y contacto de tu amigo." },
     concern: { title: "Reportar Inquietud", description: "Informa sobre un colega o seguridad. Privado para la gerencia.", typeLabel: "¿Sobre qué es tu inquietud?", typeStaff: "Otro Miembro del Staff", typeSafety: "Problema de Salud y Seguridad", siteLabel: "¿Dónde ocurrió?", detailsLabel: "Describe tu inquietud", detailsPlaceholder: "Proporciona tantos detalles como sea posible...", submit: "Enviar Reporte Privado", successTitle: "Reporte Recibido", successDesc: "Tu reporte ha sido enviado directamente a la gerencia.", missingFields: "Selecciona un tipo y proporciona detalles." },
     status: { title: "Ver Progreso", description: "Mira cómo van tus pedidos aquí.", loading: "Actualizando...", noTasks: "Sin pedidos", noTasksDesc: "No has enviado nada últimamente.", underReview: "Revisando", processing: "En proceso", reviewIn: "Revisión en:", managerUpdate: "Mensaje del Jefe" },
-    guide: { title: "Cómo usar CleanLink", description: "Una guía fácil para usar esta app.", workflow: "3 Pasos Fáciles", capabilities: "¿Qué puedo hacer?", benefits: "Cómo te ayuda", emergencyTitle: "¿Necesitas ayuda urgente?", emergencyDesc: "Si hay una emergencia real, llama a tu jefe ya.", developer: "Hecho por Smart Harley Technology", resourcesTitle: "Centro de Recursos Digitales", cleanerGuideTitle: "Hoja de Éxito del Limpiador", cleanerGuideDesc: "Aprende cómo CleanLink facilita tus turnos y te ayuda a ganar más.", managerGuideTitle: "Hoja Estratégica del Gerente", managerGuideDesc: "Por qué CleanLink es crítico para el rendimiento del sitio y la gestión del equipo.", viewSheet: "Ver Hoja Digital" }
+    guide: { title: "Cómo usar CleanLink", description: "Una guía fácil para usar esta app.", workflow: "3 Pasos Fáciles", capabilities: "¿Qué puedo hacer?", benefits: "Cómo te ayuda", emergencyTitle: "¿Necesitas ayuda urgente?", emergencyDesc: "Si hay una emergencia real, llama a tu jefe ya.", developer: "Hecho por Smart Harley Technology", resourcesTitle: "Centro de Recursos Digitales", cleanerGuideTitle: "Hoja de Éxito del Limpiador", cleanerGuideDesc: "Aprende cómo CleanLink facilita tus turnos y te ayuda a ganar más.", managerGuideTitle: "Hoja Estratégica del Gerente", managerGuideDesc: "Por qué CleanLink es crítico para el rendimiento del sitio y la gestión del equipo.", viewSheet: "Ver Hoja Digital" },
+    sheetCleaner: {
+      title: "Hoja de Éxito del Limpiador",
+      tagline: "Trabaja más Inteligente, no más Duro",
+      intro: "CleanLink es tu espacio de trabajo personal. Elimina el estrés del papeleo y las llamadas, dándote más tiempo para enfocarte en tu trabajo y tus metas.",
+      section1Title: "Sin más Papeleo",
+      section1Desc: "Olvida los formularios de papel. Pide suministros y reporta problemas en segundos desde tu móvil. No más buscar bolígrafos o esperar al jefe.",
+      section2Title: "Conoce tu Estado",
+      section2Desc: "Sigue cada solicitud en vivo. Mira exactamente cuándo se procesan tus suministros y cuándo tu jefe ha leído tus reportes.",
+      section3Title: "Gana Más",
+      section3Desc: "Mira al instante turnos extra en sitios cercanos. Recomienda a tus amigos a través de la app y obtén recompensas cuando se unan al equipo.",
+      section4Title: "Privacidad y Apoyo",
+      section4Desc: "Tu voz importa. Reporta inquietudes de forma privada y segura. Estamos aquí para apoyar tu éxito y seguridad cada día.",
+      footer: "CleanLink: Profesionalizando el estándar."
+    },
+    sheetManager: {
+      title: "Hoja Estratégica del Gerente",
+      tagline: "Excelencia Operativa y Supervisión",
+      intro: "CleanLink es el centro neural de tu gestión de infraestructura. Proporciona los datos y la visibilidad necesarios para dirigir un equipo de alto rendimiento sin fricciones.",
+      section1Title: "Supervisión del Sitio en Tiempo Real",
+      section1Desc: "Mira al instante el rendimiento en todas las ubicaciones. Identifica tendencias en fallas de equipos y problemas de acceso antes de que sean crisis.",
+      section2Title: "Control de la Cadena de Suministro",
+      section2Desc: "Estandariza los pedidos en toda tu red. Reduce el desperdicio siguiendo las solicitudes de artículos específicos y las frecuencias de entrega en tiempo real.",
+      section3Title: "Confidencialidad y Seguridad",
+      section3Desc: "Protege a tu equipo con reportes de inquietudes encriptados. Aborda problemas de salud y seguridad proactivamente a través de comentarios estructurados.",
+      section4Title: "Datos Listos para Auditoría",
+      section4Desc: "Cada solicitud se registra y archiva. Crea un historial completo de la actividad del sitio para cumplimiento, revisiones de desempeño e informes a clientes.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   pt: {
     nav: { stores: "Pedir Material", faulty: "Equipamento Estragado", incomplete: "Tarefa Incompleta", hours: "Mais Horas", referral: "Trazer um Amigo", cover: "Turnos Extras", status: "Ver Progresso", info: "Informação Importante", guide: "Como Funciona", language: "Mudar Idioma", concern: "Relatar Inquietude" },
@@ -186,13 +242,41 @@ export const translations = {
     language: { title: "Escolher Idioma", description: "Escolha o idioma que quer usar.", select: "Escolha um Idioma", back: "Voltar ao Início" },
     common: { submit: "Enviar Agora", loading: "Enviando...", site: "O seu Local", name: "O seu Nome", date: "Data", back: "Voltar", error: "Algo correu mal", success: "Pronto!", wait: "Um momento...", auth: "Ligando...", missingInfo: "Faltam detalhes", emergency: "Em emergência, ligue para o chefe já.", select: "Selecione..." },
     stores: { title: "Pedir Material", description: "Precisa de materiais? Diga-nos o que precisa.", nameLabel: "O seu Nome", namePlaceholder: "Nome completo", dateLabel: "Data de Hoje", siteLabel: "Onde trabalha?", sitePlaceholder: "Nome do local", deliveredLabel: "Precisa de entrega?", deliveredSub: "Nota: A entrega demora uns 3 dias úteis.", pickedUpLabel: "Levantou você mesmo?", pickedUpLocationLabel: "Onde levantou?", itemsTitle: "O que precisa?", addItem: "Adicionar outro", itemNamePlaceholder: "Artigo", qtyPlaceholder: "Quant.", codePlaceholder: "Código", submit: "Enviar Pedido", successTitle: "Pedido Enviado!", successDesc: "Recebido. Vamos ver amanhã até às 12h.", missingFields: "Ponha o nome, data e local." },
-    faulty: { title: "Equipamento Estragado", description: "¿Algo não funciona? Peça um novo aqui.", cleanerName: "O seu Nome", site: "Onde está o equipamento?", equipment: "O que estragou?", equipmentPlaceholder: "ex: Aspirador, Esfregona", faultDescription: "Qual é o problema?", faultPlaceholder: "Diga-nos o que aconteceu...", submit: "Enviar Relatório", successTitle: "Relatório Enviado!", successDesc: "Obrigado! Vamos ver amanhã.", missingFields: "Preencha todos os quadros." },
+    faulty: { title: "Equipamento Estragado", description: "¿Algo não funciona? Peça um novo aqui.", cleanerName: "O seu Nome", site: "Onde está o equipamento?", equipment: "O que estragou?", equipmentPlaceholder: "ex: Aspirador, Esfregona", faultDescription: "Qual é o problema?", faultPlaceholder: "Diga-nos o que aconteceu...", submit: "Enviar Relatório", successTitle: "Relatório Enviado!", successDesc: "Obrigado! Vamos ver amãnhã.", missingFields: "Preencha todos os quadros." },
     incomplete: { title: "Tarefa Incompleta", description: "Não acabou o trabalho? Diga-nos porquê.", reason: "Porque não acabou?", details: "Mais detalhes", detailsPlaceholder: "Mais alguma coisa?", submit: "Enviar Info", successTitle: "Informação Enviada!", successDesc: "Obrigado. Vamos ver amanhã.", missingFields: "Escolha uma razão.", reasons: ["Porta trancada / Sem chave", "Havia gente", "Manutenção no local", "Não era seguro", "Outro"] },
     hours: { title: "Más Horas", description: "Quer mais turnos ou más horas no seu local?", requestType: "O que procura?", permanent: "Fixo (Todas as semanas)", temporary: "Temporário (Só uns dias)", datesFree: "Que dias pode?", datesPlaceholder: "ex. Segunda a quarta", timesAvailable: "A que horas?", timesPlaceholder: "ex. 16:00 às 20:00", submit: "Enviar Pedido", successTitle: "Pedido Enviado!", successDesc: "Obrigado. Vamos ver o horário.", missingFields: "Diga que horas procura." },
-    referral: { title: "Trazer um Amigo", description: "Conhece alguém? Diga-nos!", yourName: "O seu Nome", friendInfo: "Dados do Amigo", friendName: "Nome do Amigo", email: "Email", phone: "Telemóvel", extraInfo: "Mais info?", extraPlaceholder: "Experiência ou disponibilidade...", submit: "Enviar Dados", successTitle: "Amigo Recomendado!", successDesc: "Obrigado! Vamos ligar em breve.", missingFields: "Ponha o nome e contacto do amigo." },
+    referral: { title: "Traer um Amigo", description: "Conhece alguém? Diga-nos!", yourName: "O seu Nome", friendInfo: "Dados do Amigo", friendName: "Nome do Amigo", email: "Email", phone: "Telemóvel", extraInfo: "Mais info?", extraPlaceholder: "Experiência ou disponibilidade...", submit: "Enviar Dados", successTitle: "Amigo Recomendado!", successDesc: "Obrigado! Vamos ligar em breve.", missingFields: "Ponha o nome e contacto do amigo." },
     concern: { title: "Relatar Inquietude", description: "Relate sobre um colega ou segurança. Privado para a gerência.", typeLabel: "Sobre o que é a sua inquietude?", typeStaff: "Outro Membro do Staff", typeSafety: "Problema de Saúde e Segurança", siteLabel: "Onde ocorreu?", detailsLabel: "Descreva a sua inquietude", detailsPlaceholder: "Forneça o máximo de detalhes possível...", submit: "Enviar Relatório Privado", successTitle: "Relatório Recebido", successDesc: "O seu relatório foi enviado diretamente à gerência.", missingFields: "Selecione um tipo e forneça detalhes." },
     status: { title: "Ver Progresso", description: "Veja como estão os seus pedidos.", loading: "Atualizando...", noTasks: "Sem pedidos", noTasksDesc: "Não enviou nada ultimamente.", underReview: "Revisando", processing: "Em processo", reviewIn: "Revisão em:", managerUpdate: "Mensagem do Chefe" },
-    guide: { title: "Como usar CleanLink", description: "Um guia fácil para usar esta app.", workflow: "3 Pasos Fécis", capabilities: "O que posso fazer?", benefits: "Como ajuda você", emergencyTitle: "Precisa de ajuda urgente?", emergencyDesc: "Em emergência real, ligue já para o chefe.", developer: "Feito por Smart Harley Technology", resourcesTitle: "Centro de Recursos Digitais", cleanerGuideTitle: "Folha de Sucesso do Limpador", cleanerGuideDesc: "Aprenda como o CleanLink facilita seus turnos e ajuda você a ganhar mais.", managerGuideTitle: "Folha Estratégica do Gerente", managerGuideDesc: "Por que o CleanLink é crítico para o desempenho do site e a gestão da equipe.", viewSheet: "Ver Folha Digital" }
+    guide: { title: "Como usar CleanLink", description: "Um guia fácil para usar esta app.", workflow: "3 Pasos Fécis", capabilities: "O que posso fazer?", benefits: "Como ajuda você", emergencyTitle: "Precisa de ajuda urgente?", emergencyDesc: "Em emergência real, ligue já para o chefe.", developer: "Feito por Smart Harley Technology", resourcesTitle: "Centro de Recursos Digitais", cleanerGuideTitle: "Folha de Sucesso do Limpador", cleanerGuideDesc: "Aprenda como o CleanLink facilita seus turnos e ajuda você a ganhar mais.", managerGuideTitle: "Folha Estratégica do Gerente", managerGuideDesc: "Por que o CleanLink é crítico para o desempenho do site e a gestão da equipe.", viewSheet: "Ver Folha Digital" },
+    sheetCleaner: {
+      title: "Folha de Sucesso do Limpador",
+      tagline: "Trabalhe de forma Inteligente, não Difícil",
+      intro: "O CleanLink é o seu espaço de trabalho pessoal. Ele remove o stress da papelada e das chamadas, dando-lhe mais tempo para se focar no seu trabalho e nos seus objetivos.",
+      section1Title: "Sem mais Papelada",
+      section1Desc: "Esqueça os formulários em papel. Peça materiais e relate problemas em segundos a partir do seu telemóvel. Chega de procurar canetas ou esperar pelo chefe.",
+      section2Title: "Saiba o seu Estado",
+      section2Desc: "Acompanhe cada pedido em direto. Veja exatamente quando os seus materiais estão a ser processados e quando o seu chefe leu os seus relatórios.",
+      section3Title: "Ganhe Mais",
+      section3Desc: "Veja instantaneamente turnos extra em locais próximos. Recomende os seus amigos através da app e seja recompensado quando eles se juntarem à equipa.",
+      section4Title: "Privacidade e Apoio",
+      section4Desc: "A sua voz conta. Relate inquietudes de forma privada e segura. Estamos aqui para apoiar o seu sucesso e segurança todos os dias.",
+      footer: "CleanLink: Profissionalizando o padrão."
+    },
+    sheetManager: {
+      title: "Folha Estratégica do Gerente",
+      tagline: "Excelência Operacional e Supervisão",
+      intro: "O CleanLink é o centro neural da sua gestão de infraestruturas. Fornece os dados e a visibilidade necessários para gerir uma equipa de alto desempenho sem atritos.",
+      section1Title: "Supervisão do Local em Tempo Real",
+      section1Desc: "Veja instantaneamente o desempenho em todos os locais. Identifique tendências em falhas de equipamento e problemas de acesso antes que se tornem crises.",
+      section2Title: "Controlo da Cadeia de Abastecimento",
+      section2Desc: "Padronize os pedidos em toda a sua rede. Reduza o desperdício acompanhando os pedidos de itens específicos e as frequências de entrega em tempo real.",
+      section3Title: "Confidencialidade e Segurança",
+      section3Desc: "Proteja a sua equipa com relatórios de inquietudes encriptados. Aborde questões de saúde e segurança proactivamente através de feedback estruturado.",
+      section4Title: "Dados Prontos para Auditoria",
+      section4Desc: "Cada pedido é registado e arquivado. Crie um histórico completo da atividade do local para conformidade, avaliações de desempenho e relatórios de clientes.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   pl: {
     nav: { stores: "Zamów Środki", faulty: "Zepsuty Sprzęt", incomplete: "Nieskończone Zadanie", hours: "Dodatkowe Godziny", referral: "Poleć Znajomego", cover: "Dodatkowe Zmiany", status: "Sprawdź Postęp", info: "Ważne Informacje", guide: "Jak to Działa", language: "Zmień Język", concern: "Zgłoś Obawę" },
@@ -206,7 +290,35 @@ export const translations = {
     referral: { title: "Poleć Znajomego", description: "Znasz kogoś do pracy? Daj nam znać!", yourName: "Twoje Imię", friendInfo: "Dane Znajomego", friendName: "Imię i Nazwisko Znajomego", email: "E-mail", phone: "Numer Telefonu", extraInfo: "Coś jeszcze?", extraPlaceholder: "Napisz o jego doświadczeniu lub kiedy może zacząć...", submit: "Wyślij Dane", successTitle: "Znajomy Polecony!", successDesc: "Dzięki! Skontaktujemy się z nim wkrótce.", missingFields: "Wpisz imię i dane kontaktowe znajomego." },
     concern: { title: "Zgłoś Obawę", description: "Zgłoś obawę dotyczącą pracownika lub bezpieczeństwa. Prywatne dla zarządu.", typeLabel: "Czego dotyczy Twoja obawa?", typeStaff: "Inny Pracownik", typeSafety: "Kwestia Zdrowia i Bezpieczeństwa", siteLabel: "Gdzie to się stało?", detailsLabel: "Opisz swoją obawę", detailsPlaceholder: "Podaj jak najwięcej szczegółów...", submit: "Wyślij Prywatny Raport", successTitle: "Raport Otrzymany", successDesc: "Twój raport został wysłany bezpośrednio do zarządu.", missingFields: "Wybierz typ i podaj szczegóły." },
     status: { title: "Sprawdź Postęp", description: "Tu sprawdzisz, co dzieje się z Twoimi prośbami.", loading: "Aktualizacja...", noTasks: "Brak aktywnych próśb", noTasksDesc: "Ostatnio nic nie wysyłałeś.", underReview: "Sprawdzamy teraz", processing: "W trakcie realizacji", reviewIn: "Sprawdzenie za:", managerUpdate: "Wiadomość od Managera" },
-    guide: { title: "Jak używać CleanLink", description: "Prosta instrukcja używania aplikacji w pracy.", workflow: "3 Proste Kroki", capabilities: "Co mogę zrobić?", benefits: "Jak to pomaga?", emergencyTitle: "Potrzebujesz pomocy teraz?", emergencyDesc: "W nagłych wypadkach dzwoń natychmiast do szefa.", developer: "Stworzone przez Smart Harley Technology", resourcesTitle: "Cyfrowe Centrum Zasobów", cleanerGuideTitle: "Arkusz Sukcesu Pracownika", cleanerGuideDesc: "Dowiedz się, jak CleanLink ułatwia Twoje zmiany i pomaga zarabiać więcej.", managerGuideTitle: "Arkusz Strategiczny Menedżera", managerGuideDesc: "Dlaczego CleanLink jest kluczowy dla wydajności obiektu i zarządzania zespołem.", viewSheet: "Zobacz Arkusz" }
+    guide: { title: "Jak używać CleanLink", description: "Prosta instrukcja używania aplikacji w pracy.", workflow: "3 Proste Kroki", capabilities: "Co mogę zrobić?", benefits: "Jak to pomaga?", emergencyTitle: "Potrzebujesz pomocy teraz?", emergencyDesc: "W nagłych wypadkach dzwoń natychmiast do szefa.", developer: "Stworzone przez Smart Harley Technology", resourcesTitle: "Cyfrowe Centrum Zasobów", cleanerGuideTitle: "Arkusz Sukcesu Pracownika", cleanerGuideDesc: "Dowiedz się, jak CleanLink ułatwia Twoje zmiany i pomaga zarabiać więcej.", managerGuideTitle: "Arkusz Strategiczny Menedżera", managerGuideDesc: "Dlaczego CleanLink jest kluczowy dla wydajności obiektu i zarządzania zespołem.", viewSheet: "Zobacz Arkusz" },
+    sheetCleaner: {
+      title: "Arkusz Sukcesu Pracownika",
+      tagline: "Pracuj Mądrzej, Nie Ciężej",
+      intro: "CleanLink to Twoje osobiste miejsce pracy. Usuwa stres związany z papierkową robotą i telefonami, dając Ci więcej czasu na skupienie się na pracy i celach.",
+      section1Title: "Koniec z Papierami",
+      section1Desc: "Zapomnij o papierowych formularzach. Zamawiaj środki i zgłaszaj problemy w kilka sekund ze swojego telefonu. Koniec z szukaniem długopisu czy czekaniem na szefa.",
+      section2Title: "Znasz swój Status",
+      section2Desc: "Śledź każdą prośbę na żywo. Zobacz dokładnie, kiedy Twoje środki są przetwarzane i kiedy Twój szef przeczytał Twoje raporty.",
+      section3Title: "Zarabiaj Więcej",
+      section3Desc: "Błyskawicznie sprawdzaj dodatkowe zmiany w pobliżu. Polecaj znajomych przez aplikację i otrzymuj nagrody, gdy dołączą do zespołu.",
+      section4Title: "Prywatność i Wsparcie",
+      section4Desc: "Twój głos ma znaczenie. Zgłaszaj obawy prywatnie i bezpiecznie. Jesteśmy tu, aby wspierać Twój sukces i bezpieczeństwo każdego dnia.",
+      footer: "CleanLink: Profesjonalizacja standardów."
+    },
+    sheetManager: {
+      title: "Arkusz Strategiczny Menedżera",
+      tagline: "Doskonałość Operacyjna i Nadzór",
+      intro: "CleanLink to centrum dowodzenia Twoją infrastrukturą. Dostarcza dane i widoczność potrzebną do prowadzenia wysokowydajnego zespołu bez żadnych przeszkód.",
+      section1Title: "Nadzór nad Obiektami w Czasie Rzeczywistym",
+      section1Desc: "Błyskawicznie sprawdzaj wydajność we wszystkich lokalizacjach. Identyfikuj trendy w awariach sprzętu i problemach z dostępem, zanim staną się kryzysami.",
+      section2Title: "Kontrola Łańcucha Dostaw",
+      section2Desc: "Standaryzuj zamówienia w całej sieci. Redukuj straty, śledząc konkretne zapotrzebowanie na przedmioty i częstotliwość dostaw w czasie rzeczywistym.",
+      section3Title: "Poufność i Bezpieczeństwo",
+      section3Desc: "Chroń swój zespół dzięki szyfrowanym zgłoszeniom obaw. Rozwiązuj kwestie BHP proaktywnie dzięki ustrukturyzowanym opiniom pracowników.",
+      section4Title: "Dane Gotowe do Audytu",
+      section4Desc: "Każda prośba jest rejestrowana i archiwizowana. Buduj pełną historię aktywności obiektów dla celów zgodności, ocen wydajności i raportowania dla klientów.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   ro: {
     nav: { stores: "Comandă Stoc", faulty: "Echipament Defect", incomplete: "Sarcină Incompletă", hours: "Solicitare Ore", referral: "Recomandă un Prieten", cover: "Acoperire Schimburi", status: "Panou Stare", info: "Informații Importante", guide: "Ghid Utilizare", language: "Limbă", concern: "Raportează o Îngrijorare" },
@@ -218,9 +330,37 @@ export const translations = {
     incomplete: { title: "Raport Sarcină Incompletă", description: "Raportați de ce o sarcină nu a fost finalizată.", reason: "Motiv", details: "Detalii Suplimentare", detailsPlaceholder: "Mai mult context...", submit: "Trimite Raport", successTitle: "Raport Trimis", successDesc: "Va fi revizuit în următoarea zi lucrătoare.", missingFields: "Completați câmpurile obligatorii.", reasons: ["Ușă încuiată / Fără acces", "Zonă ocupată", "Mentenanță în curs", "Sănătate și Siguranță", "Altele"] },
     hours: { title: "Solicitare Ore Suplimentare", description: "Solicitați ture extra sau ore permanente.", requestType: "Tip Solicitare", permanent: "Ore Permanente", temporary: "Ore Temporare", datesFree: "Date Specifice", datesPlaceholder: "ex: Luni - Miercuri viitoare", timesAvailable: "Intervale Disponibile", timesPlaceholder: "ex: Luni - Vineri 16:00 - 20:00", submit: "Trimite Solicitarea", successTitle: "Solicitare Trimisă", successDesc: "Mulțumim, va fi revizuită.", missingFields: "Completați câmpurile obligatorii." },
     referral: { title: "Recomandă un Prieten", description: "Recomandați pe cineva pentru echipa de curățenie.", yourName: "Numele Dvs. Complet", friendInfo: "Informații Prieten", friendName: "Numele Prietenului", email: "Email", phone: "Telefon", extraInfo: "Informații Extra", extraPlaceholder: "Disponibilitate sau experiență...", submit: "Trimite Recomandarea", successTitle: "Recomandare Trimisă", successDesc: "Mulțumim pentru recomandare!", missingFields: "Completați câmpurile obligatorii." },
-    concern: { title: "Raportează o Îngrijorare", description: "Raportează o problemă despre un coleg sau siguranță. Privat pentru management.", typeLabel: "Despre ce este îngrijorarea ta?", typeStaff: "Alt Membru al Staff-ului", typeSafety: "Problemă de Sănătate și Siguranță", siteLabel: "Unde s-a întâmplat?", detailsLabel: "Descrie îngrijorarea ta", detailsPlaceholder: "Oferă cât mai multe detalii...", submit: "Trimite Raport Privat", successTitle: "Raport Primit", successDesc: "Raportul tău a fost trimis direct către management.", missingFields: "Selectează un tip și oferă detalii." },
+    concern: { title: "Raportează o Îngrijorare", description: "Raportează o problemă despre un coleg sau siguranță. Privat pentru management.", typeLabel: "Despre ce este îngrijorarea ta?", typeStaff: "Alt Membru al Staff-ului", typeSafety: "Problemă de Sănătate și Siguranță", siteLabel: "Unde s-a întâmplat?", detailsLabel: "Descrie îngrijorarea ta", detailsPlaceholder: "Oferă cât mai multe detalii...", submit: "Trimite Raport Privat", successTitle: "Raport Primit", successDesc: "Tu raportul tău a fost trimis direct către management.", missingFields: "Selectează un tip și oferă detalii." },
     status: { title: "Panou Stare", description: "Urmăriți progresul solicitărilor.", loading: "Sincronizare...", noTasks: "Fără sarcini active", noTasksDesc: "Nu există trimiteri în sistem.", underReview: "În revizuire", processing: "În procesare", reviewIn: "Revizuire în:", managerUpdate: "Update Manager" },
-    guide: { title: "Ghid CleanLink", description: "Aflați cum să gestionați comenzile și rapoartele ușor.", workflow: "3 Pași Simpli", capabilities: "Ce Puteți Face", benefits: "Beneficii", emergencyTitle: "Ajutor Urgent?", emergencyDesc: "În urgențe, sunați supervizorul imediat.", developer: "Creat de Smart Harley Technology", resourcesTitle: "Centru de Resurse Digitale", cleanerGuideTitle: "Foaia de Succes a Lucrătorului", cleanerGuideDesc: "Află cum CleanLink îți ușurează schimburile și te ajută să câștigi mai mult.", managerGuideTitle: "Foaia Strategică a Managerului", managerGuideDesc: "De ce CleanLink este critic pentru performanța site-ului și managementul echipei.", viewSheet: "Vezi Foaia Digitală" }
+    guide: { title: "Ghid CleanLink", description: "Aflați cum să gestionați comenzile și rapoartele ușor.", workflow: "3 Pași Simpli", capabilities: "Ce Puteți Face", benefits: "Beneficii", emergencyTitle: "Ajutor Urgent?", emergencyDesc: "În urgențe, sunați supervizorul imediat.", developer: "Creat de Smart Harley Technology", resourcesTitle: "Centru de Resurse Digitale", cleanerGuideTitle: "Foaia de Succes a Lucrătorului", cleanerGuideDesc: "Află cum CleanLink îți ușurează schimburile și te ajută să câștigi mai mult.", managerGuideTitle: "Foaia Strategică a Managerului", managerGuideDesc: "De ce CleanLink este critic pentru performanța site-ului și managementul echipei.", viewSheet: "Vezi Foaia Digitală" },
+    sheetCleaner: {
+      title: "Foaia de Succes a Lucrătorului",
+      tagline: "Lucrează mai Inteligent, nu mai Greu",
+      intro: "CleanLink este spațiul tău personal de lucru. Elimină stresul actelor și al apelurilor telefonice, oferindu-ți mai mult timp pentru a te concentra pe munca și obiectivele tale.",
+      section1Title: "Gata cu Actele",
+      section1Desc: "Uită de formularele pe hârtie. Comandă stoc și raportează probleme în câteva secunde de pe telefon. Nu mai căuta pixuri și nu mai aștepta managerul.",
+      section2Title: "Află Starea Solicitării",
+      section2Desc: "Urmărește live fiecare solicitare. Vezi exact când sunt procesate materialele tale și când managerul tău a citit rapoartele.",
+      section3Title: "Câștigă Mai Mult",
+      section3Desc: "Vezi instant schimburile extra în locațiile din apropiere. Recomandă-ți prietenii prin aplicație și fii recompensat când aceștia se alătură echipei.",
+      section4Title: "Confidențialitate și Suport",
+      section4Desc: "Vocea ta contează. Raportează îngrijorările în mod privat și sigur. Suntem aici pentru a-ți susține succesul și siguranța în fiecare zi.",
+      footer: "CleanLink: Profesionalizarea standardului."
+    },
+    sheetManager: {
+      title: "Foaia Strategică a Managerului",
+      tagline: "Excelență Operațională și Supraveghere",
+      intro: "CleanLink este centrul neural al managementului infrastructurii tale. Oferă datele și vizibilitatea necesare pentru a conduce o echipă de înaltă performanță fără fricțiuni.",
+      section1Title: "Supraveghere în Timp Real",
+      section1Desc: "Vezi instant performanța în toate locațiile. Identifică tendințele în defectarea echipamentelor și problemele de acces înainte ca acestea să devină crize.",
+      section2Title: "Controlul Lanțului de Aprovizionare",
+      section2Desc: "Standardizează comenzile în toată rețeaua ta. Redu risipa urmărind solicitările specifice de articole și frecvențele de livrare în timp real.",
+      section3Title: "Confidențialitate și Siguranță",
+      section3Desc: "Protejează-ți echipa cu rapoarte de îngrijorări criptate. Abordează problemele de sănătate și siguranță proactiv prin feedback structurat.",
+      section4Title: "Date Gata pentru Audit",
+      section4Desc: "Fiecare solicitare este înregistrată și arhivată. Construiește un istoric complet al activității locației pentru conformitate, evaluări de performanță și raportări către clienți.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   hu: {
     nav: { stores: "Raktári Rendelés", faulty: "Hibás Felszerelés", incomplete: "Befejezetlen Feladat", hours: "Órák Igénylése", referral: "Barát Ajánlása", cover: "Helyettesítés", status: "Állapotjelző Tábla", info: "Fontos Információk", guide: "Útmutató", language: "Nyelv", concern: "Panasz Bejelentése" },
@@ -234,21 +374,77 @@ export const translations = {
     referral: { title: "Barát Ajánlása", description: "Ajánlj valakit a csapatba.", yourName: "Neved", friendInfo: "Barát", friendName: "Barát neve", email: "Email", phone: "Telefon", extraInfo: "Extra", extraPlaceholder: "Tapasztalat...", submit: "Küldés", successTitle: "Siker", successDesc: "Köszi az ajánlást!", missingFields: "Mindent tölts ki." },
     concern: { title: "Panasz Bejelentése", description: "Jelentsen panaszt munkatársról vagy biztonságról. Bizalmas kezelés.", typeLabel: "Mivel kapcsolatos a panasza?", typeStaff: "Másik munkatárs", typeSafety: "Egészségügyi és biztonsági kérdés", siteLabel: "Hol történt?", detailsLabel: "Írja le a panaszát", detailsPlaceholder: "Adjon meg annyi részletet, amennyit csak tud...", submit: "Bizalmas jelentés küldése", successTitle: "Jelentés fogadva", successDesc: "Jelentését közvetlenül a vezetőségnek továbbítottuk.", missingFields: "Válasszon típust és adjon meg részleteket." },
     status: { title: "Állapot", description: "Kövesse nyomon a kéréseit.", loading: "Szinkron...", noTasks: "Nincs feladat", noTasksDesc: "Nincs beküldött kérés.", underReview: "Bírálat alatt", processing: "Feldolgozás", reviewIn: "Bírálat:", managerUpdate: "Vezetői infó" },
-    guide: { title: "Útmutató", description: "Tanulja meg kezelni rendeléseit és jelentéseit.", workflow: "3 Egyszerű Lépés", capabilities: "Mit Tehet", benefits: "Előnyök", emergencyTitle: "Sürgős Segítség?", emergencyDesc: "Vészhelyzetben hívja felettesét.", developer: "Készítette: Smart Harley Technology", resourcesTitle: "Digitális Erőforrás Központ", cleanerGuideTitle: "Takarítói Sikerkártya", cleanerGuideDesc: "Tudd meg, hogyan teszi a CleanLink könnyebbé a műszakaidat és hogyan segít többet keresni.", managerGuideTitle: "Vezetői Stratégiai Kártya", managerGuideDesc: "Miért kritikus a CleanLink a helyszíni teljesítmény és a csapatkezelés szempontjából.", viewSheet: "Digitális Lap Megtekintése" }
+    guide: { title: "Útmutató", description: "Tanulja meg kezelni rendeléseit és jelentéseit.", workflow: "3 Egyszerű Lépés", capabilities: "Mit Tehet", benefits: "Előnyök", emergencyTitle: "Sürgős Segítség?", emergencyDesc: "Vészhelyzetben hívja felettesét.", developer: "Készítette: Smart Harley Technology", resourcesTitle: "Digitális Erőforrás Könyvtár", cleanerGuideTitle: "Takarítói Sikerkártya", cleanerGuideDesc: "Tudd meg, hogyan teszi a CleanLink könnyebbé a műszakaidat és hogyan segít többet keresni.", managerGuideTitle: "Vezetői Stratégiai Kártya", managerGuideDesc: "Miért kritikus a CleanLink a helyszíni teljesítmény és a csapatkezelés szempontjából.", viewSheet: "Digitális Lap Megtekintése" },
+    sheetCleaner: {
+      title: "Takarítói Sikerkártya",
+      tagline: "Dolgozz Okosabban, ne Keményebben",
+      intro: "A CleanLink a személyes munkaterületed. Megszünteti a papírmunka és a hívások okozta stresszt, így több időd marad a munkádra és a céljaidra koncentrálni.",
+      section1Title: "Nincs több Papírmunka",
+      section1Desc: "Felejtsd el a papíralapú űrlapokat. Rendelj készleteket és jelentsd a hibákat másodpercek alatt a telefonodról. Nincs több tollkeresés vagy várakozás a vezetőre.",
+      section2Title: "Kövesd az Állapotot",
+      section2Desc: "Kövesd élőben minden kérésedet. Lásd pontosan, mikor dolgozzák fel a rendelésedet, és mikor olvasta el a vezetőd a jelentéseidet.",
+      section3Title: "Keress Többet",
+      section3Desc: "Azonnal láthatod a közeli helyszíneken elérhető plusz műszakokat. Ajánld ismerőseidet az alkalmazáson keresztül, és kapj jutalmat, ha csatlakoznak a csapathoz.",
+      section4Title: "Adatvédelem és Támogatás",
+      section4Desc: "A hangod számít. Jelentsd a panaszaidat privát módon és biztonságosan. Azért vagyunk itt, hogy minden nap támogassuk a sikeredet és a biztonságodat.",
+      footer: "CleanLink: A standard professzionalizálása."
+    },
+    sheetManager: {
+      title: "Vezetői Stratégiai Kártya",
+      tagline: "Operatív Kiválóság és Felügyelet",
+      intro: "A CleanLink az infrastruktúra-kezelésed idegközpontja. Biztosítja azokat az adatokat és láthatóságot, amelyek egy nagy teljesítményű csapat súrlódásmentes irányításához szükségesek.",
+      section1Title: "Valós Idejű Helyszíni Felügyelet",
+      section1Desc: "Azonnal láthatod a teljesítményt minden helyszínen. Azonosítsd a felszerelések meghibásodásának és a helyszíni hozzáférési problémáknak a trendjeit, mielőtt azok válsággá válnának.",
+      section2Title: "Ellátási Lánc Ellenőrzése",
+      section2Desc: "Standardizáld a rendeléseket a teljes hálózatodban. Csökkentsd a veszteséget az egyedi tétel-igénylések és a szállítási gyakoriságok valós idejű követésével.",
+      section3Title: "Bizalmasság és Biztonság",
+      section3Desc: "Védd a csapatodat titkosított panaszbejelentéssel. Kezeld proaktívan az egészségügyi és biztonsági kérdéseket strukturált munkatársi visszajelzéseken keresztül.",
+      section4Title: "Auditálható Adatok",
+      section4Desc: "Minden kérés rögzítésre és archiválásra kerül. Építs átfogó előzményt a helyszíni tevékenységekről a megfelelőség, a teljesítményértékelések és az ügyféljelentések számára.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   cs: {
-    nav: { stores: "Objednávka", faulty: "Závada", incomplete: "Nedokončeno", hours: "Hodiny", referral: "Doporučit", cover: "Záskok", status: "Stav", info: "Důležité Informace", guide: "Návod", language: "Jazyk", concern: "Nahlásit Problém" },
-    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Systém Správy" },
-    language: { title: "Jazyk", description: "Vyberte jazyk.", select: "Vybrat", back: "Zpět" },
-    common: { submit: "Odeslat", loading: "Čekejte...", site: "Lokalita", name: "Jméno", date: "Datum", back: "Zpět", error: "Chyba", success: "Úspěch", wait: "Moment", auth: "Ověřování...", missingInfo: "Chybějící info", emergency: "Zkontrolujeme zítra.", select: "Vybrat..." },
-    stores: { title: "Objednávka", description: "Vyplňte pro objednání.", nameLabel: "Jméno", namePlaceholder: "Vaše jméno", dateLabel: "Datum", siteLabel: "Lokalita", sitePlaceholder: "Zadejte lokalitu", deliveredLabel: "Doručení", deliveredSub: "Do 3 dnů", pickedUpLabel: "Vyzvednuto na místě", pickedUpLocationLabel: "Odkud bylo vyzvednuto?", itemsTitle: "Položky", addItem: "Přidat", itemNamePlaceholder: "Položka", qtyPlaceholder: "Mn", codePlaceholder: "Kód", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme zítra.", missingFields: "Jméno, datum a lokalita." },
-    faulty: { title: "Závada", description: "Výměna vybavení.", cleanerName: "Jméno", site: "Lokalita", equipment: "Vybavení", equipmentPlaceholder: "např. Vysavač", faultDescription: "Závada", faultPlaceholder: "Co nefunguje?", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zítra zkontrolujeme.", missingFields: "Vyplňte vše." },
-    incomplete: { title: "Nedokončeno", description: "Proč nebylo hotovo?", reason: "Důvod", details: "Podrobnosti", detailsPlaceholder: "Více info...", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zítra zkontrolujeme.", missingFields: "Vyplňte pole.", reasons: ["Zavřeno", "Obsazeno", "Údržba", "BHP", "Jiné"] },
-    hours: { title: "Hodiny Navíc", description: "Žádost o směny.", requestType: "Typ", permanent: "Stálé", temporary: "Záskok", datesFree: "Data", datesPlaceholder: "Kdy?", timesAvailable: "Čas", timesPlaceholder: "např. 16-20", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Zkontrolujeme.", missingFields: "Vyplňte vše." },
-    referral: { title: "Doporučit", description: "Doporučte někoho.", yourName: "Vaše Jméno", friendInfo: "Přítel", friendName: "Jméno přítele", email: "Email", phone: "Telefon", extraInfo: "Extra", extraPlaceholder: "Zkušenosti...", submit: "Odeslat", successTitle: "Odesláno", successDesc: "Díky!", missingFields: "Vyplňte vše." },
+    nav: { stores: "Objednávka Skladu", faulty: "Vadné Vybavení", incomplete: "Nedokončený Úkol", hours: "Žádost o Hodiny", referral: "Doporučit Přítele", cover: "Záskok", status: "Stavová Tabule", info: "Informace", guide: "Jak Používat", language: "Language", concern: "Nahlásit Problém" },
+    footer: { tagline: "Powered by Harley:work smarter", copyright: "© 2024 SMART HARLEY TECHNOLOGIES", subtext: "Pokročilý Systém Správy Infrastruktury" },
+    language: { title: "Jazyk Rozhraní", description: "Vyberte preferovaný jazyk pro CleanLink rozhraní.", select: "Vybrat Jazyk", back: "Zpět na Konzoli" },
+    common: { submit: "Odeslat", loading: "Zpracování...", site: "Lokalita", name: "Jméno", date: "Datum", back: "Zpět", error: "Chyba", success: "Úspěch", wait: "Počkejte chvíli", auth: "Ověřování...", missingInfo: "Chybějící informace", emergency: "Odeslané formuláře budou zkontrolovány příští pracovní den.", select: "Vybrat..." },
+    stores: { title: "Objednávka Skladu", description: "Vyplňte podrobnosti pro objednávku zásob.", nameLabel: "Jméno", namePlaceholder: "Zadejte své jméno", dateLabel: "Datum", siteLabel: "Lokalita", sitePlaceholder: "Vyberte lokalitu", deliveredLabel: "Potřebuji doručit", deliveredSub: "Doručení může trvat 3 pracovní dny", pickedUpLabel: "Vyzvednuto na místě", pickedUpLocationLabel: "Odkud bylo vyzvednuto?", itemsTitle: "Položky", addItem: "Přidat položku", itemNamePlaceholder: "Název položky", qtyPlaceholder: "Mn", codePlaceholder: "Kód (volitelně)", submit: "Odeslat objednávku", successTitle: "Objednávka odeslána", successDesc: "Děkujeme, bude zkontrolována příští pracovní den.", missingFields: "Prosím vyplňte jméno, datum a lokalitu." },
+    faulty: { title: "Hlášení vadného vybavení", description: "Požádejte o výměnu vadného vybavení.", cleanerName: "Jméno pracovníka", site: "Lokalita", equipment: "Název vybavení", equipmentPlaceholder: "např. Vysavač, Mop", faultDescription: "Popis závady", faultPlaceholder: "Popište prosím problém...", submit: "Odeslat hlášení", successTitle: "Hlášení odesláno", successDesc: "Bude zkontrolováno příští pracovní den.", missingFields: "Prosím vyplňte všechna pole." },
+    incomplete: { title: "Hlášení nedokončeného úkolu", description: "Nahlaste, proč nebyl úkol dokončen.", reason: "Důvod", details: "Další podrobnosti", detailsPlaceholder: "Více kontextu...", submit: "Odeslat hlášení", successTitle: "Hlášení odesláno", successDesc: "Bude zkontrolováno příští pracovní den.", missingFields: "Prosím vyplňte všechna povinná pole.", reasons: ["Dveře zamčeny / Bez přístupu", "Prostor obsazen", "Probíhá údržba", "Bezpečnostní riziko", "Jiné"] },
+    hours: { title: "Žádost o hodiny navíc", description: "Požádejte o směny navíc nebo stálé hodiny.", requestType: "Typ žádosti", permanent: "Stálé hodiny", temporary: "Dočasné hodiny", datesFree: "Konkrétní data", datesPlaceholder: "např. Příští pondělí až středa", timesAvailable: "Kdy můžete pracovat", timesPlaceholder: "např. Pondělí - Pátek 16:00 - 20:00", submit: "Odeslat žádost", successTitle: "Žádost odeslána", successDesc: "Děkujeme, žádost bude zkontrolována.", missingFields: "Prosím vyplňte všechna pole." },
+    referral: { title: "Doporučit přítele", description: "Doporučte někoho do úklidového týmu.", yourName: "Vaše celé jméno", friendInfo: "Informace o příteli", friendName: "Celé jméno přítele", email: "Email", phone: "Telefon", extraInfo: "Další informace", extraPlaceholder: "Dostupnost nebo předchozí zkušenosti...", submit: "Odeslat doporučení", successTitle: "Doporučení odesláno", successDesc: "Děkujeme za doporučení!", missingFields: "Prosím vyplňte všechna pole." },
     concern: { title: "Nahlásit Problém", description: "Nahlaste problém s pracovníkem nebo bezpečností. Soukromé pro vedení.", typeLabel: "Čeho se týká váš problém?", typeStaff: "Jiný pracovník", typeSafety: "Zdravotní a bezpečnostní problém", siteLabel: "Kde se to stalo?", detailsLabel: "Popište svůj problém", detailsPlaceholder: "Uveďte co nejvíce podrobností...", submit: "Odeslat soukromé hlášení", successTitle: "Hlášení přijato", successDesc: "Vaše hlášení bylo odesláno přímo vedení.", missingFields: "Vyberte typ a uveďte podrobnosti." },
-    status: { title: "Stav", description: "Sledujte své požadavky.", loading: "Synchronizace...", noTasks: "Bez úkolů", noTasksDesc: "Nic v systému.", underReview: "Kontrola", processing: "Zpracování", reviewIn: "Kontrola za:", managerUpdate: "Poznámka Manažera" },
-    guide: { title: "Návod", description: "Naučte se ovládat své objednávky a hlášení.", workflow: "3 Snadné Kroky", capabilities: "Co Lze Dělat", benefits: "Výhody", emergencyTitle: "Nutná Pomoc?", emergencyDesc: "V nouzi volejte šéfa.", developer: "Vytvořeno Smart Harley Technology", resourcesTitle: "Digitální Centrum Zdrojů", cleanerGuideTitle: "Průvodce Úspěchem Pracovníka", cleanerGuideDesc: "Zjistěte, jak CleanLink usnadňuje vaše směny a pomáhá vám vydělávat více.", managerGuideTitle: "Manažerský Strategický List", managerGuideDesc: "Proč je CleanLink klíčový pro výkon lokality a správu týmu.", viewSheet: "Zobrazit Digitální List" }
+    status: { title: "Stavová Tabule", description: "Sledujte průběh svých požadavků.", loading: "Synchronizace...", noTasks: "Žádné aktivní úkoly", noTasksDesc: "V systému nejsou žádné požadavky.", underReview: "Kontroluje se", processing: "Zpracovává se", reviewIn: "Kontrola za:", managerUpdate: "Aktualizace od manažera" },
+    guide: { title: "Průvodce CleanLink", description: "Ovládněte systém správy s AI.", workflow: "Operační postup", capabilities: "Možnosti systému", benefits: "Výhody", emergencyTitle: "Link Offline?", emergencyDesc: "V nouzi volejte svého nadřízeného.", developer: "Vyvinuto Smart Harley Technology", resourcesTitle: "Digitální Centrum Zdrojů", cleanerGuideTitle: "Průvodce Úspěchem Pracovníka", cleanerGuideDesc: "Zjistěte, jak CleanLink usnadňuje vaše směny a pomáhá vám vydělávat více.", managerGuideTitle: "Manažerský Strategický List", managerGuideDesc: "Proč je CleanLink klíčový pro výkon lokality a správu týmu.", viewSheet: "Zobrazit Digitální List" },
+    sheetCleaner: {
+      title: "Průvodce Úspěchem Pracovníka",
+      tagline: "Pracujte Chytřeji, Ne Těžčeji",
+      intro: "CleanLink je váš osobní pracovní prostor. Odstraňuje stres z papírování a telefonátů a dává vám více času soustředit se na práci a vaše cíle.",
+      section1Title: "Konec Papírování",
+      section1Desc: "Zapomeňte na papírové formuláře. Objednávejte zásoby a hlaste problémy během několika sekund ze svého telefonu. Už žádné hledání pera nebo čekání na manažera.",
+      section2Title: "Sledujte Stav",
+      section2Desc: "Sledujte každý požadavek živě. Podívejte se přesně, kdy jsou vaše zásoby zpracovávány a kdy si váš manažer přečetl vaše hlášení.",
+      section3Title: "Vydělávejte Více",
+      section3Desc: "Okamžitě vidíte směny navíc v okolí. Doporučte své přátele prostřednictvím aplikace a získejte odměnu, když se přidají k týmu.",
+      section4Title: "Soukromí a Podpora",
+      section4Desc: "Na vašem hlasu záleží. Hlaste problémy soukromě a bezpečně. Jsme tu, abychom každý den podporovali váš úspěch a bezpečnost.",
+      footer: "CleanLink: Profesionalizace standardu."
+    },
+    sheetManager: {
+      title: "Manažerský Strategický List",
+      tagline: "Operační Dokonalost a Dohled",
+      intro: "CleanLink je nervovým centrem správy vaší infrastruktury. Poskytuje data a přehled potřebný k vedení vysoce výkonného týmu bez zbytečných průtahů.",
+      section1Title: "Dohled nad Lokalitou v Reálném Čase",
+      section1Desc: "Okamžitě vidíte výkon ve všech lokalitách. Identifikujte trendy v poruchách vybavení a problémech s přístupem dříve, než se stanou krizemi.",
+      section2Title: "Kontrola Dodavatelského Řetězce",
+      section2Desc: "Standardizujte objednávky v celé vaší síti. Snižte plýtvání sledováním požadavků na konkrétní položky a frekvence dodávek v reálném čase.",
+      section3Title: "Důvěrnost a Bezpečnost",
+      section3Desc: "Chraňte svůj tým pomocí šifrovaného hlášení problémů. Řešte otázky zdraví a bezpečnosti proaktivně prostřednictvím strukturované zpětné vazby zaměstnanců.",
+      section4Title: "Data Připravená k Auditu",
+      section4Desc: "Každý požadavek je zaznamenán a archivován. Vytvořte komplexní historii aktivity lokality pro shodu s předpisy, hodnocení výkonu a reportování klientům.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   bg: {
     nav: { stores: "Поръчка", faulty: "Повреда", incomplete: "Незавършено", hours: "Часове", referral: "Препоръка", cover: "Смяна", status: "Статус", info: "Важна Информация", guide: "Ръководство", language: "Език", concern: "Сигнал за проблем" },
@@ -262,7 +458,35 @@ export const translations = {
     referral: { title: "Препоръка", description: "Някой за екипа?", yourName: "Ваше Име", friendInfo: "Приятел", friendName: "Име на приятел", email: "Имейл", phone: "Телефон", extraInfo: "Екстра", extraPlaceholder: "Опит...", submit: "Изпрати", successTitle: "Изпратено", successDesc: "Благодарим!", missingFields: "Попълнете всичко." },
     concern: { title: "Сигнал за проблем", description: "Съобщете за проблем със служител или безопасност. Поверително за ръководството.", typeLabel: "За какво се отнася вашият проблем?", typeStaff: "Друг служител", typeSafety: "Проблем със здравето и безопасността", siteLabel: "Къде се случи това?", detailsLabel: "Опишете проблема си", detailsPlaceholder: "Предоставете възможно най-много подробности...", submit: "Изпращане на поверителен сигнал", successTitle: "Сигналът е получен", successDesc: "Вашият сигнал е изпратен директно до ръвоводството.", missingFields: "Моля, изберете тип и предоставете подробности." },
     status: { title: "Статус", description: "Следете заявките си.", loading: "Синхрон...", noTasks: "Няма задачи", noTasksDesc: "Празно в системата.", underReview: "Проверява се", processing: "Обработка", reviewIn: "Преглед след:", managerUpdate: "Мениджър инфо" },
-    guide: { title: "Ръководство", description: "Научете се да ползвате поръчки и доклади.", workflow: "3 Прости стъпки", capabilities: "Какво Можете", benefits: "Предимства", emergencyTitle: "Спешна Помощ?", emergencyDesc: "При спешност звъннете на шефа.", developer: "Създадено от Smart Harley Technology", resourcesTitle: "Център за Дигитални Ресурси", cleanerGuideTitle: "Лист за Успех на Хигиениста", cleanerGuideDesc: "Научете как CleanLink улеснява вашите смени и ви помага да печелите повече.", managerGuideTitle: "Стратегически Лист на Мениджъра", managerGuideDesc: "Защо CleanLink е критичен за представянето на обекта и управлението на екипа.", viewSheet: "Виж Дигитален Лист" }
+    guide: { title: "Ръководство", description: "Научете се да ползвате поръчки и доклади.", workflow: "3 Прости стъпки", capabilities: "Какво Можете", benefits: "Предимства", emergencyTitle: "Спешна Помощ?", emergencyDesc: "При спешност звъннете на шефа.", developer: "Създадено от Smart Harley Technology", resourcesTitle: "Център за Дигитални Ресурси", cleanerGuideTitle: "Лист за Успех на Хигиениста", cleanerGuideDesc: "Научете как CleanLink улеснява вашите смени и ви помага да печелите повече.", managerGuideTitle: "Стратегически Лист на Мениджъра", managerGuideDesc: "Защо CleanLink е критичен за представянето на обекта и управлението на екипа.", viewSheet: "Виж Дигитален Лист" },
+    sheetCleaner: {
+      title: "Лист за Успех на Хигиениста",
+      tagline: "Работете по-Умно, не по-Трудно",
+      intro: "CleanLink е вашето лично работно пространство. То премахва стреса от документацията и телефонните разговори, давайки ви повече време да се съсредоточите върху работата и целите си.",
+      section1Title: "Край на Документацията",
+      section1Desc: "Забравете за хартиените формуляри. Поръчвайте консумативи и докладвайте проблеми за секунди от телефона си. Без повече търсене на химикалки или чакане на мениджъра.",
+      section2Title: "Знайте Статуса си",
+      section2Desc: "Следете всяка заявка на живо. Вижте точно кога се обработват вашите консумативи и кога мениджърът ви е прочел докладите ви.",
+      section3Title: "Печелете Повече",
+      section3Desc: "Вижте моментално допълнителни смени в близки обекти. Препоръчайте приятелите си чрез приложението и получете възнаграждение, когато се присъединят към екипа.",
+      section4Title: "Поверителност и Подкрепа",
+      section4Desc: "Вашият глас е важен. Докладвайте опасения поверително и сигурно. Тук сме, за да подкрепяме вашия успех и безопасност всеки ден.",
+      footer: "CleanLink: Професионализиране на стандарта."
+    },
+    sheetManager: {
+      title: "Стратегически Лист на Мениджъра",
+      tagline: "Оперативно Съвършенство и Надзор",
+      intro: "CleanLink е нервният център на управлението на вашата инфраструктура. Той предоставя данните и видимостта, необходими за управление на високоефективен екип без триене.",
+      section1Title: "Надзор на Обектите в Реално Време",
+      section1Desc: "Вижте моментално представянето във всички локации. Идентифицирайте тенденциите в повредите на оборудването и проблемите с достъпа до обектите, преди да се превърнат в кризи.",
+      section2Title: "Контрол на Веригата за Доставки",
+      section2Desc: "Стандартизирайте поръчките в цялата си мрежа. Намалете отпадъците, като проследявате заявките за конкретни артикули и честотата на доставките в реално време.",
+      section3Title: "Поверителност и Безопасност",
+      section3Desc: "Защитете екипа си с криптирано докладване на опасения. Решавайте проблемите със здравето и безопасността проактивно чрез структурирана обратна връзка от служителите.",
+      section4Title: "Данни, Готови за Одит",
+      section4Desc: "Всяка заявка се записва и архивира. Изградете изчерпателна история на дейността на обекта за съответствие, прегледи на представянето и отчети към клиентите.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   tr: {
     nav: { stores: "Sipariş", faulty: "Arıza", incomplete: "Yarım Kalan", hours: "Saatler", referral: "Öneri", cover: "Vardiya", status: "Durum", info: "Önemli Bilgiler", guide: "Rehber", language: "Dil", concern: "Sorun Bildir" },
@@ -276,7 +500,35 @@ export const translations = {
     referral: { title: "Arkadaş Öner", description: "Ekip için birisi?", yourName: "Adınız", friendInfo: "Arkadaş", friendName: "Arkadaşın Adı", email: "E-posta", phone: "Telefon", extraInfo: "Ek", extraPlaceholder: "Deneyim...", submit: "Gönder", successTitle: "Gönderildi", successDesc: "Teşekkürler!", missingFields: "Hepsini doldur." },
     concern: { title: "Sorun Bildir", description: "Bir çalışan veya güvenlik hakkında sorun bildir. Yönetim için gizlidir.", typeLabel: "Sorununuz ne hakkında?", typeStaff: "Başka Bir Çalışan", typeSafety: "Sağlık ve Güvenlik Sorunu", siteLabel: "Nerede oldu?", detailsLabel: "Sorununuzu açıklayın", detailsPlaceholder: "Mümkün olduğunca çok detay verin...", submit: "Gizli Raporu Gönder", successTitle: "Rapor Alındı", successDesc: "Raporunuz doğrudan yönetime gönderilmiştir.", missingFields: "Lütfen bir tür seçin ve detayları belirtin." },
     status: { title: "Durum", description: "Taleplerinizi takip edin.", loading: "Senkron...", noTasks: "Görev yok", noTasksDesc: "Sistem boş.", underReview: "İncelemede", processing: "İşleniyor", reviewIn: "İnceleme:", managerUpdate: "Yönetici Notu" },
-    guide: { title: "Rehber", description: "Sipariş ve raporları kolayca yönetmeyi öğrenin.", workflow: "3 Basit Adım", capabilities: "Neler Yapılır", benefits: "Avantajlar", emergencyTitle: "Acil Yardım?", emergencyDesc: "Acil durumda amirinizi arayın.", developer: "Smart Harley Technology tarafından yapıldı", resourcesTitle: "Dijital Kaynak Merkezi", cleanerGuideTitle: "Temizlikçi Başarı Formu", cleanerGuideDesc: "CleanLink'in vardiyalarınızı nasıl kolaylaştırdığını ve daha fazla kazanmanıza nasıl yardımcı olduğunu öğrenin.", managerGuideTitle: "Yönetici Stratejik Formu", managerGuideDesc: "CleanLink'in saha performansı ve ekip yönetimi için neden kritik olduğunu öğrenin.", viewSheet: "Dijital Formu Görüntüle" }
+    guide: { title: "Rehber", description: "Sipariş ve raporları kolayca yönetmeyi öğrenin.", workflow: "3 Basit Adım", capabilities: "Neler Yapılır", benefits: "Avantajlar", emergencyTitle: "Acil Yardım?", emergencyDesc: "Acil durumda amirinizi arayın.", developer: "Smart Harley Technology tarafından yapıldı", resourcesTitle: "Dijital Kaynak Merkezi", cleanerGuideTitle: "Temizlikçi Başarı Formu", cleanerGuideDesc: "CleanLink'in vardiyalarınızı nasıl kolaylaştırdığını ve daha fazla kazanmanıza nasıl yardımcı olduğunu öğrenin.", managerGuideTitle: "Yönetici Stratejik Formu", managerGuideDesc: "CleanLink'in saha performansı ve ekip yönetimi için neden kritik olduğunu öğrenin.", viewSheet: "Dijital Formu Görüntüle" },
+    sheetCleaner: {
+      title: "Temizlikçi Başarı Formu",
+      tagline: "Daha Akıllı Çalış, Daha Çok Değil",
+      intro: "CleanLink kişisel çalışma alanınızdır. Evrak işleri ve telefon görüşmelerinin stresini ortadan kaldırarak işinize ve hedeflerinize odaklanmanız için size daha fazla zaman tanır.",
+      section1Title: "Artık Evrak İşleri Yok",
+      section1Desc: "Kağıt formları unutun. Telefonunuzdan saniyeler içinde malzeme sipariş edin ve sorunları bildirin. Artık kalem aramak veya yöneticiyi beklemek yok.",
+      section2Title: "Durumunuzu Bilin",
+      section2Desc: "Her talebi canlı takip edin. Malzemelerinizin ne zaman işlendiğini ve yöneticinizin raporlarınızı ne zaman okuduğunu tam olarak görün.",
+      section3Title: "Daha Fazla Kazanın",
+      section3Desc: "Yakındaki sahalardaki ek vardiyaları anında görün. Arkadaşlarınızı uygulama üzerinden önerin ve ekibe katıldıklarında ödüllendirilin.",
+      section4Title: "Gizlilik ve Destek",
+      section4Desc: "Sesiniz önemli. Sorunları gizli ve güvenli bir şekilde bildirin. Başarınızı ve güvenliğinizi her gün desteklemek için buradayız.",
+      footer: "CleanLink: Standardı profesyonelleştirmek."
+    },
+    sheetManager: {
+      title: "Yönetici Stratejik Formu",
+      tagline: "Operasyonel Mükemmellik ve Gözetim",
+      intro: "CleanLink, altyapı yönetiminizin sinir merkezidir. Yüksek performanslı bir ekibi sürtünmesiz yönetmek için gereken verileri ve görünürlüğü sağlar.",
+      section1Title: "Gerçek Zamanlı Saha Gözetimi",
+      section1Desc: "Tüm konumlardaki performansı anında görün. Ekipman arızalarındaki ve sahaya erişim sorunlarındaki eğilimleri krize dönüşmeden önce belirleyin.",
+      section2Title: "Tedarik Zinciri Kontrolü",
+      section2Desc: "Tüm ağınızda siparişleri standartlaştırın. Belirli ürün taleplerini ve teslimat sıklıklarını gerçek zamanlı takip ederek israfı azaltın.",
+      section3Title: "Gizlilik ve Güvenlik",
+      section3Desc: "Ekibinizi şifreli sorun bildirme ile koruyun. Yapılandırılmış çalışan geri bildirimleri aracılığıyla sağlık ve güvenlik konularını proaktif olarak ele alın.",
+      section4Title: "Denetime Hazır Veriler",
+      section4Desc: "Her talep kaydedilir ve arşivlenir. Uyumluluk, performans incelemeleri ve müşteri raporlaması için kapsamlı bir saha faaliyeti geçmişi oluşturun.",
+      footer: "Powered by Harley:work smarter"
+    }
   },
   ar: {
     nav: {
@@ -442,6 +694,34 @@ export const translations = {
       managerGuideTitle: "الورقة الاستراتيجية للمدير",
       managerGuideDesc: "لماذا يعتبر كلين لينك أمراً حيوياً لأداء الموقع وإدارة الفريق.",
       viewSheet: "عرض الورقة الرقمية"
+    },
+    sheetCleaner: {
+      title: "ورقة نجاح العامل",
+      tagline: "اعمل بذكاء وليس بجهد",
+      intro: "كلين لينك هو مساحة عملك الشخصية. يزيل ضغوط الأعمال الورقية والمكالمات الهاتفية، مما يمنحك مزيداً من الوقت للتركيز على عملك وأهدافك.",
+      section1Title: "لا مزيد من الأوراق",
+      section1Desc: "انسَ النماذج الورقية. اطلب المستلزمات وأبلغ عن المشكلات في ثوانٍ من هاتفك. لا داعي للبحث عن أقلام أو انتظار المدير.",
+      section2Title: "اعرف حالة طلبك",
+      section2Desc: "تابع كل طلب بشكل مباشر. تعرف بالضبط متى يتم معالجة مستلزماتك ومتى قرأ مديرك بلاغاتك.",
+      section3Title: "اربح المزيد",
+      section3Desc: "شاهد على الفور نوبات العمل الإضافية في المواقع القريبة. أوصِ بأصدقائك من خلال التطبيق واحصل على مكافأة عند انضمامهم للفريق.",
+      section4Title: "الخصوصية والدعم",
+      section4Desc: "صوتك مهم. أبلغ عن مخاوفك بخصوصية وأمان. نحن هنا لدعم نجاحك وسلامتك كل يوم.",
+      footer: "كلين لينك: الاحترافية في العمل."
+    },
+    sheetManager: {
+      title: "الورقة الاستراتيجية للمدير",
+      tagline: "التميز التشغيلي والرقابة",
+      intro: "كلين لينك هو المركز العصبي لإدارة البنية التحتية الخاصة بك. يوفر البيانات والرؤية اللازمة لإدارة فريق عالي الأداء دون أي عوائق.",
+      section1Title: "رقابة فورية على المواقع",
+      section1Desc: "شاهد الأداء في جميع المواقع على الفور. حدد الاتجاهات في أعطال المعدات ومشكلات الوصول للموقع قبل أن تصبح أزمات.",
+      section2Title: "التحكم في سلسلة التوريد",
+      section2Desc: "وحد الطلبات عبر شبكتك بالكامل. قلل الهدر من خلال تتبع طلبات الأصناف المحددة وتكرار التوصيل في الوقت الفعلي.",
+      section3Title: "السرية والسلامة",
+      section3Desc: "احمِ فريقك من خلال الإبلاغ المشفر عن المخاوف. عالج مشكلات الصحة والسلامة بشكل استباقي من خلال ملاحظات الموظفين المنظمة.",
+      section4Title: "بيانات جاهزة للتدقيق",
+      section4Desc: "يتم تسجيل وأرشفة كل طلب. ابنِ تاريخاً شاملاً لنشاط الموقع للامتثال ومراجعات الأداء وتقارير العملاء.",
+      footer: "Powered by Harley:work smarter"
     }
   }
 };

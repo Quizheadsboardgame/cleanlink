@@ -27,6 +27,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/context/language-context"
+import Link from "next/link"
 
 export default function HowToUsePage() {
   const { t } = useLanguage()
@@ -243,10 +244,12 @@ export default function HowToUsePage() {
                   </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                  <Button className="w-full guide-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
-                    {t.guide.viewSheet}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <Link href="/guide-cleaner">
+                    <Button className="w-full guide-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
+                      {t.guide.viewSheet}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 
@@ -267,10 +270,12 @@ export default function HowToUsePage() {
                   </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                  <Button className="w-full tasks-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
-                    {t.guide.viewSheet}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <Link href="/guide-manager">
+                    <Button className="w-full tasks-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
+                      {t.guide.viewSheet}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
