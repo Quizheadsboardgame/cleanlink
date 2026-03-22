@@ -106,14 +106,15 @@
         "title": { "type": "string" },
         "description": { "type": "string" },
         "status": { "type": "string" },
-        "managerNote": { "type": "string" },
+        "managerNote": { "type": "string", "description": "Public feedback visible to cleaners." },
+        "privateNote": { "type": "string", "description": "Internal note visible only to managers." },
         "managerId": { "type": "string" },
         "ownerId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
         "completedAt": { "type": "string", "format": "date-time" },
         "type": {
           "type": "string",
-          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern", "Cover Interest", "Pay Inquiry"]
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern", "Cover Interest", "Pay Enquiry"]
         }
       },
       "required": ["id", "title", "status", "createdAt", "managerId"]
@@ -128,9 +129,9 @@
         "senderName": { "type": "string" },
         "recipientName": { "type": "string" },
         "message": { "type": "string" },
-        "status": { "type": "string", "enum": ["Pending Review", "Authorized", "Rejected"] },
+        "status": { "type": "string", "enum": ["Pending Review", "Authorised", "Rejected"] },
         "createdAt": { "type": "string", "format": "date-time" },
-        "authorizedAt": { "type": "string", "format": "date-time" },
+        "authorisedAt": { "type": "string", "format": "date-time" },
         "expiresAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "senderName", "recipientName", "message", "createdAt", "status"]

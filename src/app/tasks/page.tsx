@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,7 +11,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, addDays } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, TrainFront } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, TrainFront, Lock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -337,6 +338,7 @@ export default function TasksPage() {
   const [managerId, setManagerId] = useState<string | null>(null)
   const [displayName, setDisplayName] = useState("")
   const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
+  const [privateNotes, setPrivateNotes] = useState<Record<string, string>>({})
   const [notificationsEnabled, setNotificationsEnabled] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const lastTaskCountRef = useRef<number>(0)
@@ -416,7 +418,12 @@ export default function TasksPage() {
     const taskRef = doc(db, 'orderTasks', taskId)
     const updateData: any = { status }
     if (status === 'Completed') updateData.completedAt = new Date().toISOString()
-    if (managerNotes[taskId]) updateData.managerNote = managerNotes[taskId]
+    
+    // Save public feedback if exists
+    if (managerNotes[taskId] !== undefined) updateData.managerNote = managerNotes[taskId]
+    // Save private internal note if exists
+    if (privateNotes[taskId] !== undefined) updateData.privateNote = privateNotes[taskId]
+    
     updateDocumentNonBlocking(taskRef, updateData)
     toast({ title: "Task Updated", description: `Status: ${status}` })
   }
@@ -439,12 +446,12 @@ export default function TasksPage() {
 
   const handleAuthoriseKudos = (id: string) => {
     const kudosRef = doc(db, 'kudos', id)
-    const authorizedAt = new Date().toISOString()
+    const authorisedAt = new Date().toISOString()
     const expiresAt = addDays(new Date(), 14).toISOString()
     
     updateDocumentNonBlocking(kudosRef, { 
       status: 'Authorised',
-      authorizedAt,
+      authorisedAt,
       expiresAt
     })
     toast({ title: "Kudos Approved", description: "Will be visible for 14 days." })
@@ -575,11 +582,34 @@ export default function TasksPage() {
                         </div>
                         <Button variant="ghost" size="icon" onClick={() => handleDeleteTask(task.id)} className="text-muted-foreground hover:text-red-500"><Trash2 className="w-4 h-4" /></Button>
                       </div>
+                      
                       <p className="text-sm text-muted-foreground bg-white/5 p-3 rounded-lg border border-white/5 leading-relaxed">{task.description}</p>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1"><MessageSquare className="w-3 h-3" /> Feedback</Label>
-                        <Input placeholder="Update staff board..." value={managerNotes[task.id] ?? task.managerNote ?? ""} onChange={(e) => setManagerNotes({...managerNotes, [task.id]: e.target.value})} className="bg-secondary/30 border-white/5 h-9 text-sm" />
+                      
+                      <div className="grid gap-4 sm:grid-cols-2 pt-2">
+                        <div className="space-y-2">
+                          <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                            <MessageSquare className="w-3 h-3" /> Staff Feedback (Public)
+                          </Label>
+                          <Input 
+                            placeholder="Cleaners will see this..." 
+                            value={managerNotes[task.id] ?? task.managerNote ?? ""} 
+                            onChange={(e) => setManagerNotes({...managerNotes, [task.id]: e.target.value})} 
+                            className="bg-secondary/30 border-white/5 h-9 text-sm" 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                            <Lock className="w-3 h-3 text-primary" /> Internal Note (Private)
+                          </Label>
+                          <Input 
+                            placeholder="Only you can see this..." 
+                            value={privateNotes[task.id] ?? task.privateNote ?? ""} 
+                            onChange={(e) => setPrivateNotes({...privateNotes, [task.id]: e.target.value})} 
+                            className="bg-primary/5 border-primary/10 h-9 text-sm focus:border-primary/30" 
+                          />
+                        </div>
                       </div>
+
                       <div className="flex gap-2 pt-2">
                         {task.status !== 'Completed' && task.status !== 'Rejected' && (
                           <>
@@ -587,6 +617,9 @@ export default function TasksPage() {
                             <Button onClick={() => handleUpdateStatus(task.id, 'Completed')} className="flex-1 h-9 bg-green-500/10 text-green-500 border border-green-500/20 font-bold text-[10px] uppercase tracking-wider">Finish</Button>
                             <Button onClick={() => handleUpdateStatus(task.id, 'Rejected')} variant="outline" className="flex-1 h-9 border-red-500/20 text-red-400 font-bold text-[10px] uppercase tracking-wider">Reject</Button>
                           </>
+                        )}
+                        {(task.status === 'Completed' || task.status === 'Rejected') && (
+                          <Button onClick={() => handleUpdateStatus(task.id, task.status)} variant="ghost" className="w-full h-9 border border-white/5 text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Save Notes Only</Button>
                         )}
                       </div>
                     </div>
