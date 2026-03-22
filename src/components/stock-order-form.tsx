@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -43,7 +42,7 @@ export function StockOrderForm() {
   const [isPickedUp, setIsPickedUp] = useState(false)
   const [pickupLocation, setPickupLocation] = useState("")
   const [items, setItems] = useState<OrderItem[]>([
-    { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }
+    { id: 'initial-stock-item', name: "", quantity: 1, code: "" }
   ])
 
   useEffect(() => {

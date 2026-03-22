@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -11,7 +10,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, addDays } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, TrainFront, Lock } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, TrainFront, Lock, Info, BookOpen } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -328,6 +327,54 @@ function ProfileTab({ displayName }: { displayName: string }) {
   )
 }
 
+function GuideTab() {
+  const sections = [
+    {
+      title: "1. Managing Live Tasks",
+      icon: LayoutDashboard,
+      content: "The 'Live Tasks' tab shows every report from your staff in real-time. Use the 'Progress' button to let cleaners know you are working on it, and 'Finish' to complete the request. Completion stops the countdown timer on their Status Board."
+    },
+    {
+      title: "2. Feedback & Notes",
+      icon: MessageSquare,
+      content: "Each task has two note fields. 'Staff Feedback' is visible to the cleaner on their screen—use this for instructions or updates. 'Internal Notes' are strictly for your own management records and will never be seen by staff."
+    },
+    {
+      title: "3. System Broadcasts",
+      icon: Megaphone,
+      content: "Use the 'Broadcast' tab to set a scrolling message that appears at the top of every staff member's screen. This is perfect for urgent site-wide announcements or reminders."
+    },
+    {
+      title: "4. Kudos Moderation",
+      icon: Heart,
+      content: "Staff can send each other appreciation notes. These appear in your 'Kudos' tab first. You must 'Authorise' them before they appear on the public wall. Notes automatically expire and disappear after 14 days."
+    },
+    {
+      title: "5. Support & Control Room",
+      icon: LifeBuoy,
+      content: "If you encounter a technical fault with the site or need extra training, use the 'Support' tab to raise a ticket. This goes directly to the Control Room administrators for resolution."
+    }
+  ]
+
+  return (
+    <div className="grid gap-6">
+      {sections.map((sec, i) => (
+        <Card key={i} className="glass-panel border-white/5">
+          <CardHeader className="flex flex-row items-center gap-4 pb-2">
+            <div className="bg-primary/10 p-2.5 rounded-xl">
+              <sec.icon className="w-5 h-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg font-headline">{sec.title}</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground leading-relaxed">
+            {sec.content}
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+
 export default function TasksPage() {
   const { user, isUserLoading } = useUser()
   const db = useFirestore()
@@ -419,9 +466,7 @@ export default function TasksPage() {
     const updateData: any = { status }
     if (status === 'Completed') updateData.completedAt = new Date().toISOString()
     
-    // Save public feedback if exists
     if (managerNotes[taskId] !== undefined) updateData.managerNote = managerNotes[taskId]
-    // Save private internal note if exists
     if (privateNotes[taskId] !== undefined) updateData.privateNote = privateNotes[taskId]
     
     updateDocumentNonBlocking(taskRef, updateData)
@@ -454,7 +499,7 @@ export default function TasksPage() {
       authorisedAt,
       expiresAt
     })
-    toast({ title: "Kudos Approved", description: "Will be visible for 14 days." })
+    toast({ title: "Kudos Authorised", description: "Will be visible for 14 days." })
   }
 
   const handleRejectKudos = (id: string) => {
@@ -509,18 +554,22 @@ export default function TasksPage() {
             <TabsTrigger value="support" className="rounded-xl flex-1 px-6 flex items-center gap-2">
               <LifeBuoy className="w-4 h-4" /> Support
             </TabsTrigger>
-            <TabsTrigger value="profile" className="rounded-xl flex-1 px-6">Connectivity</TabsTrigger>
+            <TabsTrigger value="guide" className="rounded-xl flex-1 px-6 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-lime-400" /> Guide
+            </TabsTrigger>
+            <TabsTrigger value="profile" className="rounded-xl flex-1 px-6 text-xs">Connectivity</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile"><ProfileTab displayName={displayName} /></TabsContent>
           <TabsContent value="broadcast"><BroadcastTab managerId={managerId!} /></TabsContent>
           <TabsContent value="analytics">{sortedTasks.length > 0 ? <AnalyticsTab tasks={sortedTasks} /> : <p className="text-center py-20 italic">Gathering data...</p>}</TabsContent>
           <TabsContent value="support"><SupportTab managerId={managerId!} managerName={displayName} /></TabsContent>
+          <TabsContent value="guide"><GuideTab /></TabsContent>
 
           <TabsContent value="kudos" className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-headline flex items-center gap-2"><Heart className="w-5 h-5 text-rose-400" /> Kudos Moderation</h2>
-              <p className="text-xs text-muted-foreground">Approve notes for the staff wall.</p>
+              <p className="text-xs text-muted-foreground">Authorise notes for the staff wall.</p>
             </div>
             {isKudosLoading ? (
               <div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-rose-400" /></div>

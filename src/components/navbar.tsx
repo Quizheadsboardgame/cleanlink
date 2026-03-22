@@ -182,7 +182,7 @@ export function Navbar() {
                           )}
                           {isVisible('kudos') && (
                             <div className="opacity-40 cursor-not-allowed select-none">
-                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 rounded-lg pointer-events-none">
+                              <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg pointer-events-none">
                                 <Heart className="w-4 h-4 text-rose-400" />
                                 <span className="text-sm">{t.nav.kudos}</span>
                               </DropdownMenuItem>
@@ -276,7 +276,7 @@ export function Navbar() {
                 </span>
               </div>
               <span className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] whitespace-nowrap opacity-50 sm:mb-1">
-                by Harley:work smarter
+                by Harley: work smarter
               </span>
             </div>
           </Link>

@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -101,7 +100,7 @@ export default function StatusBoardPage() {
   const auth = useAuth()
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
-  const [authStatus, setAuthStatus] = useState<'loading' | 'authorized' | 'unauthorized'>('loading')
+  const [authStatus, setAuthStatus] = useState<'loading' | 'authorised' | 'unauthorised'>('loading')
 
   useEffect(() => {
     if (!isUserLoading && !user) {
@@ -113,9 +112,9 @@ export default function StatusBoardPage() {
     const managerToken = sessionStorage.getItem("manager_auth_token")
     const controlToken = sessionStorage.getItem("control_room_auth")
     if (managerToken || controlToken === "true") {
-      setAuthStatus('authorized')
+      setAuthStatus('authorised')
     } else {
-      setAuthStatus('unauthorized')
+      setAuthStatus('unauthorised')
     }
   }, [])
 
@@ -125,7 +124,7 @@ export default function StatusBoardPage() {
     const currentM = managerId || "generic"
     
     // Managers see all tasks for their ID
-    if (authStatus === 'authorized') {
+    if (authStatus === 'authorised') {
       return query(
         collection(db, 'orderTasks'), 
         where('managerId', '==', currentM),
@@ -144,7 +143,6 @@ export default function StatusBoardPage() {
 
   const { data: allTasks, isLoading } = useCollection(tasksQuery)
 
-  // Sort on client to avoid index creation requirement during rapid prototyping
   const sortedTasks = React.useMemo(() => {
     if (!allTasks) return []
     return [...allTasks].sort((a, b) => {
@@ -161,9 +159,9 @@ export default function StatusBoardPage() {
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold font-headline status-text-gradient">{t.status.title}</h1>
             <p className="text-muted-foreground">
-              {authStatus === 'authorized' ? "Monitoring site-wide activity." : t.status.description}
+              {authStatus === 'authorised' ? "Monitoring site-wide activity." : t.status.description}
             </p>
-            {authStatus === 'authorized' && (
+            {authStatus === 'authorised' && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-primary/20 mt-2">
                 <Lock className="w-3 h-3" />
                 Management Overlay Active
@@ -218,7 +216,7 @@ export default function StatusBoardPage() {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-lg">
-                                {task.type === 'Staff Concern' && authStatus !== 'authorized' ? 'Confidential Report' : (task.title?.split(':')[0] || 'Request')}
+                                {task.type === 'Staff Concern' && authStatus !== 'authorised' ? 'Confidential Report' : (task.title?.split(':')[0] || 'Request')}
                               </span>
                               <Badge variant="outline" className={cn("text-[10px] uppercase tracking-tighter h-5", meta.border, meta.color)}>
                                 {task.type}

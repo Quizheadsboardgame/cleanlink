@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -11,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
 import { doc, collection } from "firebase/firestore"
-import { setDocumentNonBlocking, addDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
@@ -39,7 +38,7 @@ export function PayErrorForm() {
   const [site, setSite] = useState("")
   const [siteCode, setSiteCode] = useState("")
   const [entries, setEntries] = useState<PayEntry[]>([
-    { id: Math.random().toString(36).substr(2, 9), date: "", hours: "" }
+    { id: 'initial-entry', date: "", hours: "" }
   ])
 
   useEffect(() => {
@@ -103,11 +102,11 @@ export function PayErrorForm() {
       id: reportId,
       stockOrderId: reportId,
       managerId: managerId || "generic",
-      title: `Pay Inquiry: ${name}`,
+      title: `Pay Enquiry: ${name}`,
       description: `Site: ${site} (${siteCode}). Details: ${entriesSummary}`,
       status: 'Pending Review',
       ownerId: user.uid,
-      type: 'Pay Inquiry',
+      type: 'Pay Enquiry',
       createdAt: new Date().toISOString()
     }
     setDocumentNonBlocking(taskRef, taskData, { merge: true })
