@@ -7,7 +7,7 @@ import { Plus, Trash2, Send, CalendarIcon, Building2, User, Package, Loader2, Ma
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
@@ -151,7 +151,6 @@ export function StockOrderForm() {
             <Package className="w-6 h-6 text-primary" />
             {t.stores.title}
           </CardTitle>
-          <CardDescription>{t.stores.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-8">
           <div className="grid sm:grid-cols-2 gap-6">

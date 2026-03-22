@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
 import { doc } from "firebase/firestore"
@@ -111,7 +111,6 @@ export function FaultyEquipmentForm() {
             <Hammer className="w-6 h-6 text-[#F59E0B]" />
             {t.faulty.title}
           </CardTitle>
-          <CardDescription>{t.faulty.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid sm:grid-cols-2 gap-6">

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
@@ -114,7 +114,6 @@ export function IncompleteTaskForm() {
             <AlertTriangle className="w-6 h-6 text-[#EF4444]" />
             {t.incomplete.title}
           </CardTitle>
-          <CardDescription>{t.incomplete.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid sm:grid-cols-2 gap-6">
@@ -132,7 +131,7 @@ export function IncompleteTaskForm() {
             </div>
             <div className="space-y-2">
               <Label className="text-muted-foreground flex items-center gap-2">
-                <Building2 className="w-4 h-4" /> {t.incomplete.site || t.faulty.site}
+                <Building2 className="w-4 h-4" /> {t.stores.siteLabel}
               </Label>
               <Input 
                 placeholder={t.stores.sitePlaceholder} 

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useAuth } from "@/firebase"
@@ -112,7 +112,6 @@ export function AdditionalHoursForm() {
             <Clock className="w-6 h-6 text-[#D946EF]" />
             {t.hours.title}
           </CardTitle>
-          <CardDescription>{t.hours.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="space-y-2">
