@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { ShieldAlert, Send, Building2, UserX, Loader2, AlertCircle } from "lucide-react"
+import { ShieldAlert, Send, Building2, UserX, Loader2, AlertCircle, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -30,7 +30,7 @@ export function ReportConcernForm() {
 
   const [mounted, setMounted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [type, setType] = useState<"Staff Member" | "Health & Safety">("Staff Member")
+  const [type, setType] = useState<"Staff Member" | "Health & Safety" | "Other">("Staff Member")
   const [site, setSite] = useState("")
   const [description, setDescription] = useState("")
 
@@ -110,7 +110,6 @@ export function ReportConcernForm() {
             <ShieldAlert className="w-6 h-6 text-red-500" />
             {t.concern.title}
           </CardTitle>
-          <CardDescription>{t.concern.description}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="space-y-3">
@@ -118,19 +117,25 @@ export function ReportConcernForm() {
             <RadioGroup 
               defaultValue="Staff Member" 
               value={type} 
-              onValueChange={(v) => setType(v as "Staff Member" | "Health & Safety")}
-              className="flex flex-col sm:flex-row gap-4 sm:gap-6"
+              onValueChange={(v) => setType(v as "Staff Member" | "Health & Safety" | "Other")}
+              className="flex flex-col gap-4"
             >
-              <div className="flex items-center space-x-2 bg-white/5 p-3 rounded-xl border border-white/5 flex-1">
+              <div className="flex items-center space-x-2 bg-white/5 p-3 rounded-xl border border-white/5">
                 <RadioGroupItem value="Staff Member" id="staff" className="border-red-500 text-red-500" />
                 <Label htmlFor="staff" className="cursor-pointer text-white flex items-center gap-2">
                   <UserX className="w-4 h-4" /> {t.concern.typeStaff}
                 </Label>
               </div>
-              <div className="flex items-center space-x-2 bg-white/5 p-3 rounded-xl border border-white/5 flex-1">
+              <div className="flex items-center space-x-2 bg-white/5 p-3 rounded-xl border border-white/5">
                 <RadioGroupItem value="Health & Safety" id="safety" className="border-red-500 text-red-500" />
                 <Label htmlFor="safety" className="cursor-pointer text-white flex items-center gap-2">
                   <AlertCircle className="w-4 h-4" /> {t.concern.typeSafety}
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/5 p-3 rounded-xl border border-white/5">
+                <RadioGroupItem value="Other" id="other" className="border-red-500 text-red-500" />
+                <Label htmlFor="other" className="cursor-pointer text-white flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4" /> {t.concern.typeOther}
                 </Label>
               </div>
             </RadioGroup>
