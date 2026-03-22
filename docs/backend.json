@@ -17,7 +17,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "StockOrder",
       "type": "object",
-      "description": "Represents a user-created stock order containing multiple items for a specific site, before or after submission.",
+      "description": "Represents a user-created stock order containing multiple items for a specific site.",
       "properties": {
         "id": { "type": "string" },
         "customerName": { "type": "string" },
@@ -37,7 +37,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "OrderTask",
       "type": "object",
-      "description": "Represents a task generated upon submission of a report.",
+      "description": "Represents a task generated upon submission of a report or order.",
       "properties": {
         "id": { "type": "string" },
         "stockOrderId": { "type": "string" },
@@ -46,7 +46,7 @@
         "status": { "type": "string" },
         "managerNote": { "type": "string" },
         "managerId": { "type": "string" },
-        "assignedToUserId": { "type": "string" },
+        "ownerId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
         "completedAt": { "type": "string", "format": "date-time" },
         "type": {
@@ -54,7 +54,7 @@
           "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern"]
         }
       },
-      "required": ["id", "stockOrderId", "title", "description", "status", "createdAt"]
+      "required": ["id", "title", "status", "createdAt", "managerId"]
     },
     "StaffKudos": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -66,7 +66,6 @@
         "senderName": { "type": "string" },
         "recipientName": { "type": "string" },
         "message": { "type": "string" },
-        "managerId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "senderName", "recipientName", "message", "createdAt"]
@@ -100,19 +99,11 @@
         }
       },
       {
-        "path": "/staffConcerns/{concernId}",
-        "definition": {
-          "entityName": "StaffConcern",
-          "schema": { "$ref": "#/backend/entities/StaffConcern" },
-          "description": "Private concerns submitted by staff."
-        }
-      },
-      {
         "path": "/orderTasks/{taskId}",
         "definition": {
           "entityName": "OrderTask",
           "schema": { "$ref": "#/backend/entities/OrderTask" },
-          "description": "Tasks for management."
+          "description": "Tasks for management visibility."
         }
       },
       {
@@ -128,7 +119,7 @@
         "definition": {
           "entityName": "SystemAlert",
           "schema": { "$ref": "#/backend/entities/SystemAlert" },
-          "description": "Global notification alerts."
+          "description": "Global notification alerts siloed by manager."
         }
       }
     ]

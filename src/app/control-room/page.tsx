@@ -6,15 +6,16 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, doc, orderBy } from "firebase/firestore"
+import { collection, query, doc, orderBy, getDocs, writeBatch } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { setDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus } from "lucide-react"
+import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 export default function ControlRoomPage() {
   const { user, isUserLoading } = useUser()
@@ -25,6 +26,7 @@ export default function ControlRoomPage() {
   const [password, setPassword] = useState("")
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
 
   const [isAdding, setIsAdding] = useState(false)
   const [editingKey, setEditingKey] = useState<any>(null)
@@ -96,6 +98,29 @@ export default function ControlRoomPage() {
     if (confirm("Are you sure you want to remove this manager access?")) {
       deleteDocumentNonBlocking(doc(db, 'managerKeys', id))
       toast({ title: "Removed", description: "Access key deleted." })
+    }
+  }
+
+  const handleResetAllData = async () => {
+    const confirmation = prompt("Type 'RESET' to delete all site data (Tasks, Alerts, and Keys):")
+    if (confirmation !== "RESET") return
+
+    setIsResetting(true)
+    try {
+      const collections = ['orderTasks', 'systemAlerts', 'managerKeys', 'staffConcerns', 'importantInfo', 'kudos']
+      for (const colName of collections) {
+        const snap = await getDocs(collection(db, colName))
+        const batch = writeBatch(db)
+        snap.docs.forEach((doc) => batch.delete(doc.ref))
+        await batch.commit()
+      }
+      toast({ title: "System Reset", description: "All database collections have been cleared." })
+      if (typeof window !== 'undefined') window.location.reload()
+    } catch (err) {
+      console.error(err)
+      toast({ variant: "destructive", title: "Reset Failed", description: "Could not clear all collections." })
+    } finally {
+      setIsResetting(false)
     }
   }
 
@@ -200,11 +225,11 @@ export default function ControlRoomPage() {
         {isLoading ? (
           <div className="py-20 flex justify-center"><Loader2 className="animate-spin" /></div>
         ) : !keys || keys.length === 0 ? (
-          <Card className="glass-panel border-dashed py-20 text-center text-muted-foreground">
+          <Card className="glass-panel border-dashed py-20 text-center text-muted-foreground mb-8">
             No access keys found. Create one above.
           </Card>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-4 mb-12">
             {keys.map((k) => (
               <Card key={k.id} className="glass-panel border-white/5 hover:border-primary/20 transition-all">
                 <CardContent className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -244,6 +269,39 @@ export default function ControlRoomPage() {
             ))}
           </div>
         )}
+
+        <Accordion type="single" collapsible className="mt-12">
+          <AccordionItem value="danger-zone" className="border-red-500/20">
+            <AccordionTrigger className="text-red-400 hover:text-red-300 hover:no-underline">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                <span>System Danger Zone</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Card className="bg-red-500/5 border-red-500/20">
+                <CardContent className="p-6 space-y-4">
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-red-400">Reset All System Data</h4>
+                    <p className="text-sm text-muted-foreground">
+                      This will permanently delete all tasks, keys, alerts, and kudos across the entire platform. 
+                      Use this only if you want to start from a clean slate.
+                    </p>
+                  </div>
+                  <Button 
+                    variant="destructive" 
+                    className="w-full sm:w-auto gap-2"
+                    onClick={handleResetAllData}
+                    disabled={isResetting}
+                  >
+                    {isResetting ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                    Delete All Collections
+                  </Button>
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </main>
       <Footer />
     </div>
