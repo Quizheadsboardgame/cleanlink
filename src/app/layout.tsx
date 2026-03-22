@@ -7,12 +7,12 @@ import { ReviewTasksFab } from "@/components/review-tasks-fab";
 import { LanguageProvider } from "@/context/language-context";
 
 export const metadata: Metadata = {
-  title: 'CleanLink | Professional Management',
+  title: 'The Cleaners Cupboard | Professional Management',
   description: 'A professional web application for infrastructure and stock management, powered by Harley:work smarter.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'CleanLink',
+    title: 'The Cleaners Cupboard',
   },
   formatDetection: {
     telephone: false,

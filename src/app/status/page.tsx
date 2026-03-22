@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -248,6 +247,10 @@ export default function StatusBoardPage() {
                         </div>
                       )}
                     </div>
+                    <CardFooter className="p-4 pt-2 border-t border-white/5 bg-white/[0.01] flex justify-between items-center text-[8px] text-muted-foreground uppercase tracking-[0.2em]">
+                      <span>The Cleaners Cupboard</span>
+                      <span>{format(new Date(task.createdAt), "yyyy")}</span>
+                    </CardFooter>
                   </Card>
                 );
               })}

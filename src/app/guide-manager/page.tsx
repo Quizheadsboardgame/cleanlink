@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -103,7 +102,7 @@ export default function GuideManagerPage() {
               <span className="font-headline font-bold uppercase tracking-[0.2em]">{t.sheetManager.footer}</span>
             </div>
             <p className="text-[10px] text-muted-foreground/30 uppercase tracking-[0.8em] font-bold">
-              CleanLink Infrastructure v2.5
+              The Cleaners Cupboard infrastructure v2.5
             </p>
           </div>
         </div>

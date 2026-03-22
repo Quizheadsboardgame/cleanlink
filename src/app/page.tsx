@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -38,7 +37,7 @@ export default function HomeHub() {
     { href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5", desc: "Track your submitted forms and requests." },
     { href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5", desc: "Submit a private concern to management." },
     { href: "/important-info", label: t.nav.info, icon: Info, color: "info-text-gradient", border: "hover:border-orange-500/40", bg: "bg-orange-500/5", desc: "Contact details and site procedures." },
-    { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5", desc: "Learn how to use the CleanLink matrix." },
+    { href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5", desc: "Learn how to use our system." },
   ]
 
   return (
@@ -54,7 +53,7 @@ export default function HomeHub() {
               <span className="text-xs font-bold uppercase tracking-[0.3em]">System Online</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold font-headline portal-text-gradient tracking-tighter">
-              CleanLink Hub
+              The Cleaners Cupboard
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto opacity-80">
               Welcome to your digital workspace. Select a task below to begin.

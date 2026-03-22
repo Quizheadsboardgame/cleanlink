@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -106,7 +105,7 @@ export default function GuideCleanerPage() {
               <span className="font-headline font-bold uppercase tracking-[0.2em]">{t.sheetCleaner.footer}</span>
             </div>
             <p className="text-xs text-muted-foreground/40 uppercase tracking-[0.5em] font-bold">
-              Powered by Harley:work smarter
+              The Cleaners Cupboard: Work Smarter
             </p>
           </div>
         </div>

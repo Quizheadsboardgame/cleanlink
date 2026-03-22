@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -95,8 +94,8 @@ export function Navbar() {
           <Link href="/" className="flex flex-col items-center pointer-events-auto group">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-primary animate-pulse hidden sm:block" />
-              <span className="text-3xl sm:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter">
-                CleanLink
+              <span className="text-2xl sm:text-4xl lg:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
+                The Cleaners Cupboard
               </span>
             </div>
             <div className="flex flex-col items-center mt-2.5">

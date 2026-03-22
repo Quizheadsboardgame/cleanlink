@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -209,7 +208,7 @@ export default function ImportantInfoPage() {
                           </CardContent>
                           <CardFooter className="p-4 pt-2 border-t border-white/5 mt-auto flex justify-between items-center text-[9px] text-muted-foreground uppercase tracking-widest">
                             <span>{new Date(item.updatedAt).toLocaleDateString()}</span>
-                            <span className="opacity-40">CleanLink Protocol</span>
+                            <span className="opacity-40">The Cleaners Cupboard Protocol</span>
                           </CardFooter>
                         </Card>
                       ))}
