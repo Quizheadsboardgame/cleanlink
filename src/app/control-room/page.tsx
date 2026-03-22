@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -13,7 +14,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw, Settings2, CheckCircle2, LifeBuoy, Clock, Building2, User } from "lucide-react"
+import { Textarea } from "@/components/ui/textarea"
+import { Loader2, Key, Trash2, Edit2, ShieldCheck, LogOut, Plus, AlertTriangle, RefreshCw, Settings2, CheckCircle2, LifeBuoy, Clock, Building2, User, MessageSquare } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -52,6 +54,7 @@ export default function ControlRoomPage() {
   const [formData, setFormData] = useState({ key: "", displayName: "" })
 
   const [configTarget, setConfigTarget] = useState<any>(null)
+  const [ticketFeedback, setTicketFeedback] = useState<Record<string, string>>({})
 
   useEffect(() => {
     setMounted(true)
@@ -140,12 +143,18 @@ export default function ControlRoomPage() {
     setConfigTarget({ ...configTarget, enabledModules: newModules })
   }
 
-  const handleUpdateTicketStatus = (id: string, status: string) => {
+  const handleUpdateTicket = (id: string, status?: string) => {
     const ticketRef = doc(db, 'controlRoomTickets', id)
-    updateDocumentNonBlocking(ticketRef, { 
-      status, 
-      resolvedAt: status === 'Resolved' ? new Date().toISOString() : null 
-    })
+    const updateData: any = {}
+    if (status) {
+      updateData.status = status
+      if (status === 'Resolved') updateData.resolvedAt = new Date().toISOString()
+    }
+    if (ticketFeedback[id]) {
+      updateData.controlRoomNote = ticketFeedback[id]
+    }
+    
+    updateDocumentNonBlocking(ticketRef, updateData)
     toast({ title: "Ticket Updated" })
   }
 
@@ -381,56 +390,86 @@ export default function ControlRoomPage() {
               {tickets.map((t) => (
                 <Card key={t.id} className={cn("glass-panel border-white/5 transition-all", t.status === 'Open' ? "border-amber-500/20" : "opacity-60")}>
                   <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                      <div className="space-y-3 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge variant="outline" className="border-primary/30 text-primary uppercase text-[10px]">
-                            {t.type}
-                          </Badge>
-                          <Badge className={cn("text-[10px]", t.status === 'Open' ? "bg-amber-500/20 text-amber-400" : "bg-green-500/20 text-green-400")}>
-                            {t.status}
-                          </Badge>
-                          <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {format(new Date(t.createdAt), "PPp")}
-                          </span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm font-bold text-white">
-                            <Building2 className="w-4 h-4 text-muted-foreground" />
-                            {t.managerName}
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                        <div className="space-y-3 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge variant="outline" className="border-primary/30 text-primary uppercase text-[10px]">
+                              {t.type}
+                            </Badge>
+                            <Badge className={cn("text-[10px]", t.status === 'Open' ? "bg-amber-500/20 text-amber-400" : "bg-green-500/20 text-green-400")}>
+                              {t.status}
+                            </Badge>
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {format(new Date(t.createdAt), "PPp")}
+                            </span>
                           </div>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {t.description}
-                          </p>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2 text-sm font-bold text-white">
+                              <Building2 className="w-4 h-4 text-muted-foreground" />
+                              {t.managerName}
+                            </div>
+                            <p className="text-sm text-white/90 leading-relaxed italic border-l-2 border-primary/20 pl-3">
+                              "{t.description}"
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 shrink-0">
+                          {t.status === 'Open' ? (
+                            <Button 
+                              onClick={() => handleUpdateTicket(t.id, 'Resolved')}
+                              className="bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 h-9 px-4 text-xs font-bold uppercase"
+                            >
+                              Mark Resolved
+                            </Button>
+                          ) : (
+                            <Button 
+                              onClick={() => handleUpdateTicket(t.id, 'Open')}
+                              variant="outline"
+                              className="border-white/10 h-9 px-4 text-xs font-bold uppercase"
+                            >
+                              Re-open
+                            </Button>
+                          )}
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={() => deleteDocumentNonBlocking(doc(db, 'controlRoomTickets', t.id))}
+                            className="h-9 w-9 text-muted-foreground hover:text-red-500"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </div>
                       </div>
-                      <div className="flex gap-2 shrink-0">
-                        {t.status === 'Open' ? (
-                          <Button 
-                            onClick={() => handleUpdateTicketStatus(t.id, 'Resolved')}
-                            className="bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 h-9 px-4 text-xs font-bold uppercase"
-                          >
-                            Mark Resolved
-                          </Button>
-                        ) : (
-                          <Button 
-                            onClick={() => handleUpdateTicketStatus(t.id, 'Open')}
-                            variant="outline"
-                            className="border-white/10 h-9 px-4 text-xs font-bold uppercase"
-                          >
-                            Re-open
-                          </Button>
-                        )}
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          onClick={() => deleteDocumentNonBlocking(doc(db, 'controlRoomTickets', t.id))}
-                          className="h-9 w-9 text-muted-foreground hover:text-red-500"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+
+                      {t.status === 'Open' && (
+                        <div className="mt-2 space-y-3 bg-white/5 p-4 rounded-xl border border-white/5">
+                          <Label className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                            <MessageSquare className="w-3 h-3" /> Send Note to Manager
+                          </Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              placeholder="Type a message or instruction back to the manager..."
+                              value={ticketFeedback[t.id] ?? t.controlRoomNote ?? ""}
+                              onChange={(e) => setTicketFeedback({...ticketFeedback, [t.id]: e.target.value})}
+                              className="bg-secondary/50 border-white/5 text-sm h-10"
+                            />
+                            <Button 
+                              onClick={() => handleUpdateTicket(t.id)}
+                              className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 h-10 px-4"
+                            >
+                              Save Note
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {t.status === 'Resolved' && t.controlRoomNote && (
+                        <div className="text-xs text-muted-foreground italic bg-white/[0.02] p-3 rounded-lg border border-white/5">
+                          Note: "{t.controlRoomNote}"
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

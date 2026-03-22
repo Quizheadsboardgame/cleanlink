@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,7 +11,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, addDays } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, TrainFront, Lock, Info, BookOpen } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard, LifeBuoy, AlertTriangle, Sparkles, Lock, Info, BookOpen } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -164,7 +165,18 @@ function SupportTab({ managerId, managerName }: { managerId: string, managerName
                       {format(new Date(t.createdAt), "MMM d, HH:mm")}
                     </span>
                   </div>
-                  <p className="text-sm text-white/80 line-clamp-2">{t.description}</p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-white/80">{t.description}</p>
+                    {t.controlRoomNote && (
+                      <div className="bg-primary/10 p-3 rounded-lg border border-primary/20 flex gap-3">
+                        <MessageSquare className="w-4 h-4 text-primary shrink-0" />
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-bold text-primary uppercase tracking-wider">Control Room Note</p>
+                          <p className="text-xs text-muted-foreground leading-relaxed italic">"{t.controlRoomNote}"</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -352,7 +364,7 @@ function GuideTab() {
     {
       title: "5. Support & Control Room",
       icon: LifeBuoy,
-      content: "If you encounter a technical fault with the site or need extra training, use the 'Support' tab to raise a ticket. This goes directly to the Control Room administrators for resolution."
+      content: "If you encounter a technical fault with the site or need extra training, use the 'Support' tab to raise a ticket. This goes directly to the Control Room administrators. Watch for feedback—a badge will appear when the Control Room replies."
     }
   ]
 
@@ -443,14 +455,25 @@ export default function TasksPage() {
     return query(collection(db, 'kudos'), where('status', '==', 'Pending Review'))
   }, [db, user, isReady])
 
+  const supportTicketsQuery = useMemoFirebase(() => {
+    if (!db || !managerId || !isReady) return null
+    return query(collection(db, 'controlRoomTickets'), where('managerId', '==', managerId))
+  }, [db, managerId, isReady])
+
   const { data: allTasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
   const { data: pendingKudos, isLoading: isKudosLoading } = useCollection(kudosModerationQuery)
+  const { data: tickets } = useCollection(supportTicketsQuery)
 
   const sortedTasks = React.useMemo(() => {
     if (!allTasks) return []
     return [...allTasks].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   }, [allTasks])
+
+  const supportNotificationCount = React.useMemo(() => {
+    if (!tickets) return 0
+    return tickets.filter(t => t.status === 'Open' && t.controlRoomNote).length
+  }, [tickets])
 
   useEffect(() => {
     if (sortedTasks && sortedTasks.length > lastTaskCountRef.current) {
@@ -551,8 +574,13 @@ export default function TasksPage() {
             </TabsTrigger>
             <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Analytics</TabsTrigger>
             <TabsTrigger value="cover" className="rounded-xl flex-1 px-6">Cover Work</TabsTrigger>
-            <TabsTrigger value="support" className="rounded-xl flex-1 px-6 flex items-center gap-2">
+            <TabsTrigger value="support" className="rounded-xl flex-1 px-6 flex items-center gap-2 relative">
               <LifeBuoy className="w-4 h-4" /> Support
+              {supportNotificationCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 bg-primary text-white h-4 w-4 p-0 flex items-center justify-center text-[8px] border-2 border-background animate-in fade-in zoom-in">
+                  {supportNotificationCount}
+                </Badge>
+              )}
             </TabsTrigger>
             <TabsTrigger value="guide" className="rounded-xl flex-1 px-6 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-lime-400" /> Guide

@@ -42,6 +42,7 @@
         "managerName": { "type": "string" },
         "type": { "type": "string", "enum": ["Site Fault", "Feature Request", "Extra Training"] },
         "description": { "type": "string" },
+        "controlRoomNote": { "type": "string", "description": "Feedback provided by the Control Room." },
         "status": { "type": "string", "enum": ["Open", "Resolved"] },
         "createdAt": { "type": "string", "format": "date-time" },
         "resolvedAt": { "type": "string", "format": "date-time" }
