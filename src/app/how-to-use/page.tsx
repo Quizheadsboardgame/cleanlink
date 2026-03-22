@@ -20,9 +20,12 @@ import {
   Send,
   LayoutList,
   UserPlus,
-  Sparkles
+  Sparkles,
+  FileDown,
+  ArrowRight
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/context/language-context"
 
 export default function HowToUsePage() {
@@ -108,29 +111,6 @@ export default function HowToUsePage() {
     }
   ]
 
-  const benefits = [
-    {
-      title: "Fast Responses",
-      description: "Your request is sent instantly to management so they can review it quickly.",
-      icon: Zap
-    },
-    {
-      title: "Live Updates",
-      description: "Track your request from 'Submitted' to 'Complete' in real-time.",
-      icon: LayoutList
-    },
-    {
-      title: "Works on Any Phone",
-      description: "Access CleanLink on your smartphone or tablet while you are at work.",
-      icon: Smartphone
-    },
-    {
-      title: "Earn More",
-      description: "Easily find and apply for extra cover shifts across our entire network.",
-      icon: ShieldCheck
-    }
-  ]
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -169,6 +149,63 @@ export default function HowToUsePage() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </section>
+
+          {/* Downloadable Resources */}
+          <section className="space-y-8">
+            <div className="flex items-center gap-3 justify-center sm:justify-start">
+              <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1 font-mono tracking-widest text-[10px]">RESOURCE_CENTER</Badge>
+              <h2 className="text-2xl font-bold font-headline">{t.guide.resourcesTitle}</h2>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* Cleaner Guide */}
+              <Card className="glass-panel overflow-hidden group hover:border-lime-500/30 transition-all border-white/5">
+                <div className="h-2 w-full guide-gradient" />
+                <CardHeader className="p-8">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-2">
+                      <CardTitle className="text-2xl font-headline flex items-center gap-3">
+                        <FileDown className="w-6 h-6 text-lime-400" />
+                        {t.guide.cleanerGuideTitle}
+                      </CardTitle>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {t.guide.cleanerGuideDesc}
+                      </p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8">
+                  <Button className="w-full guide-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
+                    {t.guide.viewSheet}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Manager Guide */}
+              <Card className="glass-panel overflow-hidden group hover:border-primary/30 transition-all border-white/5">
+                <div className="h-2 w-full tasks-gradient" />
+                <CardHeader className="p-8">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-2">
+                      <CardTitle className="text-2xl font-headline flex items-center gap-3">
+                        <ShieldCheck className="w-6 h-6 text-primary" />
+                        {t.guide.managerGuideTitle}
+                      </CardTitle>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {t.guide.managerGuideDesc}
+                      </p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8">
+                  <Button className="w-full tasks-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
+                    {t.guide.viewSheet}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </section>
 
@@ -254,3 +291,26 @@ export default function HowToUsePage() {
     </div>
   )
 }
+
+const benefits = [
+  {
+    title: "Fast Responses",
+    description: "Your request is sent instantly to management so they can review it quickly.",
+    icon: Zap
+  },
+  {
+    title: "Live Updates",
+    description: "Track your request from 'Submitted' to 'Complete' in real-time.",
+    icon: LayoutList
+  },
+  {
+    title: "Works on Any Phone",
+    description: "Access CleanLink on your smartphone or tablet while you are at work.",
+    icon: Smartphone
+  },
+  {
+    title: "Earn More",
+    description: "Easily find and apply for extra cover shifts across our entire network.",
+    icon: ShieldCheck
+  }
+]
