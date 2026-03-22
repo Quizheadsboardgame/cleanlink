@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -97,7 +96,7 @@ export default function StatusBoardPage() {
   const db = useFirestore()
   const auth = useAuth()
   const { t } = useLanguage()
-  const { managerId } = useManagerContext()
+  const { managerId, isManagerLinked } = useManagerContext()
   const [authStatus, setAuthStatus] = useState<'loading' | 'authorized' | 'unauthorized'>('loading')
 
   useEffect(() => {
@@ -107,7 +106,7 @@ export default function StatusBoardPage() {
   }, [user, isUserLoading, auth])
 
   useEffect(() => {
-    // Robustly check for management tokens
+    // Check for management tokens reliably
     const managerToken = sessionStorage.getItem("manager_auth_token")
     const controlToken = sessionStorage.getItem("control_room_auth")
     if (managerToken || controlToken === "true") {
@@ -118,12 +117,12 @@ export default function StatusBoardPage() {
   }, [])
 
   const tasksQuery = useMemoFirebase(() => {
+    // Only proceed once we have a user and authStatus is determined
     if (!db || !user || authStatus === 'loading') return null
     
-    // We strictly wait until authStatus is determined before running the query
-    // to prevent permission errors from unauthorized initial states.
     const currentM = managerId || "generic"
     
+    // Managers see all tasks for their ID
     if (authStatus === 'authorized') {
       return query(
         collection(db, 'orderTasks'), 
@@ -133,6 +132,7 @@ export default function StatusBoardPage() {
       )
     }
 
+    // Cleaners only see their own tasks
     return query(
       collection(db, 'orderTasks'), 
       where('managerId', '==', currentM),
@@ -144,17 +144,6 @@ export default function StatusBoardPage() {
 
   const { data: allTasks, isLoading } = useCollection(tasksQuery)
 
-  const tasks = React.useMemo(() => {
-    if (!allTasks) return null;
-    return allTasks.filter(task => {
-      // Secondary safety check for sensitive tasks
-      if (task.type === 'Staff Concern') {
-        return authStatus === 'authorized' || task.ownerId === user?.uid;
-      }
-      return true;
-    });
-  }, [allTasks, authStatus, user?.uid]);
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -163,7 +152,9 @@ export default function StatusBoardPage() {
         <div className="space-y-8">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold font-headline status-text-gradient">{t.status.title}</h1>
-            <p className="text-muted-foreground">{authStatus === 'authorized' ? "Monitoring site-wide activity." : t.status.description}</p>
+            <p className="text-muted-foreground">
+              {authStatus === 'authorized' ? "Monitoring site-wide activity." : t.status.description}
+            </p>
             {authStatus === 'authorized' && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-primary/20 mt-2">
                 <Lock className="w-3 h-3" />
@@ -177,7 +168,7 @@ export default function StatusBoardPage() {
               <Loader2 className="w-10 h-10 text-white animate-spin" />
               <p className="text-muted-foreground">{t.status.loading}</p>
             </div>
-          ) : !tasks || tasks.length === 0 ? (
+          ) : !allTasks || allTasks.length === 0 ? (
             <Card className="glass-panel border-dashed py-20 text-center">
               <CardContent className="flex flex-col items-center gap-4">
                 <div className="bg-secondary/50 p-4 rounded-full">
@@ -193,7 +184,7 @@ export default function StatusBoardPage() {
             </Card>
           ) : (
             <div className="grid gap-4">
-              {tasks.map((task) => {
+              {allTasks.map((task) => {
                 const meta = getTaskMeta(task.type);
                 const Icon = meta.icon;
 
@@ -219,7 +210,7 @@ export default function StatusBoardPage() {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-lg">
-                                {task.type === 'Staff Concern' && authStatus !== 'authorized' ? 'Confidential Report' : task.title.split(':')[0]}
+                                {task.type === 'Staff Concern' && authStatus !== 'authorized' ? 'Confidential Report' : (task.title?.split(':')[0] || 'Request')}
                               </span>
                               <Badge variant="outline" className={cn("text-[10px] uppercase tracking-tighter h-5", meta.border, meta.color)}>
                                 {task.type}
@@ -228,13 +219,13 @@ export default function StatusBoardPage() {
                             <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-muted-foreground">
                               <span className="flex items-center gap-1 italic">
                                 <Building2 className="w-3 h-3" />
-                                {task.description.split('.')[0].replace('Site: ', '').replace('Reported by: ', '')}
+                                {task.description?.split('.')[0]?.replace('Site: ', '').replace('Reported by: ', '') || 'Site Data'}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
-                                {format(new Date(task.createdAt), "HH:mm")}
+                                {task.createdAt ? format(new Date(task.createdAt), "HH:mm") : '--:--'}
                               </span>
-                              {task.status !== 'Completed' && task.status !== 'Rejected' && (
+                              {task.status !== 'Completed' && task.status !== 'Rejected' && task.createdAt && (
                                 <CountdownTimer createdAt={task.createdAt} status={task.status} colorClass={meta.color} />
                               )}
                             </div>
@@ -268,7 +259,7 @@ export default function StatusBoardPage() {
                     </div>
                     <CardFooter className="p-4 pt-2 border-t border-white/5 bg-white/[0.01] flex justify-between items-center text-[8px] text-muted-foreground uppercase tracking-[0.2em]">
                       <span>The Cleaners Cupboard</span>
-                      <span>{format(new Date(task.createdAt), "yyyy")}</span>
+                      <span>{task.createdAt ? format(new Date(task.createdAt), "yyyy") : '2024'}</span>
                     </CardFooter>
                   </Card>
                 );
