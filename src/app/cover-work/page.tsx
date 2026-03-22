@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -7,13 +8,12 @@ import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
 import { collection, query, orderBy, doc } from "firebase/firestore"
-import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates"
+import { addDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
 import { CalendarDays, MapPin, Clock, Send, Loader2, Info } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog"
@@ -88,18 +88,36 @@ export default function CoverWorkPage() {
       return
     }
 
+    const post = allPosts?.find(p => p.id === respondingTo)
+    if (!post) return
+
     setIsSubmitting(true)
-    const colRef = collection(db, 'coverWorkPosts', respondingTo, 'responses')
     
+    // 1. Log response in the post's subcollection
+    const colRef = collection(db, 'coverWorkPosts', respondingTo, 'responses')
     addDocumentNonBlocking(colRef, {
       postId: respondingTo,
       cleanerName,
       notes,
-      ownerId: user?.uid,
+      ownerId: user?.uid || "anonymous",
       createdAt: new Date().toISOString()
     })
 
-    toast({ title: "Interest Logged", description: "Manager has been notified of your interest." })
+    // 2. Feed it through to the manager's task board
+    const taskId = Math.random().toString(36).substr(2, 9)
+    const taskRef = doc(db, 'orderTasks', taskId)
+    setDocumentNonBlocking(taskRef, {
+      id: taskId,
+      managerId: post.managerId,
+      title: `Cover Interest: ${post.title}`,
+      description: `Staff: ${cleanerName}. Notes: ${notes || "None"}. Location: ${post.location || "N/A"}`,
+      status: 'Pending Review',
+      ownerId: user?.uid || "anonymous",
+      type: 'Cover Interest',
+      createdAt: new Date().toISOString()
+    }, { merge: true })
+
+    toast({ title: "Interest Logged", description: "Manager has been notified of your interest via their task board." })
     setRespondingTo(null)
     setCleanerName("")
     setNotes("")

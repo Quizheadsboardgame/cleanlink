@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,7 +10,7 @@ import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "
 import { collection, query, orderBy, limit, where } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus, ShieldAlert, Lock } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus, ShieldAlert, Lock, CalendarDays } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/context/language-context"
@@ -86,6 +87,8 @@ const getTaskMeta = (type: string) => {
       return { icon: UserPlus, color: 'text-[#FACC15]', bg: 'bg-[#FACC15]/10', border: 'border-[#FACC15]/20' };
     case 'Staff Concern':
       return { icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20' };
+    case 'Cover Interest':
+      return { icon: CalendarDays, color: 'text-sky-400', bg: 'bg-sky-400/10', border: 'border-sky-400/20' };
     default:
       return { icon: Clock, color: 'text-white', bg: 'bg-white/10', border: 'border-white/20' };
   }

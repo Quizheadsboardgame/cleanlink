@@ -11,7 +11,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -83,7 +83,7 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
       .slice(0, 5)
   }, [tasks])
 
-  const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9']
+  const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9', '#0284C7']
 
   if (!mounted) return <div className="h-[300px] flex items-center justify-center text-muted-foreground italic">Initializing visualizer...</div>
 
@@ -485,6 +485,10 @@ export default function TasksPage() {
                           <CardTitle className={cn("text-lg font-headline flex items-center gap-2", task.type === 'Staff Concern' && "text-red-400")}>
                             {task.type === 'Staff Referral' && <UserPlus className="w-4 h-4 text-[#FACC15]" />}
                             {task.type === 'Staff Concern' && <ShieldAlert className="w-4 h-4" />}
+                            {task.type === 'Cover Interest' && <CalendarDays className="w-4 h-4 text-sky-400" />}
+                            {task.type === 'Stock Order' && <Plus className="w-4 h-4 text-[#6E76F5]" />}
+                            {task.type === 'Faulty Equipment' && <ShieldAlert className="w-4 h-4 text-[#F59E0B]" />}
+                            {task.type === 'Additional Hours' && <Clock className="w-4 h-4 text-[#D946EF]" />}
                             {task.title}
                           </CardTitle>
                           <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">
@@ -522,7 +526,7 @@ export default function TasksPage() {
 
           <TabsContent value="cover" className="space-y-6">
             <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">Manage your cover work opportunities.</p>
+              <p className="text-sm text-muted-foreground">Manage your cover work opportunities and view staff interest.</p>
               <Dialog open={isCreatingCover} onOpenChange={setIsCreatingCover}>
                 <DialogTrigger asChild>
                   <Button className="cover-gradient text-white gap-2 rounded-xl h-10 px-6 font-bold shadow-lg"><Plus className="w-4 h-4" /> Create Post</Button>

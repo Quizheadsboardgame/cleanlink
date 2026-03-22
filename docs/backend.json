@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "ManagerKey": {
@@ -51,7 +52,7 @@
         "completedAt": { "type": "string", "format": "date-time" },
         "type": {
           "type": "string",
-          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern"]
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern", "Cover Interest"]
         }
       },
       "required": ["id", "title", "status", "createdAt", "managerId"]
