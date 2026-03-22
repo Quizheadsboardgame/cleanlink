@@ -33,7 +33,7 @@ export default function HomeHub() {
     { id: 'pay', href: "/pay-error", label: t.nav.pay, icon: CreditCard, color: "text-emerald-400", border: "hover:border-emerald-400/40", bg: "bg-emerald-400/5" },
     { id: 'referral', href: "/referral", label: t.nav.referral, icon: UserPlus, color: "referral-text-gradient", border: "hover:border-[#FACC15]/40", bg: "bg-[#FACC15]/5" },
     { id: 'cover', href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "cover-text-gradient", border: "hover:border-[#0EA5E9]/40", bg: "bg-[#0EA5E9]/5" },
-    { id: 'kudos', href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "hover:border-rose-400/40", bg: "bg-rose-400/5" },
+    { id: 'kudos', href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "border-rose-400/10", bg: "bg-rose-400/5", comingSoon: true },
     { id: 'status', href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5", always: true },
     { id: 'concern', href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5" },
     { id: 'portal', href: isManagerAuthorized ? "/tasks" : "/manager-login", label: isManagerAuthorized ? "Management Hub" : t.nav.managerPortal, icon: Lock, color: "text-primary", border: "border-primary/20 bg-primary/5", bg: "bg-primary/10", always: true },
@@ -84,22 +84,50 @@ export default function HomeHub() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {filteredServices.map((service) => (
-              <Link key={service.href} href={service.href} className="group">
-                <Card className={cn("glass-panel h-full border-white/5 transition-all duration-300 group-hover:-translate-y-1 overflow-hidden relative", service.border)}>
-                  <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500", service.bg)} />
+            {filteredServices.map((service) => {
+              const Content = (
+                <Card className={cn(
+                  "glass-panel h-full border-white/5 transition-all duration-300 overflow-hidden relative", 
+                  service.border,
+                  service.comingSoon ? "opacity-50 cursor-not-allowed" : "group-hover:-translate-y-1"
+                )}>
+                  <div className={cn(
+                    "absolute inset-0 opacity-0 transition-opacity duration-500", 
+                    service.bg,
+                    !service.comingSoon && "group-hover:opacity-100"
+                  )} />
                   <CardHeader className="relative z-10 p-6">
                     <div className="flex items-center justify-between mb-2">
-                      <div className={cn("p-3 rounded-2xl bg-white/5 group-hover:scale-110 transition-transform duration-300", service.color)}>
+                      <div className={cn(
+                        "p-3 rounded-2xl bg-white/5 transition-transform duration-300", 
+                        service.color,
+                        !service.comingSoon && "group-hover:scale-110"
+                      )}>
                         <service.icon className="w-6 h-6" />
                       </div>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                      {!service.comingSoon && (
+                        <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                      )}
                     </div>
                     <CardTitle className={cn("text-xl font-headline font-bold", service.color)}>{service.label}</CardTitle>
                   </CardHeader>
                 </Card>
-              </Link>
-            ))}
+              );
+
+              if (service.comingSoon) {
+                return (
+                  <div key={service.id} className="group relative">
+                    {Content}
+                  </div>
+                );
+              }
+
+              return (
+                <Link key={service.href} href={service.href} className="group">
+                  {Content}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </main>
