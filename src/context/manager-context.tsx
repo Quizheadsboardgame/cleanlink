@@ -7,7 +7,8 @@ import { collection, query, where, limit, getDocs } from 'firebase/firestore';
 
 interface ManagerContextType {
   managerId: string | null;
-  setManagerId: (id: string) => void;
+  managerName: string | null;
+  setManagerId: (id: string, name: string) => void;
   isManagerLinked: boolean;
   isManagerAuthorized: boolean;
   isMounted: boolean;
@@ -18,6 +19,7 @@ const ManagerContext = createContext<ManagerContextType | undefined>(undefined);
 export function ManagerProvider({ children }: { children: ReactNode }) {
   const db = useFirestore();
   const [managerId, setManagerIdState] = useState<string | null>(null);
+  const [managerName, setManagerNameState] = useState<string | null>(null);
   const [isManagerAuthorized, setIsManagerAuthorized] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const searchParams = useSearchParams();
@@ -28,8 +30,10 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
       
       // 1. Check for logged-in manager session (takes priority)
       const authToken = sessionStorage.getItem("manager_auth_token");
+      const authName = sessionStorage.getItem("manager_display_name");
       if (authToken) {
         setManagerIdState(authToken);
+        setManagerNameState(authName || "Manager");
         setIsManagerAuthorized(true);
         return;
       }
@@ -39,7 +43,6 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
       if (mParam && db) {
         try {
           // Resolve Display Name to the actual internal Key (managerId)
-          // This keeps the Key secret and only exposes the public Name in the link
           const q = query(
             collection(db, 'managerKeys'),
             where('displayName', '==', decodeURIComponent(mParam)),
@@ -49,7 +52,7 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
           
           if (!snap.empty) {
             const data = snap.docs[0].data();
-            setManagerId(data.key); // Use the internal key for data siloing
+            setManagerId(data.key, data.displayName); 
             return;
           }
         } catch (err) {
@@ -58,25 +61,30 @@ export function ManagerProvider({ children }: { children: ReactNode }) {
       }
 
       // 3. Check LocalStorage for saved internal ID (linked cleaner persistence)
-      const saved = localStorage.getItem('cupboard_manager_id');
-      if (saved) {
-        setManagerIdState(saved);
+      const savedId = localStorage.getItem('cupboard_manager_id');
+      const savedName = localStorage.getItem('cupboard_manager_name');
+      if (savedId) {
+        setManagerIdState(savedId);
+        setManagerNameState(savedName || "Linked Manager");
       }
     };
 
     resolveManager();
   }, [searchParams, db]);
 
-  const setManagerId = (id: string) => {
+  const setManagerId = (id: string, name: string) => {
     setManagerIdState(id);
+    setManagerNameState(name);
     if (typeof window !== 'undefined') {
       localStorage.setItem('cupboard_manager_id', id);
+      localStorage.setItem('cupboard_manager_name', name);
     }
   };
 
   return (
     <ManagerContext.Provider value={{ 
       managerId, 
+      managerName,
       setManagerId, 
       isManagerLinked: !!managerId,
       isManagerAuthorized,

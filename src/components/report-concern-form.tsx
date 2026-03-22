@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -26,7 +25,7 @@ export function ReportConcernForm() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const { t } = useLanguage()
-  const { managerId } = useManagerContext()
+  const { managerId, managerName } = useManagerContext()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [type, setType] = useState<"Staff Member" | "Health & Safety">("Staff Member")
@@ -165,7 +164,7 @@ export function ReportConcernForm() {
       </Card>
       
       <p className="mt-4 text-[10px] text-center text-muted-foreground/60 uppercase tracking-[0.2em]">
-        SECURITY PROTOCOL: {managerId ? `SECURED TO PROFILE ${managerId.substring(0, 8)}` : "GENERIC CONNECTION"}
+        SECURITY PROTOCOL: {managerName ? `SECURED TO PROFILE: ${managerName}` : "GENERIC CONNECTION"}
       </p>
     </div>
   )

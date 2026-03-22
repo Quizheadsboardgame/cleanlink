@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -31,7 +30,7 @@ import { Badge } from "@/components/ui/badge"
 
 export default function HomeHub() {
   const { t } = useLanguage()
-  const { managerId, isManagerLinked, isManagerAuthorized } = useManagerContext()
+  const { managerName, isManagerLinked, isManagerAuthorized } = useManagerContext()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function HomeHub() {
               ) : isManagerLinked ? (
                 <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-400 px-4 py-1.5 rounded-full border border-green-500/20 text-[10px] font-bold uppercase tracking-widest">
                   <Link2 className="w-3 h-3" />
-                  Linked to Manager Profile: {managerId?.substring(0, 8)}...
+                  Linked to Manager: {managerName}
                 </div>
               ) : (
                 <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-1.5 rounded-full border border-amber-500/20 text-[10px] font-bold uppercase tracking-widest">
