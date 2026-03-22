@@ -2,16 +2,29 @@
 "use client"
 
 import * as React from "react"
+import { useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Sparkles, CheckCircle2, Zap, LayoutList, UserPlus, ShieldCheck } from "lucide-react"
+import { ArrowLeft, Sparkles, CheckCircle2, Zap, LayoutList, UserPlus, ShieldCheck, Download, Printer } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
+import { useSearchParams } from "next/navigation"
 
 export default function GuideCleanerPage() {
   const { t, isRTL } = useLanguage()
+  const searchParams = useSearchParams()
+  const autoDownload = searchParams.get('download') === 'true'
+
+  useEffect(() => {
+    if (autoDownload) {
+      const timer = setTimeout(() => {
+        window.print()
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [autoDownload])
 
   const sections = [
     { title: t.sheetCleaner.section1Title, desc: t.sheetCleaner.section1Desc, icon: Zap },
@@ -19,6 +32,10 @@ export default function GuideCleanerPage() {
     { title: t.sheetCleaner.section3Title, desc: t.sheetCleaner.section3Desc, icon: UserPlus },
     { title: t.sheetCleaner.section4Title, desc: t.sheetCleaner.section4Desc, icon: ShieldCheck },
   ]
+
+  const handleDownload = () => {
+    window.print()
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -28,11 +45,20 @@ export default function GuideCleanerPage() {
         <div className="space-y-12">
           {/* Header */}
           <div className="flex flex-col items-center text-center space-y-6">
-            <Link href="/how-to-use" className="self-start">
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white">
-                <ArrowLeft className={isRTL ? "rotate-180" : ""} /> {t.common.back}
+            <div className="w-full flex justify-between items-center no-print">
+              <Link href="/how-to-use">
+                <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white">
+                  <ArrowLeft className={isRTL ? "rotate-180" : ""} /> {t.common.back}
+                </Button>
+              </Link>
+              
+              <Button 
+                onClick={handleDownload}
+                className="guide-gradient text-white rounded-xl shadow-lg gap-2 h-10 px-6 font-bold"
+              >
+                <Download className="w-4 h-4" /> {t.common.downloadPdf}
               </Button>
-            </Link>
+            </div>
             
             <div className="space-y-2">
               <Badge variant="outline" className="border-lime-500/30 text-lime-400 font-mono tracking-[0.3em] uppercase text-[10px] px-4 py-1">
@@ -76,7 +102,7 @@ export default function GuideCleanerPage() {
           {/* Footer of the sheet */}
           <div className="pt-16 border-t border-white/5 text-center space-y-4">
             <div className="flex items-center justify-center gap-3 text-primary">
-              <Sparkles className="w-5 h-5 animate-pulse" />
+              <Sparkles className="w-5 h-5 animate-pulse no-print" />
               <span className="font-headline font-bold uppercase tracking-[0.2em]">{t.sheetCleaner.footer}</span>
             </div>
             <p className="text-xs text-muted-foreground/40 uppercase tracking-[0.5em] font-bold">

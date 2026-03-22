@@ -22,7 +22,8 @@ import {
   UserPlus,
   Sparkles,
   FileDown,
-  ArrowRight
+  ArrowRight,
+  Download
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -220,7 +221,7 @@ export default function HowToUsePage() {
             </div>
           </section>
 
-          {/* Downloadable Resources - MOVED TO BOTTOM */}
+          {/* Downloadable Resources */}
           <section className="space-y-8">
             <div className="flex items-center gap-3 justify-center sm:justify-start">
               <Badge variant="outline" className="border-primary/30 text-primary px-3 py-1 font-mono tracking-widest text-[10px]">RESOURCE_CENTER</Badge>
@@ -244,10 +245,10 @@ export default function HowToUsePage() {
                   </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                  <Link href="/guide-cleaner">
+                  <Link href="/guide-cleaner?download=true">
                     <Button className="w-full guide-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
+                      <Download className="w-4 h-4 mr-2" />
                       {t.guide.viewSheet}
-                      <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -270,10 +271,10 @@ export default function HowToUsePage() {
                   </div>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                  <Link href="/guide-manager">
+                  <Link href="/guide-manager?download=true">
                     <Button className="w-full tasks-gradient text-white h-12 rounded-xl group-hover:scale-[1.02] transition-transform font-bold tracking-tight">
+                      <Download className="w-4 h-4 mr-2" />
                       {t.guide.viewSheet}
-                      <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>

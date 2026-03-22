@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -190,4 +191,72 @@
 }
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+/* Print Styles for PDF Generation */
+@media print {
+  nav, footer, .no-print, button, .lucide-sparkles {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  main {
+    padding: 2cm !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .glass-panel {
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .guide-text-gradient, 
+  .tasks-text-gradient, 
+  .portal-text-gradient {
+    background: none !important;
+    -webkit-text-fill-color: black !important;
+    color: black !important;
+    text-shadow: none !important;
+  }
+
+  .guide-gradient, .tasks-gradient {
+    background: #f1f5f9 !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  .guide-gradient svg, .tasks-gradient svg {
+    color: #475569 !important;
+  }
+
+  .text-muted-foreground {
+    color: #64748b !important;
+  }
+
+  .border-white\/5, .border-white\/10 {
+    border-color: #e2e8f0 !important;
+  }
+
+  .bg-white\/5 {
+    background-color: #f8fafc !important;
+  }
+
+  /* Force color adjust */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }

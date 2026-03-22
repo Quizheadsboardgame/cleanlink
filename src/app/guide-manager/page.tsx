@@ -2,16 +2,29 @@
 "use client"
 
 import * as React from "react"
+import { useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ShieldCheck, BarChart3, Package, Lock, FileText, Sparkles } from "lucide-react"
+import { ArrowLeft, ShieldCheck, BarChart3, Package, Lock, FileText, Sparkles, Download } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
+import { useSearchParams } from "next/navigation"
 
 export default function GuideManagerPage() {
   const { t, isRTL } = useLanguage()
+  const searchParams = useSearchParams()
+  const autoDownload = searchParams.get('download') === 'true'
+
+  useEffect(() => {
+    if (autoDownload) {
+      const timer = setTimeout(() => {
+        window.print()
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [autoDownload])
 
   const sections = [
     { title: t.sheetManager.section1Title, desc: t.sheetManager.section1Desc, icon: BarChart3 },
@@ -19,6 +32,10 @@ export default function GuideManagerPage() {
     { title: t.sheetManager.section3Title, desc: t.sheetManager.section3Desc, icon: Lock },
     { title: t.sheetManager.section4Title, desc: t.sheetManager.section4Desc, icon: FileText },
   ]
+
+  const handleDownload = () => {
+    window.print()
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -28,11 +45,20 @@ export default function GuideManagerPage() {
         <div className="space-y-12">
           {/* Header */}
           <div className="flex flex-col items-center text-center space-y-6">
-            <Link href="/how-to-use" className="self-start">
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white">
-                <ArrowLeft className={isRTL ? "rotate-180" : ""} /> {t.common.back}
+            <div className="w-full flex justify-between items-center no-print">
+              <Link href="/how-to-use">
+                <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white">
+                  <ArrowLeft className={isRTL ? "rotate-180" : ""} /> {t.common.back}
+                </Button>
+              </Link>
+              
+              <Button 
+                onClick={handleDownload}
+                className="tasks-gradient text-white rounded-xl shadow-lg gap-2 h-10 px-6 font-bold"
+              >
+                <Download className="w-4 h-4" /> {t.common.downloadPdf}
               </Button>
-            </Link>
+            </div>
             
             <div className="space-y-2">
               <Badge variant="outline" className="border-primary/30 text-primary font-mono tracking-[0.3em] uppercase text-[10px] px-4 py-1">
@@ -73,7 +99,7 @@ export default function GuideManagerPage() {
           {/* Footer of the sheet */}
           <div className="pt-16 border-t border-white/5 text-center space-y-4">
             <div className="flex items-center justify-center gap-3 text-primary">
-              <ShieldCheck className="w-5 h-5" />
+              <ShieldCheck className="w-5 h-5 no-print" />
               <span className="font-headline font-bold uppercase tracking-[0.2em]">{t.sheetManager.footer}</span>
             </div>
             <p className="text-[10px] text-muted-foreground/30 uppercase tracking-[0.8em] font-bold">
