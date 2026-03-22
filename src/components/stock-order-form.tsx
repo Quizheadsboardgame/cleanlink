@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -15,6 +16,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 
 interface OrderItem {
   id: string
@@ -30,6 +32,7 @@ export function StockOrderForm() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -77,15 +80,6 @@ export function StockOrderForm() {
       return
     }
 
-    if (isPickedUp && !pickupLocation) {
-      toast({
-        variant: "destructive",
-        title: t.common.missingInfo,
-        description: t.stores.pickedUpLocationLabel
-      })
-      return
-    }
-
     setIsSubmitting(true)
 
     const stockOrderId = Math.random().toString(36).substr(2, 9)
@@ -99,6 +93,7 @@ export function StockOrderForm() {
       site: site,
       status: 'Submitted',
       ownerId: user.uid,
+      managerId: managerId || "generic",
       needStoresDelivered,
       isPickedUp,
       pickupLocation: isPickedUp ? pickupLocation : "",
@@ -122,6 +117,7 @@ export function StockOrderForm() {
     const taskData = {
       id: stockOrderId,
       stockOrderId: stockOrderId,
+      managerId: managerId || "generic",
       title: `Stock Order: ${name}`,
       description: `Site: ${site}. Delivered: ${needStoresDelivered ? "Yes" : "No"}. Picked Up: ${isPickedUp ? `Yes (${pickupLocation})` : "No"}.`,
       status: 'Pending Review',

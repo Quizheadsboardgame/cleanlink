@@ -7,11 +7,11 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, doc, setDoc, orderBy, limit } from "firebase/firestore"
+import { collection, query, doc, setDoc, orderBy, limit, where } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -145,7 +145,7 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
   )
 }
 
-function BroadcastTab() {
+function BroadcastTab({ managerId }: { managerId: string }) {
   const db = useFirestore()
   const { toast } = useToast()
   const [message, setMessage] = useState("")
@@ -153,9 +153,9 @@ function BroadcastTab() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const alertQuery = useMemoFirebase(() => {
-    if (!db) return null
-    return query(collection(db, 'systemAlerts'), limit(1))
-  }, [db])
+    if (!db || !managerId) return null
+    return query(collection(db, 'systemAlerts'), where('managerId', '==', managerId), limit(1))
+  }, [db, managerId])
 
   const { data: currentAlert } = useCollection(alertQuery)
 
@@ -170,17 +170,18 @@ function BroadcastTab() {
     e.preventDefault()
     setIsSubmitting(true)
     
-    const alertId = "global-alert"
+    const alertId = `alert-${managerId}`
     const alertRef = doc(db, 'systemAlerts', alertId)
 
     setDocumentNonBlocking(alertRef, {
       id: alertId,
+      managerId,
       message,
       active: isActive,
       updatedAt: new Date().toISOString()
     }, { merge: true })
 
-    toast({ title: "Broadcast Updated", description: "All staff will see the new banner message." })
+    toast({ title: "Broadcast Updated", description: "Your staff will see the new banner message." })
     setIsSubmitting(false)
   }
 
@@ -190,7 +191,7 @@ function BroadcastTab() {
         <CardTitle className="text-xl font-headline flex items-center gap-2">
           <Megaphone className="w-5 h-5 text-primary" /> Live Broadcast
         </CardTitle>
-        <CardDescription>This message scrolls at the top of every staff member's screen.</CardDescription>
+        <CardDescription>This message scrolls at the top of your staff's screens.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleUpdate} className="space-y-6">
@@ -206,7 +207,7 @@ function BroadcastTab() {
           <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
             <div className="space-y-0.5">
               <Label className="text-base">Broadcast Active</Label>
-              <p className="text-xs text-muted-foreground">Toggle visibility for all users.</p>
+              <p className="text-xs text-muted-foreground">Toggle visibility for your users.</p>
             </div>
             <Switch checked={isActive} onCheckedChange={setIsActive} />
           </div>
@@ -217,6 +218,43 @@ function BroadcastTab() {
         </form>
       </CardContent>
     </Card>
+  )
+}
+
+function ProfileTab({ managerId }: { managerId: string }) {
+  const [copied, setCopied] = useState(false)
+  const staffUrl = typeof window !== 'undefined' ? `${window.location.origin}/?m=${managerId}` : ""
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(staffUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="grid gap-6">
+      <Card className="glass-panel border-white/5">
+        <CardHeader>
+          <CardTitle className="text-xl font-headline flex items-center gap-2">
+            <Link2 className="w-5 h-5 text-primary" /> Your Exclusive Staff Link
+          </CardTitle>
+          <CardDescription>Share this link with your staff. When they use it, their tasks will link directly to your dashboard.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <Input readOnly value={staffUrl} className="bg-secondary/50 border-white/5 font-mono text-xs" />
+            <Button onClick={copyLink} variant="outline" className="shrink-0 border-white/10">
+              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+            </Button>
+          </div>
+          <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <strong>Tip:</strong> Create a QR code for this link and stick it in your site's cleaner cupboards. Any staff member scanning it will be automatically linked to you.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
@@ -254,7 +292,6 @@ export default function TasksPage() {
     }
   }, [])
 
-  // Push notification trigger
   const requestNotificationPermission = () => {
     if (!('Notification' in window)) return
     Notification.requestPermission().then(permission => {
@@ -270,6 +307,7 @@ export default function TasksPage() {
     setIsChecking(true)
     
     setTimeout(() => {
+      // Logic: For this prototype, any user with the correct code is treated as a unique manager based on their UID
       if (password === "Harley") {
         setIsAuthorized(true)
         sessionStorage.setItem("portalflow_auth", "true")
@@ -281,21 +319,20 @@ export default function TasksPage() {
     }, 600)
   }
 
-  // Data queries
+  // Data queries - FILTED BY MANAGER ID
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !isAuthorized || !user) return null
-    return query(collection(db, 'orderTasks'), orderBy('createdAt', 'desc'))
+    return query(collection(db, 'orderTasks'), where('managerId', '==', user.uid), orderBy('createdAt', 'desc'))
   }, [db, isAuthorized, user])
 
   const coverPostsQuery = useMemoFirebase(() => {
     if (!db || !isAuthorized || !user) return null
-    return query(collection(db, 'coverWorkPosts'))
+    return query(collection(db, 'coverWorkPosts'), where('managerId', '==', user.uid))
   }, [db, isAuthorized, user])
 
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
 
-  // Browser Notification Logic
   useEffect(() => {
     if (tasks && tasks.length > lastTaskCountRef.current) {
       if (lastTaskCountRef.current > 0 && notificationsEnabled) {
@@ -336,12 +373,13 @@ export default function TasksPage() {
     
     setDoc(postRef, {
       id: postId,
+      managerId: user?.uid,
       ...newCover,
       deadline: new Date(newCover.deadline).toISOString(),
       createdAt: new Date().toISOString()
     })
 
-    toast({ title: "Cover Posted", description: "Successfully added to the board." })
+    toast({ title: "Cover Posted", description: "Successfully added to your board." })
     setIsCreatingCover(false)
     setNewCover({ title: "", location: "", description: "", deadline: "" })
   }
@@ -356,14 +394,14 @@ export default function TasksPage() {
               <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
                 <Lock className="w-6 h-6 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-headline tasks-text-gradient">Protected Area</CardTitle>
-              <CardDescription>Enter the management password to access.</CardDescription>
+              <CardTitle className="text-2xl font-headline tasks-text-gradient">Manager Area</CardTitle>
+              <CardDescription>Enter code to unlock your dashboard.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin} className="space-y-4">
                 <Input 
                   type="password" 
-                  placeholder="Enter Password" 
+                  placeholder="Enter Code" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-secondary/50 border-white/5 text-center text-lg tracking-widest text-white"
@@ -388,8 +426,8 @@ export default function TasksPage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-5xl">
         <div className="mb-8 flex flex-col sm:flex-row justify-between items-end gap-4">
           <div className="space-y-1">
-            <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Management Portal</h1>
-            <p className="text-muted-foreground">Monitor site activity and broadcast updates.</p>
+            <h1 className="text-4xl font-bold font-headline tasks-text-gradient tracking-tighter">Your Dashboard</h1>
+            <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">Profile ID: {user?.uid.substring(0, 8)}</p>
           </div>
           <Button 
             variant="outline" 
@@ -400,7 +438,7 @@ export default function TasksPage() {
             )}
           >
             {notificationsEnabled ? <BellRing className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
-            {notificationsEnabled ? "Desktop Alerts: ON" : "Enable Desktop Alerts"}
+            {notificationsEnabled ? "Alerts: ON" : "Enable Alerts"}
           </Button>
         </div>
 
@@ -410,10 +448,15 @@ export default function TasksPage() {
             <TabsTrigger value="broadcast" className="rounded-xl flex-1 px-6">Broadcast</TabsTrigger>
             <TabsTrigger value="analytics" className="rounded-xl flex-1 px-6">Analytics</TabsTrigger>
             <TabsTrigger value="cover" className="rounded-xl flex-1 px-6">Cover Work</TabsTrigger>
+            <TabsTrigger value="profile" className="rounded-xl flex-1 px-6">Profile & Link</TabsTrigger>
           </TabsList>
 
+          <TabsContent value="profile">
+            {user && <ProfileTab managerId={user.uid} />}
+          </TabsContent>
+
           <TabsContent value="broadcast">
-            <BroadcastTab />
+            {user && <BroadcastTab managerId={user.uid} />}
           </TabsContent>
 
           <TabsContent value="analytics">
@@ -424,7 +467,7 @@ export default function TasksPage() {
             {(isTasksLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
             ) : !tasks || tasks.length === 0 ? (
-              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks found.</CardContent></Card>
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No active tasks for your profile.</CardContent></Card>
             ) : (
               <div className="grid gap-4">
                 {tasks.map((task) => (
@@ -451,8 +494,8 @@ export default function TasksPage() {
                       </div>
                       <p className="text-sm text-muted-foreground bg-white/5 p-3 rounded-lg border border-white/5">{task.description}</p>
                       <div className="space-y-2">
-                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1"><MessageSquare className="w-3 h-3" /> Public Note</Label>
-                        <Input placeholder="Status update for staff board..." value={managerNotes[task.id] ?? task.managerNote ?? ""} onChange={(e) => setManagerNotes({...managerNotes, [task.id]: e.target.value})} className="bg-secondary/30 border-white/5 h-9 text-sm" />
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1"><MessageSquare className="w-3 h-3" /> Manager Feedback</Label>
+                        <Input placeholder="Update staff board..." value={managerNotes[task.id] ?? task.managerNote ?? ""} onChange={(e) => setManagerNotes({...managerNotes, [task.id]: e.target.value})} className="bg-secondary/30 border-white/5 h-9 text-sm" />
                       </div>
                       <div className="flex gap-2 pt-2">
                         {task.status !== 'Completed' && task.status !== 'Rejected' && (
@@ -472,7 +515,7 @@ export default function TasksPage() {
 
           <TabsContent value="cover" className="space-y-6">
             <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">Manage upcoming cover work opportunities.</p>
+              <p className="text-sm text-muted-foreground">Manage your cover work opportunities.</p>
               <Dialog open={isCreatingCover} onOpenChange={setIsCreatingCover}>
                 <DialogTrigger asChild>
                   <Button className="cover-gradient text-white gap-2 rounded-xl"><Plus className="w-4 h-4" /> Create Post</Button>
@@ -484,7 +527,7 @@ export default function TasksPage() {
                     <div className="space-y-2"><Label>Location (Optional)</Label><Input placeholder="e.g. Addenbrooke's Site C" value={newCover.location} onChange={(e) => setNewCover({...newCover, location: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
                     <div className="space-y-2"><Label>Response Deadline</Label><Input type="datetime-local" value={newCover.deadline} onChange={(e) => setNewCover({...newCover, deadline: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
                     <div className="space-y-2"><Label>Description & Details</Label><Textarea placeholder="Dates, times, and specific duties..." value={newCover.description} onChange={(e) => setNewCover({...newCover, description: e.target.value})} className="bg-secondary/50 border-white/5" /></div>
-                    <DialogFooter><Button type="submit" className="w-full cover-gradient text-white">Post to Board</Button></DialogFooter>
+                    <DialogFooter><Button type="submit" className="w-full cover-gradient text-white">Post to Your Board</Button></DialogFooter>
                   </form>
                 </DialogContent>
               </Dialog>
@@ -493,7 +536,7 @@ export default function TasksPage() {
             {(isCoverLoading) ? (
               <div className="flex flex-col items-center justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-sky-400" /></div>
             ) : !coverPosts || coverPosts.length === 0 ? (
-              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No cover posts yet.</CardContent></Card>
+              <Card className="glass-panel border-dashed py-20 text-center"><CardContent>No cover posts for your profile.</CardContent></Card>
             ) : (
               <div className="grid gap-6">
                 {coverPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((post) => (

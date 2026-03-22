@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -6,29 +7,22 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { useCollection, useFirestore, useUser, useAuth, useMemoFirebase } from "@/firebase"
-import { collection, query, orderBy, limit } from "firebase/firestore"
+import { collection, query, orderBy, limit, where } from "firebase/firestore"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format } from "date-fns"
 import { CheckCircle2, Clock, Building2, Loader2, ListTodo, Timer, MessageSquare, XCircle, Package, Hammer, AlertTriangle, UserPlus, ShieldAlert, Lock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 
-/**
- * Calculates the next working day (Mon-Fri) at 12:00 PM
- */
 const getNextWorkingDay12pm = (createdAt: string) => {
   const date = new Date(createdAt);
   const target = new Date(date);
-  
-  // Move to at least the next day
   target.setDate(target.getDate() + 1);
-  
-  // Skip weekends (0 = Sunday, 6 = Saturday)
   while (target.getDay() === 0 || target.getDay() === 6) {
     target.setDate(target.getDate() + 1);
   }
-  
   target.setHours(12, 0, 0, 0);
   return target;
 };
@@ -103,6 +97,7 @@ export default function StatusBoardPage() {
   const db = useFirestore()
   const auth = useAuth()
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
   const [isAuthorized, setIsAuthorized] = useState(false)
 
   useEffect(() => {
@@ -120,12 +115,18 @@ export default function StatusBoardPage() {
 
   const tasksQuery = useMemoFirebase(() => {
     if (!db || !user) return null
-    return query(collection(db, 'orderTasks'), orderBy('createdAt', 'desc'), limit(50))
-  }, [db, user])
+    // Filter by active manager context
+    const currentM = managerId || "generic"
+    return query(
+      collection(db, 'orderTasks'), 
+      where('managerId', '==', currentM),
+      orderBy('createdAt', 'desc'), 
+      limit(50)
+    )
+  }, [db, user, managerId])
 
   const { data: allTasks, isLoading } = useCollection(tasksQuery)
 
-  // Filter out Staff Concerns for non-managers
   const tasks = React.useMemo(() => {
     if (!allTasks) return null;
     return allTasks.filter(task => {

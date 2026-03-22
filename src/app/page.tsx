@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -18,13 +19,17 @@ import {
   Sparkles,
   ArrowRight,
   ShieldAlert,
-  Heart
+  Heart,
+  Link2
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 export default function HomeHub() {
   const { t } = useLanguage()
+  const { managerId, isManagerLinked } = useManagerContext()
 
   const services = [
     { href: "/stores", label: t.nav.stores, icon: PlusCircle, color: "stores-text-gradient", border: "hover:border-[#6E76F5]/40", bg: "bg-[#6E76F5]/5", desc: "Request cleaning supplies and materials." },
@@ -58,6 +63,18 @@ export default function HomeHub() {
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto opacity-80">
               Welcome to your digital workspace. Select a task below to begin.
             </p>
+            
+            {isManagerLinked ? (
+              <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-400 px-4 py-1.5 rounded-full border border-green-500/20 text-[10px] font-bold uppercase tracking-widest">
+                <Link2 className="w-3 h-3" />
+                Linked to Manager Profile: {managerId?.substring(0, 8)}...
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-1.5 rounded-full border border-amber-500/20 text-[10px] font-bold uppercase tracking-widest">
+                <ShieldAlert className="w-3 h-3" />
+                Generic View: Please scan your site QR code for exclusive access
+              </div>
+            )}
           </div>
 
           {/* Service Grid */}
@@ -93,7 +110,7 @@ export default function HomeHub() {
           {/* Quick Info Bar */}
           <div className="pt-12 text-center">
             <p className="text-[10px] text-muted-foreground uppercase tracking-[0.5em] font-bold opacity-40">
-              Secure Connection: ESTABLISHED
+              Secure Connection: {isManagerLinked ? "LINKED" : "ANONYMOUS"}
             </p>
           </div>
         </div>

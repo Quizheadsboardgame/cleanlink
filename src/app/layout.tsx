@@ -1,3 +1,4 @@
+
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -5,6 +6,8 @@ import { FirebaseClientProvider } from "@/firebase/client-provider";
 import { ScrollingBanner } from "@/components/scrolling-banner";
 import { ReviewTasksFab } from "@/components/review-tasks-fab";
 import { LanguageProvider } from "@/context/language-context";
+import { ManagerProvider } from "@/context/manager-context";
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'The Cleaners Cupboard | Professional Management',
@@ -41,12 +44,16 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased bg-background text-foreground selection:bg-primary/30">
         <FirebaseClientProvider>
-          <LanguageProvider>
-            <ScrollingBanner />
-            {children}
-            <ReviewTasksFab />
-            <Toaster />
-          </LanguageProvider>
+          <Suspense fallback={null}>
+            <ManagerProvider>
+              <LanguageProvider>
+                <ScrollingBanner />
+                {children}
+                <ReviewTasksFab />
+                <Toaster />
+              </LanguageProvider>
+            </ManagerProvider>
+          </Suspense>
         </FirebaseClientProvider>
       </body>
     </html>

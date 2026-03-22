@@ -4,17 +4,21 @@
 import React from "react"
 import { AlertCircle, Megaphone } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 import { useFirestore, useCollection, useMemoFirebase } from "@/firebase"
 import { collection, query, where, limit } from "firebase/firestore"
 
 export function ScrollingBanner() {
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
   const db = useFirestore()
   
   const alertQuery = useMemoFirebase(() => {
     if (!db) return null
-    return query(collection(db, 'systemAlerts'), where('active', '==', true), limit(1))
-  }, [db])
+    // If we have a linked manager, show their alert. Otherwise generic.
+    const currentM = managerId || "generic"
+    return query(collection(db, 'systemAlerts'), where('active', '==', true), where('managerId', '==', currentM), limit(1))
+  }, [db, managerId])
 
   const { data: alerts } = useCollection(alertQuery)
   

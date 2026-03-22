@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -15,6 +16,7 @@ import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
+import { useManagerContext } from "@/context/manager-context"
 
 export function FaultyEquipmentForm() {
   const { toast } = useToast()
@@ -23,6 +25,7 @@ export function FaultyEquipmentForm() {
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
   const { t } = useLanguage()
+  const { managerId } = useManagerContext()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState("")
@@ -65,6 +68,7 @@ export function FaultyEquipmentForm() {
       faultDescription: description,
       status: 'Submitted',
       ownerId: user.uid,
+      managerId: managerId || "generic",
       createdAt: new Date().toISOString()
     }
 
@@ -73,6 +77,7 @@ export function FaultyEquipmentForm() {
     const taskData = {
       id: reportId,
       stockOrderId: reportId,
+      managerId: managerId || "generic",
       title: `Faulty Equipment: ${equipment}`,
       description: `Reported by: ${name} at ${site}. Issue: ${description}`,
       status: 'Pending Review',
@@ -88,7 +93,7 @@ export function FaultyEquipmentForm() {
     })
 
     setTimeout(() => {
-      router.push('/tasks')
+      router.push('/status')
     }, 1500)
   }
 
