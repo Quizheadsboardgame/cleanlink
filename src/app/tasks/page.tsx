@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -11,7 +10,7 @@ import { collection, query, doc, setDoc } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, subDays, isBefore } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, TrendingUp, ShieldAlert, Share2 } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, TrendingUp, ShieldAlert } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -156,10 +155,6 @@ export default function TasksPage() {
   const [isChecking, setIsChecking] = useState(false)
   const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
 
-  // QR Utility State
-  const [qrSite, setQrSite] = useState("")
-  const [qrLink, setQrLink] = useState("")
-
   // Cover Work Creation State
   const [isCreatingCover, setIsCreatingCover] = useState(false)
   const [newCover, setNewCover] = useState({ title: "", location: "", description: "", deadline: "" })
@@ -206,13 +201,6 @@ export default function TasksPage() {
 
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
-
-  const generateQrLink = () => {
-    if (!qrSite) return
-    const baseUrl = window.location.origin
-    const link = `${baseUrl}/stores?site=${encodeURIComponent(qrSite)}`
-    setQrLink(link)
-  }
 
   const handleUpdateStatus = (taskId: string, status: string) => {
     const taskRef = doc(db, 'orderTasks', taskId)
@@ -298,39 +286,11 @@ export default function TasksPage() {
               <TabsTrigger value="tasks">Tasks</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="cover">Cover Work</TabsTrigger>
-              <TabsTrigger value="tools">Tools</TabsTrigger>
             </TabsList>
           </div>
 
           <TabsContent value="analytics">
             {tasks && tasks.length > 0 ? <AnalyticsTab tasks={tasks} /> : <p className="text-center text-muted-foreground py-20">Not enough data for analytics.</p>}
-          </TabsContent>
-
-          <TabsContent value="tools" className="space-y-6">
-            <Card className="glass-panel border-white/5">
-              <CardHeader>
-                <CardTitle className="text-xl font-headline flex items-center gap-2">
-                  <Share2 className="w-5 h-5 text-primary" /> QR Shortcut Generator
-                </CardTitle>
-                <CardDescription>Create links for specific sites to pre-fill the form for staff.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Site Name</Label>
-                  <div className="flex gap-2">
-                    <Input placeholder="e.g. Site Alpha" value={qrSite} onChange={(e) => setQrSite(e.target.value)} className="bg-secondary/50 border-white/5" />
-                    <Button onClick={generateQrLink} className="tasks-gradient text-white">Generate</Button>
-                  </div>
-                </div>
-                {qrLink && (
-                  <div className="p-4 bg-white/5 rounded-lg border border-white/5 space-y-3">
-                    <p className="text-[10px] uppercase font-bold text-primary">Pre-filled URL:</p>
-                    <code className="text-xs break-all text-muted-foreground">{qrLink}</code>
-                    <Button variant="outline" className="w-full h-8 text-[10px]" onClick={() => { navigator.clipboard.writeText(qrLink); toast({ title: "Copied!" }) }}>Copy Link</Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-4">

@@ -13,7 +13,7 @@ import { useFirestore, useUser, useAuth } from "@/firebase"
 import { doc } from "firebase/firestore"
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useLanguage } from "@/context/language-context"
 
 interface OrderItem {
@@ -26,7 +26,6 @@ interface OrderItem {
 export function StockOrderForm() {
   const { toast } = useToast()
   const router = useRouter()
-  const searchParams = useSearchParams()
   const db = useFirestore()
   const auth = useAuth()
   const { user, isUserLoading } = useUser()
@@ -48,14 +47,6 @@ export function StockOrderForm() {
       initiateAnonymousSignIn(auth)
     }
   }, [user, isUserLoading, auth])
-
-  // Handle URL Pre-fill for QR codes
-  useEffect(() => {
-    const siteParam = searchParams.get('site')
-    if (siteParam) {
-      setSite(siteParam)
-    }
-  }, [searchParams])
 
   const addItem = () => {
     setItems([...items, { id: Math.random().toString(36).substr(2, 9), name: "", quantity: 1, code: "" }])
@@ -146,7 +137,7 @@ export function StockOrderForm() {
     })
 
     setTimeout(() => {
-      router.push('/tasks')
+      router.push('/status')
     }, 1500)
   }
 
