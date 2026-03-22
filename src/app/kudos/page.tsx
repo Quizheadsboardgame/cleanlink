@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -42,10 +41,10 @@ export default function KudosPage() {
 
   const kudosQuery = useMemoFirebase(() => {
     if (!db || !user) return null
-    // Show only authorized kudos
+    // Show only authorised kudos
     return query(
       collection(db, 'kudos'), 
-      where('status', '==', 'Authorized'),
+      where('status', '==', 'Authorised'),
       orderBy('createdAt', 'desc'), 
       limit(30)
     )
@@ -226,7 +225,7 @@ export default function KudosPage() {
                       </div>
                       <span className="text-xs font-bold text-white/60">From: {item.senderName}</span>
                     </div>
-                    <Badge variant="outline" className="border-rose-500/20 text-rose-400 text-[8px] uppercase">Manager Approved</Badge>
+                    <Badge variant="outline" className="border-rose-500/20 text-rose-400 text-[8px] uppercase">Manager Authorised</Badge>
                   </CardFooter>
                 </Card>
               ))}

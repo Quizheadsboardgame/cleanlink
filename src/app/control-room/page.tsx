@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -27,7 +26,7 @@ const MODULES = [
   { id: 'faulty', label: 'Broken Equipment' },
   { id: 'incomplete', label: 'Unfinished Tasks' },
   { id: 'hours', label: 'Extra Hours Request' },
-  { id: 'pay', label: 'Pay Inquiry' },
+  { id: 'pay', label: 'Pay Enquiry' },
   { id: 'referral', label: 'Refer a Friend' },
   { id: 'cover', label: 'Cover Work Posts' },
   { id: 'kudos', label: 'Kudos Board' },
@@ -44,7 +43,7 @@ export default function ControlRoomPage() {
   
   const [mounted, setMounted] = useState(false)
   const [password, setPassword] = useState("")
-  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [isAuthorised, setIsAuthorised] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
 
@@ -57,7 +56,7 @@ export default function ControlRoomPage() {
   useEffect(() => {
     setMounted(true)
     const saved = sessionStorage.getItem("control_room_auth")
-    if (saved === "true") setIsAuthorized(true)
+    if (saved === "true") setIsAuthorised(true)
   }, [])
 
   useEffect(() => {
@@ -71,9 +70,9 @@ export default function ControlRoomPage() {
     setIsChecking(true)
     setTimeout(() => {
       if (password === "Harley") {
-        setIsAuthorized(true)
+        setIsAuthorised(true)
         sessionStorage.setItem("control_room_auth", "true")
-        toast({ title: "Authorized", description: "Welcome to the Control Room." })
+        toast({ title: "Authorised", description: "Welcome to the Control Room." })
       } else {
         toast({ variant: "destructive", title: "Denied", description: "Incorrect access code." })
       }
@@ -83,20 +82,20 @@ export default function ControlRoomPage() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("control_room_auth")
-    setIsAuthorized(false)
+    setIsAuthorised(false)
     setPassword("")
     toast({ title: "Logged Out", description: "You have left the Control Room." })
   }
 
   const keysQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized || !user || !mounted) return null
+    if (!db || !isAuthorised || !user || !mounted) return null
     return query(collection(db, 'managerKeys'), orderBy('createdAt', 'desc'))
-  }, [db, isAuthorized, user, mounted])
+  }, [db, isAuthorised, user, mounted])
 
   const ticketsQuery = useMemoFirebase(() => {
-    if (!db || !isAuthorized || !user || !mounted) return null
+    if (!db || !isAuthorised || !user || !mounted) return null
     return query(collection(db, 'controlRoomTickets'), orderBy('createdAt', 'desc'))
-  }, [db, isAuthorized, user, mounted])
+  }, [db, isAuthorised, user, mounted])
 
   const { data: keys, isLoading } = useCollection(keysQuery)
   const { data: tickets, isLoading: isTicketsLoading } = useCollection(ticketsQuery)
@@ -177,7 +176,7 @@ export default function ControlRoomPage() {
     return <div className="min-h-screen bg-background" />
   }
 
-  if (!isAuthorized) {
+  if (!isAuthorised) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />

@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -203,7 +202,7 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
 
   const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9', '#0284C7', '#10b981']
 
-  if (!mounted) return <div className="h-[300px] flex items-center justify-center text-muted-foreground italic">Initializing visualizer...</div>
+  if (!mounted) return <div className="h-[300px] flex items-center justify-center text-muted-foreground italic">Initialising visualiser...</div>
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -438,13 +437,13 @@ export default function TasksPage() {
     setNewCover({ title: "", location: "", description: "", deadline: "" })
   }
 
-  const handleAuthorizeKudos = (id: string) => {
+  const handleAuthoriseKudos = (id: string) => {
     const kudosRef = doc(db, 'kudos', id)
     const authorizedAt = new Date().toISOString()
     const expiresAt = addDays(new Date(), 14).toISOString()
     
     updateDocumentNonBlocking(kudosRef, { 
-      status: 'Authorized',
+      status: 'Authorised',
       authorizedAt,
       expiresAt
     })
@@ -534,8 +533,8 @@ export default function TasksPage() {
                         <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Submitted {format(new Date(k.createdAt), "PPp")}</p>
                       </div>
                       <div className="flex sm:flex-col gap-2 shrink-0">
-                        <Button onClick={() => handleAuthorizeKudos(k.id)} className="bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 gap-2 h-10 px-6 font-bold uppercase text-xs">
-                          <CheckCircle2 className="w-4 h-4" /> Authorize
+                        <Button onClick={() => handleAuthoriseKudos(k.id)} className="bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20 gap-2 h-10 px-6 font-bold uppercase text-xs">
+                          <CheckCircle2 className="w-4 h-4" /> Authorise
                         </Button>
                         <Button onClick={() => handleRejectKudos(k.id)} variant="outline" className="border-red-500/20 text-red-400 hover:bg-red-500/10 gap-2 h-10 px-6 font-bold uppercase text-xs">
                           <XCircle className="w-4 h-4" /> Reject
@@ -565,7 +564,7 @@ export default function TasksPage() {
                             {task.type === 'Staff Concern' && <ShieldAlert className="w-4 h-4" />}
                             {task.type === 'Cover Interest' && <CalendarDays className="w-4 h-4 text-sky-400" />}
                             {task.type === 'Stock Order' && <Plus className="w-4 h-4 text-[#6E76F5]" />}
-                            {task.type === 'Pay Inquiry' && <CreditCard className="w-4 h-4 text-emerald-400" />}
+                            {task.type === 'Pay Enquiry' && <CreditCard className="w-4 h-4 text-emerald-400" />}
                             {task.title}
                           </CardTitle>
                           <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">
@@ -597,7 +596,7 @@ export default function TasksPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="cover" className="space-y-6">
+          <TabsContent value="cover" className="space-y-4">
             <div className="flex justify-between items-center"><p className="text-sm text-muted-foreground">Manage cover work posts.</p><Dialog open={isCreatingCover} onOpenChange={setIsCreatingCover}><DialogTrigger asChild><Button className="cover-gradient text-white gap-2 rounded-xl h-10 px-6 font-bold shadow-lg"><Plus className="w-4 h-4" /> Create Post</Button></DialogTrigger><DialogContent className="glass-panel border-none text-foreground"><DialogHeader><DialogTitle className="font-headline text-2xl">New Cover Opportunity</DialogTitle></DialogHeader><form onSubmit={handleCreateCover} className="space-y-4 pt-4"><div className="space-y-2"><Label>Title</Label><Input placeholder="e.g. Office Cover" value={newCover.title} onChange={(e) => setNewCover({...newCover, title: e.target.value})} className="bg-secondary/50 border-white/5" /></div><div className="space-y-2"><Label>Deadline</Label><Input type="datetime-local" value={newCover.deadline} onChange={(e) => setNewCover({...newCover, deadline: e.target.value})} className="bg-secondary/50 border-white/5" /></div><div className="space-y-2"><Label>Details</Label><Textarea placeholder="Dates, times..." value={newCover.description} onChange={(e) => setNewCover({...newCover, description: e.target.value})} className="bg-secondary/50 border-white/5 min-h-[100px]" /></div><DialogFooter><Button type="submit" className="w-full cover-gradient text-white h-12 rounded-xl font-bold">Post Board</Button></DialogFooter></form></DialogContent></Dialog></div>
             {isCoverLoading ? <div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-sky-400" /></div> : !coverPosts || coverPosts.length === 0 ? <Card className="glass-panel border-dashed py-20 text-center"><CardContent className="text-muted-foreground">No active cover posts.</CardContent></Card> : <div className="grid gap-6">{coverPosts.map((post) => (<Card key={post.id} className="glass-panel overflow-hidden border-sky-500/10"><CardHeader className="p-6 pb-2"><div className="flex justify-between items-start"><div className="space-y-1"><CardTitle className="text-xl font-headline flex items-center gap-2"><CalendarDays className="w-5 h-5 text-sky-400" /> {post.title}</CardTitle><div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground"><span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Ends {post.deadline ? format(new Date(post.deadline), "PPp") : '...'}</span></div></div></div></CardHeader><CardContent className="p-6 pt-2"><p className="text-sm text-muted-foreground whitespace-pre-wrap mb-4 leading-relaxed">{post.description}</p><div className="h-px bg-white/5 w-full" /><ResponseList postId={post.id} /></CardContent></Card>))}</div>}
           </TabsContent>

@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -268,19 +267,17 @@ export function Navbar() {
         </div>
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="flex flex-col items-center pointer-events-auto group">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary animate-pulse hidden sm:block" />
-              <span className="text-2xl sm:text-4xl lg:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
-                My Tidy Tracker
+          <Link href="/" className="flex items-center pointer-events-auto group">
+            <div className="flex flex-col items-center sm:items-baseline sm:flex-row gap-2">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-primary animate-pulse hidden sm:block" />
+                <span className="text-2xl sm:text-4xl lg:text-5xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
+                  My Tidy Tracker
+                </span>
+              </div>
+              <span className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] whitespace-nowrap opacity-50 sm:mb-1">
+                by Harley:work smarter
               </span>
-            </div>
-            <div className="flex items-center gap-1.5 mt-2.5">
-              <span className="h-px w-4 bg-primary/30" />
-              <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.4em] whitespace-nowrap opacity-70">
-                Powered by Harley:work smarter
-              </span>
-              <span className="h-px w-4 bg-primary/30" />
             </div>
           </Link>
         </div>

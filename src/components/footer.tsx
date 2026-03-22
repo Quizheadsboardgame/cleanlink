@@ -1,4 +1,3 @@
-
 "use client"
 
 import Link from "next/link"
@@ -44,7 +43,7 @@ export function Footer() {
               {t.footer.copyright}
             </p>
             <p className="text-[9px] text-muted-foreground/40 uppercase tracking-[0.2em]">
-              {t.footer.subtext}
+              Smart Management for Cleaning Teams
             </p>
           </div>
         </div>
