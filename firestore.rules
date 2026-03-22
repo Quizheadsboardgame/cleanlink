@@ -27,44 +27,38 @@ service cloud.firestore {
 
     match /users/{userId}/stockOrders/{stockOrderId} {
       allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
-      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if isExistingOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
 
       match /orderItems/{orderItemId} {
         allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
-        allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
-        allow delete: if isExistingOwner(userId);
+        allow create: if isOwner(userId);
+        allow update, delete: if isExistingOwner(userId);
       }
     }
 
     match /users/{userId}/additionalHoursRequests/{requestId} {
       allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
-      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if isExistingOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
     }
 
     match /users/{userId}/referrals/{referralId} {
       allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
-      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if isExistingOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
     }
 
     match /users/{userId}/faultyEquipmentReports/{reportId} {
       allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
-      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if isExistingOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
     }
 
     match /users/{userId}/incompleteTaskReports/{reportId} {
       allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && isSettingCorrectOwner(request.resource.data);
-      allow update: if isExistingOwner(userId) && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if isExistingOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
     }
 
     match /orderTasks/{orderTaskId} {
@@ -82,14 +76,20 @@ service cloud.firestore {
       allow create, update, delete: if isSignedIn();
 
       match /responses/{responseId} {
-        allow create: if isSignedIn() && isSettingCorrectOwner(request.resource.data);
+        allow create: if isSignedIn();
         allow get, list: if isSignedIn();
       }
     }
 
     match /staffConcerns/{concernId} {
       allow create: if isSignedIn();
-      allow get, list, update, delete: if isSignedIn(); // In a production app, we would restrict this to admin roles
+      allow get, list, update, delete: if isSignedIn();
+    }
+
+    match /kudos/{kudosId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if false; // Morale is permanent!
     }
   }
 }

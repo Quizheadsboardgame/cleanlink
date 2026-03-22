@@ -16,10 +16,10 @@ import {
   LayoutList, 
   Info, 
   BookOpen, 
-  Languages,
   Sparkles,
   ArrowRight,
-  ShieldAlert
+  ShieldAlert,
+  Heart
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { cn } from "@/lib/utils"
@@ -34,6 +34,7 @@ export default function HomeHub() {
     { href: "/additional-hours", label: t.nav.hours, icon: Clock, color: "hours-text-gradient", border: "hover:border-[#D946EF]/40", bg: "bg-[#D946EF]/5", desc: "Apply for extra shifts or permanent hours." },
     { href: "/referral", label: t.nav.referral, icon: UserPlus, color: "referral-text-gradient", border: "hover:border-[#FACC15]/40", bg: "bg-[#FACC15]/5", desc: "Invite others to join the team." },
     { href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "cover-text-gradient", border: "hover:border-[#0EA5E9]/40", bg: "bg-[#0EA5E9]/5", desc: "Find and pick up available cover shifts." },
+    { href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "hover:border-rose-400/40", bg: "bg-rose-400/5", desc: "Say thank you to a fellow teammate." },
     { href: "/status", label: t.nav.status, icon: LayoutList, color: "status-text-gradient", border: "hover:border-white/40", bg: "bg-white/5", desc: "Track your submitted forms and requests." },
     { href: "/report-concern", label: t.nav.concern, icon: ShieldAlert, color: "text-red-500", border: "hover:border-red-500/40", bg: "bg-red-500/5", desc: "Submit a private concern to management." },
     { href: "/important-info", label: t.nav.info, icon: Info, color: "info-text-gradient", border: "hover:border-orange-500/40", bg: "bg-orange-500/5", desc: "Contact details and site procedures." },

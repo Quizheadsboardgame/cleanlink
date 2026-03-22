@@ -7,169 +7,58 @@
       "type": "object",
       "description": "Represents a user-created stock order containing multiple items for a specific site, before or after submission.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the StockOrder entity."
-        },
-        "customerName": {
-          "type": "string",
-          "description": "The name of the customer or person placing the stock order."
-        },
-        "orderDate": {
-          "type": "string",
-          "description": "The date and time when the stock order was placed.",
-          "format": "date-time"
-        },
-        "site": {
-          "type": "string",
-          "description": "The designated site or location for which the stock order is being placed."
-        },
-        "status": {
-          "type": "string",
-          "description": "The current workflow status of the stock order (e.g., 'Draft', 'Submitted', 'Archived'). 'Submitted' indicates a corresponding OrderTask has been created."
-        },
-        "needStoresDelivered": {
-          "type": "boolean",
-          "description": "Whether the items need to be delivered to the site."
-        },
-        "isPickedUp": {
-          "type": "boolean",
-          "description": "Whether the items were picked up from a specific location."
-        },
-        "pickupLocation": {
-          "type": "string",
-          "description": "The location where the items were picked up from, if applicable."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the stock order record was initially created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the stock order record was last updated.",
-          "format": "date-time"
-        }
+        "id": { "type": "string" },
+        "customerName": { "type": "string" },
+        "orderDate": { "type": "string", "format": "date-time" },
+        "site": { "type": "string" },
+        "status": { "type": "string" },
+        "needStoresDelivered": { "type": "boolean" },
+        "isPickedUp": { "type": "boolean" },
+        "pickupLocation": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
       },
-      "required": [
-        "id",
-        "customerName",
-        "orderDate",
-        "site",
-        "status",
-        "createdAt"
-      ]
-    },
-    "OrderItem": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "OrderItem",
-      "type": "object",
-      "description": "Represents a single item and its quantity within a specific stock order.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the OrderItem entity."
-        },
-        "stockOrderId": {
-          "type": "string",
-          "description": "Reference to the StockOrder this item belongs to. (Relationship: StockOrder 1:N OrderItem)"
-        },
-        "itemName": {
-          "type": "string",
-          "description": "The name or description of the item being ordered."
-        },
-        "quantity": {
-          "type": "number",
-          "description": "The numerical quantity of the item being ordered. Typically a positive integer."
-        }
-      },
-      "required": [
-        "id",
-        "stockOrderId",
-        "itemName",
-        "quantity"
-      ]
+      "required": ["id", "customerName", "orderDate", "site", "status", "createdAt"]
     },
     "OrderTask": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "OrderTask",
       "type": "object",
-      "description": "Represents a task generated upon submission of a stock order, faulty equipment report, or incomplete task report.",
+      "description": "Represents a task generated upon submission of a report.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the OrderTask entity."
-        },
-        "stockOrderId": {
-          "type": "string",
-          "description": "Reference to the associated report (StockOrder, FaultyEquipment, etc.)."
-        },
-        "title": {
-          "type": "string",
-          "description": "A concise title for the processing task."
-        },
-        "description": {
-          "type": "string",
-          "description": "A detailed description of the task."
-        },
-        "status": {
-          "type": "string",
-          "description": "The current workflow status of the task (e.g., 'Pending Review', 'In Progress', 'Completed', 'Rejected')."
-        },
-        "managerNote": {
-          "type": "string",
-          "description": "A public note added by a manager to provide updates on task progress."
-        },
-        "assignedToUserId": {
-          "type": "string",
-          "description": "Optional reference to the user assigned to complete this task."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the task was initially created.",
-          "format": "date-time"
-        },
-        "completedAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the task was marked as completed.",
-          "format": "date-time"
-        },
+        "id": { "type": "string" },
+        "stockOrderId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string" },
+        "managerNote": { "type": "string" },
+        "assignedToUserId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" },
         "type": {
           "type": "string",
-          "description": "The category of task.",
           "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern"]
         }
       },
-      "required": [
-        "id",
-        "stockOrderId",
-        "title",
-        "description",
-        "status",
-        "createdAt"
-      ]
+      "required": ["id", "stockOrderId", "title", "description", "status", "createdAt"]
     },
-    "StaffConcern": {
+    "StaffKudos": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "StaffConcern",
+      "title": "StaffKudos",
       "type": "object",
-      "description": "A private report submitted by a staff member regarding another staff member or a health and safety issue.",
+      "description": "A public appreciation note from one staff member to another.",
       "properties": {
         "id": { "type": "string" },
-        "type": { "type": "string", "enum": ["Staff Member", "Health & Safety"] },
-        "site": { "type": "string" },
-        "description": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "status": { "type": "string" }
+        "senderName": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "type", "site", "description", "createdAt", "status"]
+      "required": ["id", "senderName", "recipientName", "message", "createdAt"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous"
-    ]
+    "providers": ["password", "anonymous"]
   },
   "firestore": {
     "structure": [
@@ -177,13 +66,24 @@
         "path": "/staffConcerns/{concernId}",
         "definition": {
           "entityName": "StaffConcern",
-          "schema": {
-            "$ref": "#/backend/entities/StaffConcern"
-          },
-          "description": "Private concerns submitted by staff.",
-          "params": [
-            { "name": "concernId", "description": "Concern UID" }
-          ]
+          "schema": { "$ref": "#/backend/entities/StaffConcern" },
+          "description": "Private concerns submitted by staff."
+        }
+      },
+      {
+        "path": "/orderTasks/{taskId}",
+        "definition": {
+          "entityName": "OrderTask",
+          "schema": { "$ref": "#/backend/entities/OrderTask" },
+          "description": "Tasks for management."
+        }
+      },
+      {
+        "path": "/kudos/{kudosId}",
+        "definition": {
+          "entityName": "StaffKudos",
+          "schema": { "$ref": "#/backend/entities/StaffKudos" },
+          "description": "Public staff appreciation board."
         }
       }
     ]

@@ -11,7 +11,7 @@ import { collection, query, doc, setDoc } from "firebase/firestore"
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, subDays, isBefore } from "date-fns"
-import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus } from "lucide-react"
+import { CheckCircle2, Clock, Package, Building2, Lock, ArrowRight, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, TrendingUp, ShieldAlert, Share2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart as RePieChart, Pie } from 'recharts'
 
 function ResponseList({ postId }: { postId: string }) {
   const db = useFirestore()
@@ -55,6 +56,95 @@ function ResponseList({ postId }: { postId: string }) {
   )
 }
 
+function AnalyticsTab({ tasks }: { tasks: any[] }) {
+  const dataByType = React.useMemo(() => {
+    const counts: Record<string, number> = {}
+    tasks.forEach(t => {
+      counts[t.type] = (counts[t.type] || 0) + 1
+    })
+    return Object.entries(counts).map(([name, value]) => ({ name, value }))
+  }, [tasks])
+
+  const dataBySite = React.useMemo(() => {
+    const counts: Record<string, number> = {}
+    tasks.forEach(t => {
+      // Basic extraction of site from description
+      const siteMatch = t.description.match(/Site:\s*([^.]+)/)
+      const siteName = siteMatch ? siteMatch[1].trim() : 'Unknown'
+      counts[siteName] = (counts[siteName] || 0) + 1
+    })
+    return Object.entries(counts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 5)
+  }, [tasks])
+
+  const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9']
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <Card className="glass-panel border-white/5">
+        <CardHeader>
+          <CardTitle className="text-lg font-headline flex items-center gap-2">
+            <PieChart className="w-4 h-4 text-primary" /> Request Types
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <RePieChart>
+              <Pie
+                data={dataByType}
+                innerRadius={60}
+                outerRadius={80}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {dataByType.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ background: '#0a0a0c', border: '1px solid #ffffff10', borderRadius: '8px' }}
+                itemStyle={{ color: '#fff' }}
+              />
+            </RePieChart>
+          </ResponsiveContainer>
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            {dataByType.map((entry, index) => (
+              <div key={entry.name} className="flex items-center gap-2 text-[10px]">
+                <div className="w-2 h-2 rounded-full" style={{ background: COLORS[index % COLORS.length] }} />
+                <span className="text-muted-foreground truncate">{entry.name}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="glass-panel border-white/5">
+        <CardHeader>
+          <CardTitle className="text-lg font-headline flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-primary" /> Top 5 Active Sites
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={dataBySite}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" />
+              <XAxis dataKey="name" stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} />
+              <YAxis stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} />
+              <Tooltip 
+                cursor={{ fill: '#ffffff05' }}
+                contentStyle={{ background: '#0a0a0c', border: '1px solid #ffffff10', borderRadius: '8px' }}
+              />
+              <Bar dataKey="value" fill="#6E76F5" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
 export default function TasksPage() {
   const { user, isUserLoading } = useUser()
   const db = useFirestore()
@@ -65,6 +155,10 @@ export default function TasksPage() {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isChecking, setIsChecking] = useState(false)
   const [managerNotes, setManagerNotes] = useState<Record<string, string>>({})
+
+  // QR Utility State
+  const [qrSite, setQrSite] = useState("")
+  const [qrLink, setQrLink] = useState("")
 
   // Cover Work Creation State
   const [isCreatingCover, setIsCreatingCover] = useState(false)
@@ -113,22 +207,12 @@ export default function TasksPage() {
   const { data: tasks, isLoading: isTasksLoading } = useCollection(tasksQuery)
   const { data: coverPosts, isLoading: isCoverLoading } = useCollection(coverPostsQuery)
 
-  // Auto-delete logic: 14 days after completion
-  useEffect(() => {
-    if (isAuthorized && tasks && tasks.length > 0) {
-      const fourteenDaysAgo = subDays(new Date(), 14);
-      
-      tasks.forEach(task => {
-        if (task.status === 'Completed' && task.completedAt) {
-          const completionDate = new Date(task.completedAt);
-          if (isBefore(completionDate, fourteenDaysAgo)) {
-            const taskRef = doc(db, 'orderTasks', task.id);
-            deleteDocumentNonBlocking(taskRef);
-          }
-        }
-      });
-    }
-  }, [isAuthorized, tasks, db]);
+  const generateQrLink = () => {
+    if (!qrSite) return
+    const baseUrl = window.location.origin
+    const link = `${baseUrl}/stores?site=${encodeURIComponent(qrSite)}`
+    setQrLink(link)
+  }
 
   const handleUpdateStatus = (taskId: string, status: string) => {
     const taskRef = doc(db, 'orderTasks', taskId)
@@ -165,12 +249,6 @@ export default function TasksPage() {
     toast({ title: "Cover Posted", description: "Successfully added to the board." })
     setIsCreatingCover(false)
     setNewCover({ title: "", location: "", description: "", deadline: "" })
-  }
-
-  const handleDeleteCover = (postId: string) => {
-    const postRef = doc(db, 'coverWorkPosts', postId)
-    deleteDocumentNonBlocking(postRef)
-    toast({ title: "Post Removed", description: "The cover work post has been deleted." })
   }
 
   if (!isAuthorized) {
@@ -212,15 +290,48 @@ export default function TasksPage() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 max-w-5xl">
         <Tabs defaultValue="tasks" className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <h1 className="text-3xl font-bold font-headline tasks-text-gradient">Management Portal</h1>
             <TabsList className="bg-secondary/50 border border-white/5 p-1">
-              <TabsTrigger value="tasks" className="data-[state=active]:bg-primary/20">Task Board</TabsTrigger>
-              <TabsTrigger value="cover" className="data-[state=active]:bg-sky-500/20">Cover Work</TabsTrigger>
+              <TabsTrigger value="tasks">Tasks</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="cover">Cover Work</TabsTrigger>
+              <TabsTrigger value="tools">Tools</TabsTrigger>
             </TabsList>
           </div>
+
+          <TabsContent value="analytics">
+            {tasks && tasks.length > 0 ? <AnalyticsTab tasks={tasks} /> : <p className="text-center text-muted-foreground py-20">Not enough data for analytics.</p>}
+          </TabsContent>
+
+          <TabsContent value="tools" className="space-y-6">
+            <Card className="glass-panel border-white/5">
+              <CardHeader>
+                <CardTitle className="text-xl font-headline flex items-center gap-2">
+                  <Share2 className="w-5 h-5 text-primary" /> QR Shortcut Generator
+                </CardTitle>
+                <CardDescription>Create links for specific sites to pre-fill the form for staff.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Site Name</Label>
+                  <div className="flex gap-2">
+                    <Input placeholder="e.g. Site Alpha" value={qrSite} onChange={(e) => setQrSite(e.target.value)} className="bg-secondary/50 border-white/5" />
+                    <Button onClick={generateQrLink} className="tasks-gradient text-white">Generate</Button>
+                  </div>
+                </div>
+                {qrLink && (
+                  <div className="p-4 bg-white/5 rounded-lg border border-white/5 space-y-3">
+                    <p className="text-[10px] uppercase font-bold text-primary">Pre-filled URL:</p>
+                    <code className="text-xs break-all text-muted-foreground">{qrLink}</code>
+                    <Button variant="outline" className="w-full h-8 text-[10px]" onClick={() => { navigator.clipboard.writeText(qrLink); toast({ title: "Copied!" }) }}>Copy Link</Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="tasks" className="space-y-4">
             {(isTasksLoading) ? (
@@ -230,18 +341,19 @@ export default function TasksPage() {
             ) : (
               <div className="grid gap-4">
                 {tasks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((task) => (
-                  <Card key={task.id} className="glass-panel overflow-hidden">
+                  <Card key={task.id} className={cn("glass-panel overflow-hidden", task.type === 'Staff Concern' && "border-red-500/20 bg-red-500/5")}>
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
-                          <CardTitle className="text-lg font-headline flex items-center gap-2">
+                          <CardTitle className={cn("text-lg font-headline flex items-center gap-2", task.type === 'Staff Concern' && "text-red-400")}>
                             {task.type === 'Staff Referral' && <UserPlus className="w-4 h-4 text-[#FACC15]" />}
+                            {task.type === 'Staff Concern' && <ShieldAlert className="w-4 h-4" />}
                             {task.title}
                           </CardTitle>
                           <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(task.createdAt), "PPp")}</span>
                             <Badge variant="outline" className="border-white/10 uppercase tracking-tighter">{task.type}</Badge>
-                            <Badge className={cn("text-[10px] h-5", task.status === 'Completed' ? "bg-green-500/20 text-green-400" : task.status === 'In Progress' ? "bg-amber-500/20 text-amber-400" : task.status === 'Rejected' ? "bg-red-500/20 text-red-400" : "bg-primary/20 text-primary")}>
+                            <Badge className={cn("text-[10px] h-5", task.status === 'Completed' ? "bg-green-500/20 text-green-400" : "bg-primary/20 text-primary")}>
                               {task.status}
                             </Badge>
                           </div>
@@ -262,11 +374,6 @@ export default function TasksPage() {
                             <Button onClick={() => handleUpdateStatus(task.id, 'Completed')} className="flex-1 h-9 bg-green-500/10 text-green-500 hover:bg-green-600 hover:text-white border border-green-500/20"><CheckCircle2 className="w-4 h-4 mr-2" /> Finish</Button>
                             <Button onClick={() => handleUpdateStatus(task.id, 'Rejected')} variant="outline" className="flex-1 h-9 border-red-500/20 text-red-400 hover:bg-red-500/10"><XCircle className="w-4 h-4 mr-2" /> Reject</Button>
                           </>
-                        )}
-                        {(task.status === 'Completed' || task.status === 'Rejected') && (
-                          <p className="text-[10px] text-muted-foreground italic w-full text-center">
-                            {task.status === 'Completed' ? "Completed on " + format(new Date(task.completedAt), "PPp") : "Task was rejected."} (Auto-deletes in 14 days)
-                          </p>
                         )}
                       </div>
                     </div>
@@ -314,10 +421,8 @@ export default function TasksPage() {
                           <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">
                             {post.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-sky-400" /> {post.location}</span>}
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Ends {format(new Date(post.deadline), "PPp")}</span>
-                            {new Date(post.deadline) < new Date() && <Badge variant="destructive" className="h-4 text-[8px]">EXPIRED (Hidden from staff)</Badge>}
                           </div>
                         </div>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteCover(post.id)} className="text-muted-foreground hover:text-red-500"><Trash2 className="w-4 h-4" /></Button>
                       </div>
                     </CardHeader>
                     <CardContent className="p-6 pt-2">
