@@ -1,7 +1,7 @@
 
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { AlertCircle, Megaphone } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
@@ -12,6 +12,11 @@ export function ScrollingBanner() {
   const { t } = useLanguage()
   const { managerId } = useManagerContext()
   const db = useFirestore()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   const alertQuery = useMemoFirebase(() => {
     if (!db) return null
@@ -23,6 +28,14 @@ export function ScrollingBanner() {
   const { data: alerts } = useCollection(alertQuery)
   
   const activeAlert = alerts && alerts.length > 0 ? alerts[0].message : t.common.emergency
+
+  if (!mounted) {
+    return (
+      <div className="w-full bg-white border-b border-black/10 py-2 overflow-hidden whitespace-nowrap sticky top-0 z-[60] backdrop-blur-sm h-[37px]">
+        {/* Placeholder to prevent layout shift */}
+      </div>
+    )
+  }
 
   return (
     <div className="w-full bg-white border-b border-black/10 py-2 overflow-hidden whitespace-nowrap sticky top-0 z-[60] backdrop-blur-sm">

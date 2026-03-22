@@ -1,6 +1,8 @@
+
 "use client"
 
 import * as React from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -29,6 +31,11 @@ import { Badge } from "@/components/ui/badge"
 export default function HomeHub() {
   const { t } = useLanguage()
   const { managerId, isManagerLinked } = useManagerContext()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const services = [
     { href: "/stores", label: t.nav.stores, icon: PlusCircle, color: "stores-text-gradient", border: "hover:border-[#6E76F5]/40", bg: "bg-[#6E76F5]/5", desc: "Request cleaning supplies and materials." },
@@ -63,16 +70,18 @@ export default function HomeHub() {
               Welcome to your digital workspace. Select a task below to begin.
             </p>
             
-            {isManagerLinked ? (
-              <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-400 px-4 py-1.5 rounded-full border border-green-500/20 text-[10px] font-bold uppercase tracking-widest">
-                <Link2 className="w-3 h-3" />
-                Linked to Manager Profile: {managerId?.substring(0, 8)}...
-              </div>
-            ) : (
-              <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-1.5 rounded-full border border-amber-500/20 text-[10px] font-bold uppercase tracking-widest">
-                <ShieldAlert className="w-3 h-3" />
-                Generic View: Please use your manager's direct link for exclusive access
-              </div>
+            {mounted && (
+              isManagerLinked ? (
+                <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-400 px-4 py-1.5 rounded-full border border-green-500/20 text-[10px] font-bold uppercase tracking-widest">
+                  <Link2 className="w-3 h-3" />
+                  Linked to Manager Profile: {managerId?.substring(0, 8)}...
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-1.5 rounded-full border border-amber-500/20 text-[10px] font-bold uppercase tracking-widest">
+                  <ShieldAlert className="w-3 h-3" />
+                  Generic View: Please use your manager's direct link for exclusive access
+                </div>
+              )
             )}
           </div>
 
@@ -109,7 +118,7 @@ export default function HomeHub() {
           {/* Quick Info Bar */}
           <div className="pt-12 text-center">
             <p className="text-[10px] text-muted-foreground uppercase tracking-[0.5em] font-bold opacity-40">
-              Secure Connection: {isManagerLinked ? "LINKED" : "ANONYMOUS"}
+              Secure Connection: {mounted ? (isManagerLinked ? "LINKED" : "ANONYMOUS") : "CONNECTING..."}
             </p>
           </div>
         </div>
