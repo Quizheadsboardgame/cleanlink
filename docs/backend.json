@@ -34,6 +34,33 @@
       },
       "required": ["id", "customerName", "orderDate", "site", "status", "createdAt"]
     },
+    "PayError": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PayError",
+      "type": "object",
+      "description": "A report regarding missing pay or incorrect hours.",
+      "properties": {
+        "id": { "type": "string" },
+        "cleanerName": { "type": "string" },
+        "site": { "type": "string" },
+        "siteCode": { "type": "string" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "hours": { "type": "string" }
+            }
+          }
+        },
+        "status": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "managerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "cleanerName", "site", "siteCode", "entries", "status", "createdAt"]
+    },
     "OrderTask": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "OrderTask",
@@ -52,7 +79,7 @@
         "completedAt": { "type": "string", "format": "date-time" },
         "type": {
           "type": "string",
-          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern", "Cover Interest"]
+          "enum": ["Stock Order", "Faulty Equipment", "Incomplete Task", "Additional Hours", "Staff Referral", "Staff Concern", "Cover Interest", "Pay Inquiry"]
         }
       },
       "required": ["id", "title", "status", "createdAt", "managerId"]

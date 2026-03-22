@@ -11,7 +11,7 @@ import { collection, query, doc, orderBy, where, limit } from "firebase/firestor
 import { updateDocumentNonBlocking, deleteDocumentNonBlocking, setDocumentNonBlocking } from "@/firebase/non-blocking-updates"
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login"
 import { format, addDays } from "date-fns"
-import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck } from "lucide-react"
+import { CheckCircle2, Clock, Loader2, PlayCircle, XCircle, MessageSquare, CalendarDays, MapPin, Plus, Trash2, Users, UserPlus, BarChart3, PieChart, ShieldAlert, Bell, BellRing, Megaphone, Send, Link2, Copy, Check, LogOut, LayoutDashboard, Heart, ShieldCheck, CreditCard } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -83,7 +83,7 @@ function AnalyticsTab({ tasks }: { tasks: any[] }) {
       .slice(0, 5)
   }, [tasks])
 
-  const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9', '#0284C7']
+  const COLORS = ['#6E76F5', '#F59E0B', '#EF4444', '#D946EF', '#FACC15', '#0EA5E9', '#0284C7', '#10b981']
 
   if (!mounted) return <div className="h-[300px] flex items-center justify-center text-muted-foreground italic">Initializing visualizer...</div>
 
@@ -443,6 +443,7 @@ export default function TasksPage() {
                             {task.type === 'Staff Concern' && <ShieldAlert className="w-4 h-4" />}
                             {task.type === 'Cover Interest' && <CalendarDays className="w-4 h-4 text-sky-400" />}
                             {task.type === 'Stock Order' && <Plus className="w-4 h-4 text-[#6E76F5]" />}
+                            {task.type === 'Pay Inquiry' && <CreditCard className="w-4 h-4 text-emerald-400" />}
                             {task.title}
                           </CardTitle>
                           <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground">

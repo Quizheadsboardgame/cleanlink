@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,7 +10,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { 
   PlusCircle, Hammer, AlertTriangle, Clock, UserPlus, 
   CalendarDays, LayoutList, Info, BookOpen, Sparkles, 
-  ArrowRight, ShieldAlert, Heart, Link2, Lock 
+  ArrowRight, ShieldAlert, Heart, Link2, Lock, CreditCard 
 } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
@@ -29,6 +30,7 @@ export default function HomeHub() {
     { href: "/faulty-equipment", label: t.nav.faulty, icon: Hammer, color: "faulty-text-gradient", border: "hover:border-[#F59E0B]/40", bg: "bg-[#F59E0B]/5" },
     { href: "/incomplete-task", label: t.nav.incomplete, icon: AlertTriangle, color: "incomplete-text-gradient", border: "hover:border-[#EF4444]/40", bg: "bg-[#EF4444]/5" },
     { href: "/additional-hours", label: t.nav.hours, icon: Clock, color: "hours-text-gradient", border: "hover:border-[#D946EF]/40", bg: "bg-[#D946EF]/5" },
+    { href: "/pay-error", label: t.nav.pay, icon: CreditCard, color: "text-emerald-400", border: "hover:border-emerald-400/40", bg: "bg-emerald-400/5" },
     { href: "/referral", label: t.nav.referral, icon: UserPlus, color: "referral-text-gradient", border: "hover:border-[#FACC15]/40", bg: "bg-[#FACC15]/5" },
     { href: "/cover-work", label: t.nav.cover, icon: CalendarDays, color: "cover-text-gradient", border: "hover:border-[#0EA5E9]/40", bg: "bg-[#0EA5E9]/5" },
     { href: "/kudos", label: t.nav.kudos, icon: Heart, color: "text-rose-400", border: "hover:border-rose-400/40", bg: "bg-rose-400/5" },

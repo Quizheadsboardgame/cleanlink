@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -23,7 +24,8 @@ import {
   ClipboardList,
   Users,
   Search,
-  HelpCircle
+  HelpCircle,
+  CreditCard
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -143,6 +145,12 @@ export function Navbar() {
                           <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
                             <CalendarDays className="w-4 h-4 text-[#0EA5E9]" />
                             <span className="text-sm">{t.nav.cover}</span>
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/pay-error">
+                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <CreditCard className="w-4 h-4 text-emerald-400" />
+                            <span className="text-sm">{t.nav.pay}</span>
                           </DropdownMenuItem>
                         </Link>
                         <Link href="/referral">
