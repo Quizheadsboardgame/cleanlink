@@ -9,12 +9,12 @@ import { ManagerProvider } from "@/context/manager-context";
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'My Tidy Tracker | Professional Management',
+  title: 'Staff To Management Communications | Professional Management',
   description: 'A professional web application for infrastructure and stock management, powered by Harley: work smarter.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'My Tidy Tracker',
+    title: 'Staff Comms',
   },
   formatDetection: {
     telephone: false,

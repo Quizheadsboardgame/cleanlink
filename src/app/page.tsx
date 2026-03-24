@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -6,7 +5,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
   PlusCircle, Hammer, AlertTriangle, Clock, UserPlus, 
   CalendarDays, LayoutList, Info, BookOpen, Sparkles, 
@@ -42,7 +41,6 @@ export default function HomeHub() {
     { id: 'guide', href: "/how-to-use", label: t.nav.guide, icon: BookOpen, color: "guide-text-gradient", border: "hover:border-[#84CC16]/40", bg: "bg-[#84CC16]/5" },
   ]
 
-  // Filter based on visibility toggles if manager is linked
   const filteredServices = services.filter(s => {
     if (s.always) return true;
     if (enabledModules && enabledModules[s.id as keyof typeof enabledModules] === false) return false;
@@ -63,8 +61,8 @@ export default function HomeHub() {
               <Sparkles className="w-5 h-5 animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-[0.3em]">System Online</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold font-headline portal-text-gradient tracking-tighter">
-              My Tidy Tracker
+            <h1 className="text-4xl md:text-6xl font-bold font-headline portal-text-gradient tracking-tighter uppercase">
+              Staff Comms Hub
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto opacity-80">
               Select a task below to begin your digital workflow.

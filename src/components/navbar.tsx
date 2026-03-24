@@ -28,7 +28,6 @@ import {
   UserCheck
 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
@@ -46,7 +45,6 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import placeholderData from "@/app/lib/placeholder-images.json"
 import { useLanguage } from "@/context/language-context"
 import { useManagerContext } from "@/context/manager-context"
 
@@ -59,8 +57,6 @@ export function Navbar() {
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  const rightLogo = placeholderData.placeholderImages.find(img => img.id === "header-right-logo")
 
   const isVisible = (moduleId: string) => {
     if (!enabledModules) return true;
@@ -210,14 +206,14 @@ export function Navbar() {
                       </AccordionTrigger>
                       <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
                         <Link href="/status">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5", pathname === "/status" ? "bg-white/10" : "")}>
                             <LayoutList className="w-4 h-4 text-white" />
                             <span className="text-sm">{t.nav.status}</span>
                           </DropdownMenuItem>
                         </Link>
                         {isVisible('concern') && (
                           <Link href="/report-concern">
-                            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5", pathname === "/report-concern" ? "bg-white/10" : "")}>
                               <ShieldAlert className="w-4 h-4 text-red-500" />
                               <span className="text-sm">{t.nav.concern}</span>
                             </DropdownMenuItem>
@@ -236,7 +232,7 @@ export function Navbar() {
                       <AccordionContent className="pb-2 pt-1 px-2 space-y-1">
                         {isVisible('info') && (
                           <Link href="/important-info">
-                            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5", pathname === "/important-info" ? "bg-white/10" : "")}>
                               <Info className="w-4 h-4 text-orange-500" />
                               <span className="text-sm">{t.nav.info}</span>
                             </DropdownMenuItem>
@@ -244,14 +240,14 @@ export function Navbar() {
                         )}
                         {isVisible('guide') && (
                           <Link href="/how-to-use">
-                            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                            <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5", pathname === "/how-to-use" ? "bg-white/10" : "")}>
                               <BookOpen className="w-4 h-4 text-[#84CC16]" />
                               <span className="text-sm">{t.nav.guide}</span>
                             </DropdownMenuItem>
                           </Link>
                         )}
                         <Link href="/language">
-                          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5">
+                          <DropdownMenuItem className={cn("flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-white/5", pathname === "/language" ? "bg-white/10" : "")}>
                             <Languages className="w-4 h-4 text-primary" />
                             <span className="text-sm">{t.nav.language}</span>
                           </DropdownMenuItem>
@@ -283,8 +279,8 @@ export function Navbar() {
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary animate-pulse hidden sm:block" />
-                <span className="text-3xl sm:text-5xl lg:text-6xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center">
-                  My Tidy Tracker
+                <span className="text-xl sm:text-3xl lg:text-4xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center uppercase">
+                  Staff To Management Communications
                 </span>
               </div>
               <span className="text-[8px] sm:text-[10px] font-bold text-primary/60 uppercase tracking-[0.4em] whitespace-nowrap mt-1">
@@ -292,14 +288,6 @@ export function Navbar() {
               </span>
             </div>
           </Link>
-        </div>
-
-        <div className="flex-shrink-0 z-10 ml-auto">
-          {rightLogo && (
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 animate-float">
-              <Image src={rightLogo.imageUrl} alt={rightLogo.description} fill className="object-contain" />
-            </div>
-          )}
         </div>
       </div>
     </nav>
