@@ -279,7 +279,7 @@ export function Navbar() {
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary animate-pulse hidden sm:block" />
-                <span className="text-xl sm:text-3xl lg:text-4xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center uppercase">
+                <span className="text-sm sm:text-lg lg:text-xl font-bold font-headline portal-text-gradient leading-none tracking-tighter text-center uppercase">
                   Staff To Management Communications
                 </span>
               </div>
